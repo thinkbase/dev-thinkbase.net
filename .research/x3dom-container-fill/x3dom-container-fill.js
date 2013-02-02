@@ -27,7 +27,7 @@
             "maroon", "aqua", "lime", "teal", "green", "blue", "navy" /* black */
         ],
         CONTAINER_ROTATIONS: {  //The rotations for viewport of container
-            "default": "0.5 -0.5 0 0.5",
+            "default": "1.0 -0.5 0 0.4",
             "front": "0 0 1 0",
             "top": "1 0 0 1.57",
             "right": "0 -0.5 0 1.57"
@@ -35,7 +35,7 @@
     };
     var _DEFAULT_CONTAINER_CFG = {
         size: {                 //The measurements of container, in meters
-            width: 10, height: 4.0, depth: 3.0,
+            width: 11.8, height: 2.18, depth: 2.13,     //40 inch DRYCONTAINER
             sideSize: 0.001         //Size of every side, in meters
         },
         materialAttributes:{    //The meatrial attributes of container's back, bottom, and left side;

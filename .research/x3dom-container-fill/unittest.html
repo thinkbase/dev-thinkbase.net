@@ -10,19 +10,25 @@
 	<script type="text/javascript" src="x3dom-container-fill.js"></script>
     <script type="text/javascript">
         var boxData = [
-            { id: "BOX001", position: {x: 0, y: 0, z: 0.5}, size: {width: 0.3, height: 2.3, depth: 2.2} },
+            { id: "BOX001", position: {x: 0, y: 0, z: 0.5}, size: {width: 0.3, height: 2.3, depth: 1.6} },
             { id: "BOX002", position: {x: 0, y: 0, z: 0}, size: {width: 0.3, height: 1.3, depth: 0.5} },
             { id: "BOX003", position: {x: 0.3, y: 0, z: 0}, size: {width: 2.3, height: 1.0, depth: 1.0} },
             { id: "BOX004", position: {x: 1.3, y: 1.0, z: 0}, size: {width: 0.3, height: 0.3, depth: 0.5} },
-            { position: {x: 4.0, y: 0, z: 0.5}, size: {width: 1.3, height: 2.3, depth: 2.2}, color: "darkorange" },
+            { position: {x: 4.0, y: 0, z: 0.5}, size: {width: 1.3, height: 2.3, depth: 1.5}, color: "darkorange" },
             { position: {x: 3.0, y: 0, z: 0}, size: {width: 2.3, height: 1.3, depth: 0.5}, color: "darkorange" },
-            { position: {x: 5.3, y: 0, z: 0}, size: {width: 2.3, height: 1.0, depth: 2.5}, color: "darkorange" },
-            { position: {x: 6.3, y: 1.0, z: 2.0}, size: {width: 0.8, height: 0.3, depth: 0.8}, color: "darkorange" },
+            { position: {x: 5.3, y: 0, z: 0}, size: {width: 2.3, height: 1.0, depth: 1.95}, color: "darkorange" },
+            { position: {x: 6.3, y: 1.0, z: 1.3}, size: {width: 0.8, height: 0.3, depth: 0.8}, color: "darkorange" },
         ];
     </script>
     <script type="text/javascript">
         x3dom.runtime.ready = function() {
             var fill3d = window.x3dom_fill3d.buildFill3D("cargotainer", "root");
+            
+            //设置容器的尺寸
+            fill3d.containerCfg.size.width = 11.8;
+            fill3d.containerCfg.size.height = 2.72;
+            fill3d.containerCfg.size.depth = 2.13;
+            
             fill3d.boxHighlightCallback = function(boxElm, isHighlight){
                 var hs = document.getElementById("highlightStatusBar");
                 var ns = document.getElementById("normalizeStatusBar");
@@ -109,9 +115,16 @@
          x="0px" y="0px" width="1000px" height="500px"
          swfpath="x3dom-1.4.0/x3dom.swf">
       <scene>
-        <viewpoint position="0 0 10" orientation="0 0 1 0" fieldOfView="0.7"></viewpoint>
+        <!--注意:
+            Viewpoint 的 position 需要依据 箱体的尺寸 相应进行调整;
+            fieldOfView 的大小需要参照 x3d 的 width/height 进行调整, 以实现更佳的显示效果;
+        -->
+        <viewpoint position="0 0 10" fieldOfView="0.7"></viewpoint>
+        
         <background transparency="0" skyColor="white" ></background>
-        <transform id="root" translation="0 0 0" rotation="0.5 -0.5 0 0.5"></transform>
+        
+        <!-- 这个 Transform 是整个 3D 显示模型的根节点 -->
+        <transform id="root"></transform>
       </scene>
     </x3d>
 </body>
