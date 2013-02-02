@@ -1,0 +1,155 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>FAQ &mdash; X3DOM v1.4.0 documentation</title>
+    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="X3DOM v1.4.0 documentation" href="../index.html" />
+    <link rel="up" title="Notes" href="index.html" />
+    <link rel="next" title="Resources" href="resources.html" />
+    <link rel="prev" title="Compatibility Matrix" href="compatibility_matrix.html" />
+   
+    <script src="http://x3dom.org/download/dev/x3dom-full.js"></script>
+  
+  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+
+  </head>
+  <body>
+    <!--<div id="beta_notice"><p><strong>Note: </strong>This documentation is under active development. If you are interested in helping out, <a href="http://sourceforge.net/mailarchive/forum.php?forum_name=x3dom-developers">get in touch</a>.</p></div>-->
+  
+  
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="resources.html" title="Resources"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="compatibility_matrix.html" title="Compatibility Matrix"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">X3DOM v1.4.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Notes</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="faq">
+<span id="id1"></span><h1>FAQ<a class="headerlink" href="#faq" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils">
+<dt><strong>Q: Why declarative 3D in HTML? Can I not just use WebGL, O3D, etc.</strong></dt>
+<dd><p class="first"><a class="reference external" href="http://www.khronos.org/news/press/releases/khronos-webgl-initiative-hardware-accelerated-3d-graphics-internet/">WebGL</a>, <a class="reference external" href="http://code.google.com/apis/o3d/">O3D</a> or [your favorite 3D-JS lib] are made by gfx-coders for
+gfx-coders who know how to deal with a 4×4 transformation matrix and
+speak GLSL as their first language. Most web-page developer have a
+different profile. They just would like to build their 3D-UI,
+Visual-Analytics or Web-Shop application and want to utilize some 3D
+technology.</p>
+<p class="last">If you build the next high-end browser-based online game or visualization
+demo then use WebGL or O3D. But if you simply need some 3D elements in
+your Web-App then try X3DOM.</p>
+</dd>
+<dt><strong>Q: Why X3D? Can I not just use Collada, VRML, OBJ, etc.</strong></dt>
+<dd><p class="first">3D (X)HTML-ized graphics requires a royalty-free, open and standardized
+XML-encoded format. Therefore <a class="reference external" href="http://www.khronos.org/collada/">Collada</a> or <a class="reference external" href="http://www.web3d.org/about/overview/">X3D</a> are the best candidates
+(however you can easily <a class="reference external" href="http://www.instantreality.org/tools/x3d_encoding_converter/">convert VRML to X3D-XML</a>).</p>
+<p class="last"><a class="reference external" href="http://www.khronos.org/collada/">Collada</a> is really designed as interchange and intermediate format to
+transport and manage your 3D data. The <a class="reference external" href="http://www.khronos.org/files/collada_spec_1_5.pdf">Collada specification</a> does not include, unlike
+X3D, a <a class="reference external" href="http://www.web3d.org/x3d/specifications/ISO-IEC-19775-1.2-X3D-AbstractSpecification/Part01/concepts.html#Runtimeenvironment">runtime or event model</a>, which is needed for
+per-frame updates on the 3D-side (e.g. animations). Therefore this project
+uses a well defined <a class="reference external" href="http://www.x3dom.org/?page_id=158">subset of X3D</a> (called Profile in the X3D-World) for X3DOM. For more background information
+about how Collada and X3D relate and why <strong>“X3D is ideal for the Web”</strong>
+please read the <a class="reference external" href="http://www.khronos.org/collada/presentations/Developing_Web_Applications_with_COLLADA_and_X3D.pdf">Whitepaper</a> by <a class="reference external" href="http://software.intel.com/en-us/blogs/author/remi-arnaud/">Rémi Arnaud</a> and <a class="reference external" href="http://flux.typepad.com/">Tony Parisi</a>.</p>
+</dd>
+</dl>
+<p><strong>Q: Why JS? Can you not write the system/plugin in C++, Java, …</strong></p>
+<blockquote>
+<div><p>Well, the developer of this project worked on different native <a class="reference external" href="http://www.web3d.org/x3d/content/examples/X3dResources.html#Applications">commercial and open-source X3D-runtimes</a>
+before. The limitations of the current plugin interface (e.g. how to
+monitor DOM-changes) would make a implementation hard or even imposible.</p>
+<p>In addition, we just wanted an open source test environment, which is
+small, works without any plugin and can be easily modified to inspire and
+follow the integration-model easily. And first tests showed that the
+increasing performance of JavaScript and WebGL would lead to impressive
+results.</p>
+</div></blockquote>
+<p><strong>Q: Why any standardization and native implementation if there is already the X3DOM-JS runtime?</strong></p>
+<blockquote>
+<div>Short answer: Feature and Speed. The current JS/WebGL layer does not allow
+to implement e.g. spatial <a class="reference external" href="http://www.web3d.org/x3d/specifications/ISO-IEC-19775-1.2-X3D-AbstractSpecification/Part01/components/sound.html#Sound">Sound</a> or specific image loader and
+although WebGL is an impressive step forward we still have to do all the
+scene management and updates in JS.</div></blockquote>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><!-- 
+<p class="logo"><a href="../index.html">
+  <img class="logo" src="../_static/x3dom-logo-small.png" alt="Logo"/>
+</a></p>
+--><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Notes</a><ul>
+      <li>Previous: <a href="compatibility_matrix.html" title="previous chapter">Compatibility Matrix</a></li>
+      <li>Next: <a href="resources.html" title="next chapter">Resources</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2012, Fraunhofer IGD/VCST.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  
+<style>
+    .internal-node-list ul,
+    .internal-node-list, li {
+        margin:0;
+        padding:0;
+    }
+</style>
+  </body>
+</html>

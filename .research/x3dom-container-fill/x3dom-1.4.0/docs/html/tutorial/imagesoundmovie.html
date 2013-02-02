@@ -1,0 +1,147 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Images, sound and movie formats &mdash; X3DOM v1.4.0 documentation</title>
+    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="X3DOM v1.4.0 documentation" href="../index.html" />
+    <link rel="up" title="Tutorial" href="index.html" />
+    <link rel="next" title="Generic 3D data conversion" href="dataconversion.html" />
+    <link rel="prev" title="Styling with CSS" href="styling.html" />
+   
+    <script src="http://x3dom.org/download/dev/x3dom-full.js"></script>
+  
+  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+
+  </head>
+  <body>
+    <!--<div id="beta_notice"><p><strong>Note: </strong>This documentation is under active development. If you are interested in helping out, <a href="http://sourceforge.net/mailarchive/forum.php?forum_name=x3dom-developers">get in touch</a>.</p></div>-->
+  
+  
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="dataconversion.html" title="Generic 3D data conversion"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="styling.html" title="Styling with CSS"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">X3DOM v1.4.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="images-sound-and-movie-formats">
+<span id="imagesoundmovie"></span><h1>Images, sound and movie formats<a class="headerlink" href="#images-sound-and-movie-formats" title="Permalink to this headline">¶</a></h1>
+<p>This tutorial shows what type of image, sound and movie formats can be used in X3DOM and what are the features and restrictions.</p>
+<div class="section" id="images">
+<h2>Images<a class="headerlink" href="#images" title="Permalink to this headline">¶</a></h2>
+<p>You can use <a class="reference external" href="http://en.wikipedia.org/wiki/Portable_Network_Graphics">PNG</a>, <a class="reference external" href="http://en.wikipedia.org/wiki/Jpeg">JPEG</a> or <a class="reference external" href="http://en.wikipedia.org/wiki/Gif">GIF</a> to encode your static Texture data. JPG has a low memory profile but has a lossy compression and it does not support alpha channels. PNG compression is lossless and can handle alpha. GIF is also lossless and has alpha.</p>
+<p>General: If you do not need an alpha channel and the content does not have hard edges (e.g. Text) use JPG. Otherwise use PNG. You should really not use GIF anymore. PNG is more flexible for future content (e.g. 16-bit channels).</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;ImageTexture</span> <span class="na">url=</span><span class="s">’foo.jpg’</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sound">
+<h2>Sound<a class="headerlink" href="#sound" title="Permalink to this headline">¶</a></h2>
+<p>You can use <a class="reference external" href="http://en.wikipedia.org/wiki/Wav">WAV</a>, <a class="reference external" href="http://en.wikipedia.org/wiki/Mp3">MP3</a> and <a class="reference external" href="http://en.wikipedia.org/wiki/Ogg">OGG</a> for sound sources. All UA should support WAV. If you would like to use compressed formats (e.g. MP3 or OGG) provide alternative encodings in your AudioClip node.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;AudioClip</span> <span class="na">url=</span><span class="s">’”foo.wav”,”foo.ogg”‘</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="movies">
+<h2>Movies<a class="headerlink" href="#movies" title="Permalink to this headline">¶</a></h2>
+<p>There is right now no single movie file supported by all user agents. Use the <a class="reference external" href="http://x3dom.org/x3dom/example/x3dom_video.xhtml">X3DOM formats exmaple</a> to check your browser.</p>
+<p>The best solution right now is to encode your content as <a class="reference external" href="http://en.wikipedia.org/wiki/MP4">MP4</a> and <a class="reference external" href="http://en.wikipedia.org/wiki/OGV">OGV</a> movie and provide alternative sources in your MovieTexture node.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;MovieTexture</span> <span class="na">url=</span><span class="s">’”foo.mp4″,”foo.ogv”‘</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><!-- 
+<p class="logo"><a href="../index.html">
+  <img class="logo" src="../_static/x3dom-logo-small.png" alt="Logo"/>
+</a></p>
+-->
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Images, sound and movie formats</a><ul>
+<li><a class="reference internal" href="#images">Images</a></li>
+<li><a class="reference internal" href="#sound">Sound</a></li>
+<li><a class="reference internal" href="#movies">Movies</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Tutorial</a><ul>
+      <li>Previous: <a href="styling.html" title="previous chapter">Styling with CSS</a></li>
+      <li>Next: <a href="dataconversion.html" title="next chapter">Generic 3D data conversion</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2012, Fraunhofer IGD/VCST.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  
+<style>
+    .internal-node-list ul,
+    .internal-node-list, li {
+        margin:0;
+        padding:0;
+    }
+</style>
+  </body>
+</html>

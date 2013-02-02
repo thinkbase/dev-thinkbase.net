@@ -1,0 +1,221 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Platform Notes &mdash; X3DOM v1.4.0 documentation</title>
+    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="X3DOM v1.4.0 documentation" href="../index.html" />
+    <link rel="up" title="Notes" href="index.html" />
+    <link rel="next" title="Compatibility Matrix" href="compatibility_matrix.html" />
+    <link rel="prev" title="Complex models" href="complex_models.html" />
+   
+    <script src="http://x3dom.org/download/dev/x3dom-full.js"></script>
+  
+  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+
+  </head>
+  <body>
+    <!--<div id="beta_notice"><p><strong>Note: </strong>This documentation is under active development. If you are interested in helping out, <a href="http://sourceforge.net/mailarchive/forum.php?forum_name=x3dom-developers">get in touch</a>.</p></div>-->
+  
+  
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="compatibility_matrix.html" title="Compatibility Matrix"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="complex_models.html" title="Complex models"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">X3DOM v1.4.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Notes</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="platform-notes">
+<span id="platforms"></span><h1>Platform Notes<a class="headerlink" href="#platform-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="system-requirements-and-browser-notes">
+<h2>System requirements and browser notes<a class="headerlink" href="#system-requirements-and-browser-notes" title="Permalink to this headline">¶</a></h2>
+<p>In order to be able to work with X3DOM, you need a WebGL enabled web browser.
+We also support different fallback models for browsers not supporting WebGL
+natively. The best support of features however is only ensured with a browser
+sporting a WebGL implementation. You can check the status of supported
+browser <a class="reference external" href="http://www.x3dom.org/?page_id=9">here</a>.</p>
+</div>
+<div class="section" id="chrome">
+<h2>Chrome<a class="headerlink" href="#chrome" title="Permalink to this headline">¶</a></h2>
+<p>Recent releases of Chrome require you to enable WebGL. Please use the following
+command parameters when launching chrome:</p>
+<div class="highlight-python"><pre>--enable-webgl
+--use-gl=desktop
+--log-level=0
+--allow-file-access-from-files
+--allow-file-access</pre>
+</div>
+<p>The last two options enable the browser to load textures from disk. You will
+need this if you are developing your site locally.</p>
+<div class="section" id="platform-notes-os-gpu-drivers">
+<h3>Platform notes (OS/GPU/Drivers)<a class="headerlink" href="#platform-notes-os-gpu-drivers" title="Permalink to this headline">¶</a></h3>
+<p>While WebGL is supported in most current browsers, there are various little
+differences in operating system and graphics driver support. We can not discuss
+any possible OS/GPU/Driver combination here, but you might find some valuable
+hints if you can not get WebGL up and running on your system. With all systems
+be sure to use latest drivers for your graphics card and be sure those drivers
+support the OpenGL standard.</p>
+</div>
+</div>
+<div class="section" id="blacklists">
+<h2>Blacklists<a class="headerlink" href="#blacklists" title="Permalink to this headline">¶</a></h2>
+<p>Some GPUs and Driver combinations are blacklisted by browser vendors. In case
+of strange errors, please check the following lists for:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="https://wiki.mozilla.org/Blocklisting/Blocked_Graphics_Drivers">Mozilla</a></li>
+<li><a class="reference external" href="http://src.chromium.org/viewvc/chrome/trunk/src/chrome/browser/resources/software_rendering_list.json">Chrome</a></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="windows">
+<h2>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h2>
+<p><strong>Chrome Frame</strong></p>
+<p>Currently, the only way to use WebGL with Internet Explorer is by using the Google <a class="reference external" href="http://code.google.com/chrome/chromeframe/">Chrome Frame plugin</a>. In order to make X3DOM use the WebGL renderer with Internet Explorer, you need to install Chrome Frame and enable it in your HTML or web browser configuration. The most simple way to enable ChromeFrame is to put this line in your HTML head section:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;X-UA-Compatible&quot;</span> <span class="na">content=</span><span class="s">&quot;chrome=1&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>Download and furhter reading:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="http://code.google.com/chrome/chromeframe/">Chrome Frame</a></li>
+<li><a class="reference external" href="http://www.chromium.org/developers/how-tos/chrome-frame-getting-started">Getting started</a></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="mac-os-x">
+<h2>Mac OS X<a class="headerlink" href="#mac-os-x" title="Permalink to this headline">¶</a></h2>
+<p>Safari 5.1+ is supporting WebGL, however you need to enable it in the Developer menu.
+This menu is invisible by default. Go to &#8220;Preferences&#8221; (Cmd-,) and select the
+&#8220;Advaned&#8221; tab. Enable the option &#8220;Show Develop menu in menu bar&#8221;.</p>
+<p><strong>Rubber band scrolling in Mac OS X 10.7 Lion</strong></p>
+<p>On Mac OS Lion, with Apple input devices scrolling behaves differently. When reaching the end of a page, a rubber band effect kicks in. This behavior is also present on iOS devices.</p>
+<p>If you don&#8217;t like the effect, you can turn if off using a CSS rule:</p>
+<div class="highlight-css"><div class="highlight"><pre><span class="nt">body</span> <span class="p">{</span> <span class="k">overflow</span><span class="o">:</span> <span class="k">hidden</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p>Keep in mind that this rule changes the default behavior of your browser and scrollbars might disappear entirely. It is only a workaround and the preferred fix is to wait for Apple to provide a switch to turn this functionality off. Also note that the rubber band scrolling might not be visible at all with non Apple pointing devices.</p>
+</div>
+<div class="section" id="ubuntu-linux">
+<h2>Ubuntu Linux<a class="headerlink" href="#ubuntu-linux" title="Permalink to this headline">¶</a></h2>
+<p>In order to enable WebGL for Firefox 4 and above you need to:</p>
+<blockquote>
+<div><ol class="arabic">
+<li><p class="first">Install the libosmesa6 package. You can do so by issuing
+the the following command in a terminal window or one of the consoles:</p>
+<div class="highlight-python"><pre>sudo apt-get install libosmesa6</pre>
+</div>
+</li>
+<li><p class="first">Open the Firefox application and enter <em>about:config</em> in the
+location bar and <em>webgl</em> in the filter box.</p>
+</li>
+<li><p class="first">Set the option <em>webgl.force-enable</em> and <em>webgl.prefer-native-gl</em> to <em>true</em></p>
+</li>
+<li><p class="first">Set <em>webgl.osmesalib</em> to the the path of the library you installed
+in step 1, usually thi should be: <tt class="docutils literal"><span class="pre">/usr/lib/libOSMesa.so.6</span></tt></p>
+</li>
+<li><p class="first">Restart Firefox</p>
+</li>
+</ol>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><!-- 
+<p class="logo"><a href="../index.html">
+  <img class="logo" src="../_static/x3dom-logo-small.png" alt="Logo"/>
+</a></p>
+-->
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Platform Notes</a><ul>
+<li><a class="reference internal" href="#system-requirements-and-browser-notes">System requirements and browser notes</a></li>
+<li><a class="reference internal" href="#chrome">Chrome</a><ul>
+<li><a class="reference internal" href="#platform-notes-os-gpu-drivers">Platform notes (OS/GPU/Drivers)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#blacklists">Blacklists</a></li>
+<li><a class="reference internal" href="#windows">Windows</a></li>
+<li><a class="reference internal" href="#mac-os-x">Mac OS X</a></li>
+<li><a class="reference internal" href="#ubuntu-linux">Ubuntu Linux</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Notes</a><ul>
+      <li>Previous: <a href="complex_models.html" title="previous chapter">Complex models</a></li>
+      <li>Next: <a href="compatibility_matrix.html" title="next chapter">Compatibility Matrix</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2012, Fraunhofer IGD/VCST.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  
+<style>
+    .internal-node-list ul,
+    .internal-node-list, li {
+        margin:0;
+        padding:0;
+    }
+</style>
+  </body>
+</html>

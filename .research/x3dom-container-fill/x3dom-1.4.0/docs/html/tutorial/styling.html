@@ -1,0 +1,287 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Styling with CSS &mdash; X3DOM v1.4.0 documentation</title>
+    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="X3DOM v1.4.0 documentation" href="../index.html" />
+    <link rel="up" title="Tutorial" href="index.html" />
+    <link rel="next" title="Images, sound and movie formats" href="imagesoundmovie.html" />
+    <link rel="prev" title="First steps with X3DOM" href="firststeps.html" />
+   
+    <script src="http://x3dom.org/download/dev/x3dom-full.js"></script>
+  
+  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+
+  </head>
+  <body>
+    <!--<div id="beta_notice"><p><strong>Note: </strong>This documentation is under active development. If you are interested in helping out, <a href="http://sourceforge.net/mailarchive/forum.php?forum_name=x3dom-developers">get in touch</a>.</p></div>-->
+  
+  
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="imagesoundmovie.html" title="Images, sound and movie formats"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="firststeps.html" title="First steps with X3DOM"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">X3DOM v1.4.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="styling-with-css">
+<span id="styling"></span><h1>Styling with CSS<a class="headerlink" href="#styling-with-css" title="Permalink to this headline">¶</a></h1>
+<p>This tutorial guides you through the process of using CSS with X3DOM. In order to demonstrate the functionality, we are going to create a HTML document with a X3DOM scene. That scene is then amended with a button that allows to resize the scene by setting CSS attributes using JavaScript.</p>
+<p>Important: you should always include the X3DOM default stylesheet <tt class="docutils literal"><span class="pre">x3dom.css</span></tt>, since it initializes some important settings necessary due to the fact that X3DOM&#8217;s new 3D elements are unknown to the Browser and so are their styles. For example, if the <tt class="docutils literal"><span class="pre">&lt;x3d&gt;</span></tt> element is not floating (e.g. using the <cite>float:left</cite> property), the relative mouse positions cannot be calculated correctly and picking does not work!</p>
+<div class="section" id="basic-scene-document">
+<h2>Basic scene document<a class="headerlink" href="#basic-scene-document" title="Permalink to this headline">¶</a></h2>
+<p>We are going to use the box example scene established in the <a class="reference internal" href="firststeps.html#firststeps"><em>First steps with X3DOM</em></a> tutorial:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">&quot;utf-8&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>CSS Integration Test<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;http://www.x3dom.org/download/x3dom.css&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://www.x3dom.org/download/x3dom.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+  <span class="nt">&lt;/head&gt;</span>
+  <span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>Styling tutorial<span class="nt">&lt;/h1&gt;</span>
+    <span class="nt">&lt;x3d</span> <span class="na">width=</span><span class="s">&quot;400px&quot;</span> <span class="na">height=</span><span class="s">&quot;300px&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;scene&gt;</span>
+        <span class="nt">&lt;shape&gt;</span>
+          <span class="nt">&lt;appearance&gt;</span>
+            <span class="nt">&lt;material</span> <span class="na">diffuseColor=</span><span class="s">&#39;red&#39;</span><span class="nt">&gt;&lt;/material&gt;</span>
+          <span class="nt">&lt;/appearance&gt;</span>
+          <span class="nt">&lt;box&gt;&lt;/box&gt;</span>
+        <span class="nt">&lt;/shape&gt;</span>
+      <span class="nt">&lt;/scene&gt;</span>
+    <span class="nt">&lt;/x3d&gt;</span>
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+</div>
+<p>Rendering this document in a <a class="reference external" href="http://www.x3dom.org/?page_id=9">WebGL compatible browser</a>, results in a look similar to this:</p>
+<img alt="../_images/styling1.png" src="../_images/styling1.png" />
+</div>
+<div class="section" id="basic-styling">
+<h2>Basic styling<a class="headerlink" href="#basic-styling" title="Permalink to this headline">¶</a></h2>
+<p>In the initial example above, we created the scene using the <tt class="docutils literal"><span class="pre">&lt;x3d&gt;</span></tt> tag initializing it with <tt class="docutils literal"><span class="pre">`width`</span></tt> and <tt class="docutils literal"><span class="pre">`height`</span></tt> attributes. In order to take advantage of CSS, we can use a CSS rule to set height and width in the visual layer.</p>
+<p>The following CSS rules, added to the <tt class="docutils literal"><span class="pre">&lt;head&gt;</span></tt> of the HTML document element will resize the scene to 50% height and with of the parent element - in this case the <tt class="docutils literal"><span class="pre">body</span></tt> element. In order to make this work with IDs, we need to add the <tt class="docutils literal"><span class="pre">`id`</span></tt> attribute to the <tt class="docutils literal"><span class="pre">&lt;x3d&gt;</span></tt> element:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;head&gt;</span>
+  <span class="nt">&lt;style&gt;</span>
+    <span class="nf">#the_element</span> <span class="p">{</span>
+      <span class="k">width</span><span class="o">:</span> <span class="m">50%</span><span class="p">;</span>
+      <span class="k">height</span><span class="o">:</span> <span class="m">50%</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="nt">&lt;/style&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+...
+<span class="nt">&lt;x3d</span> <span class="na">id=</span><span class="s">&quot;the_element&quot;</span><span class="nt">&gt;</span>
+...
+</pre></div>
+</div>
+<p>We need to remove the <tt class="docutils literal"><span class="pre">width</span></tt> and <tt class="docutils literal"><span class="pre">height</span></tt> attributes as well because they take precedence over the CSS rules. In order to change the background of the WebGL viewport we add the CSS background rule. To make this work, the scene must be transparent (default). If you change the background in the X3D definition, it will not be visible because it is disguised by the X3D background.</p>
+<div class="highlight-css"><div class="highlight"><pre><span class="nf">#the_element</span> <span class="p">{</span>
+    <span class="k">width</span><span class="o">:</span> <span class="m">50%</span><span class="p">;</span>
+    <span class="k">height</span><span class="o">:</span> <span class="m">50%</span><span class="p">;</span>
+    <span class="k">background</span><span class="o">:</span><span class="m">#000</span> <span class="sx">url(http://www.x3dom.org/x3dom/example/texture/solarSystem/starsbg.png)</span><span class="p">;</span>
+ <span class="p">}</span>
+</pre></div>
+</div>
+<p>The result looks something like this:</p>
+<img alt="../_images/styling2.png" src="../_images/styling2.png" />
+<p>Note that the dimensions are relative now and adapted when resizing the browser window.</p>
+<ul class="simple">
+<li><a class="reference external" href="../_static/tutorial/styling/styling2.mov">View demo video</a></li>
+<li><a class="reference external" href="../_static/tutorial/styling/styling2.html">View live example</a></li>
+</ul>
+</div>
+<div class="section" id="adding-interaction">
+<h2>Adding interaction<a class="headerlink" href="#adding-interaction" title="Permalink to this headline">¶</a></h2>
+<p>The dynamic resizing showed in the last chapter is great for automatically adapting to browser resize and for positioning elements in your layout. In order to add more elaborate interaction with the scene, we can use JavaScript. For example, to change the dimensions of the X3D element so we can resize it to &#8220;fullscreen&#8221; like the ubiquitous video player.</p>
+<p>In order to achieve this we are going to add a button to our example that allows to switch our X3D element to fullscreen – or more precisely to 100% of the parent HTML element.</p>
+<p>First step is adding a piece of markup that we can use for styling as a button. Fortunately there already is a HTML element that is meant for exactly this purpose: <tt class="docutils literal"><span class="pre">&lt;button&gt;</span></tt>. And since we move in a HTML5 context, we put the button element within the <tt class="docutils literal"><span class="pre">&lt;x3d&gt;</span></tt> element:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;x3d</span> <span class="na">id=</span><span class="s">&quot;the_element&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;toggler&quot;</span><span class="nt">&gt;</span>Zoom<span class="nt">&lt;/button&gt;</span>
+    <span class="nt">&lt;scene&gt;</span>
+    ...
+<span class="nt">&lt;/x3d&gt;</span>
+</pre></div>
+</div>
+<p>Semantically we are fine, but now we need to style the button so it floats over the scene. The following style rules will accomplish this. Please note the <cite>position: relative</cite> property we are setting on the <tt class="docutils literal"><span class="pre">x3d</span></tt> element. We need this to allow absolute positioning of the button within the <tt class="docutils literal"><span class="pre">x3d</span></tt> element. Otherwise it would position absolute to the page. Additionally we need to remove the default 1 pixels border added by the X3DOM default stylesheet.</p>
+<div class="highlight-css"><div class="highlight"><pre><span class="nf">#the_element</span> <span class="p">{</span>
+    <span class="o">...</span>
+    <span class="k">border</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span>  <span class="o">//</span> <span class="n">remove</span> <span class="n">the</span> <span class="k">default</span> <span class="m">1px</span> <span class="k">border</span>
+    <span class="k">position</span><span class="o">:</span> <span class="k">relative</span><span class="p">;</span>
+ <span class="p">}</span>
+
+<span class="nf">#toggler</span> <span class="p">{</span>
+    <span class="k">position</span><span class="o">:</span> <span class="k">absolute</span><span class="p">;</span>
+    <span class="k">float</span><span class="o">:</span> <span class="k">left</span><span class="p">;</span>
+    <span class="k">z-index</span><span class="o">:</span> <span class="m">1</span><span class="p">;</span>
+    <span class="k">top</span><span class="o">:</span> <span class="m">0px</span><span class="p">;</span>
+    <span class="k">left</span><span class="o">:</span> <span class="m">0px</span><span class="p">;</span>
+    <span class="k">width</span><span class="o">:</span> <span class="m">10em</span><span class="p">;</span>
+    <span class="k">height</span><span class="o">:</span> <span class="m">2em</span><span class="p">;</span>
+    <span class="k">border</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span>
+    <span class="k">background-color</span><span class="o">:</span> <span class="m">#202021</span><span class="p">;</span>
+    <span class="k">color</span><span class="o">:</span> <span class="m">#ccc</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Looking at our example in a browser reveals that there is a &#8220;Zoom&#8221; button floating over the x3d element in the top left corner.</p>
+<img alt="../_images/styling3.png" src="../_images/styling3.png" />
+<p>### A button alone isn’t interaction</p>
+<p>Nice. But a button alone is quite useless, we need to be able to do something with it. But first things first. In order to give the user some feedback what is going on, we add a hover effect by simply changing the background color. This is basic <a class="reference external" href="http://www.useit.com/">usability</a> and a simple style rule will do the job:</p>
+<div class="highlight-css"><div class="highlight"><pre><span class="nf">#toggler</span><span class="nd">:hover</span> <span class="p">{</span>
+    <span class="k">background-color</span><span class="o">:</span><span class="nb">blue</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Next we add some JavasScript to the mix, because we want to actually change something when the user clicks on the button: Fullscreen. First we think of a method name to use, like <tt class="docutils literal"><span class="pre">toggle()</span></tt> and attach it to the <tt class="docutils literal"><span class="pre">onclick</span></tt> event of our button:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;toggler&quot;</span> <span class="na">onclick=</span><span class="s">&quot;toggle(this);return false;&quot;</span><span class="nt">&gt;</span>Zoom<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+</div>
+<p>Note to the purists: Yes, there are several, more elegant ways of achieving this. For the sake of clarity of this tutorial, we are using the <tt class="docutils literal"><span class="pre">onclick</span></tt> attribute of the <tt class="docutils literal"><span class="pre">button</span></tt> element. In practice you probably want to use a DOM library like <a class="reference external" href="http://jquery.com">jQuery</a> et al.</p>
+<p>Next, we need to implement the <tt class="docutils literal"><span class="pre">toggle</span></tt> function. Within a <tt class="docutils literal"><span class="pre">script</span></tt> element. <strong>After</strong> the inclusion of <tt class="docutils literal"><span class="pre">x3dom.js</span></tt> we add the following code:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">zoomed</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+
+<span class="kd">function</span> <span class="nx">toggle</span><span class="p">(</span><span class="nx">button</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="kd">var</span> <span class="nx">new_size</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">x3d_element</span><span class="p">;</span>
+
+        <span class="nx">x3d_element</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;the_element&#39;</span><span class="p">);</span>
+
+        <span class="nx">title</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">)</span>
+    <span class="nx">body</span>  <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">zoomed</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">new_size</span> <span class="o">=</span> <span class="s2">&quot;50%&quot;</span><span class="p">;</span>
+                <span class="nx">button</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;Zoom&quot;</span><span class="p">;</span>
+                <span class="nx">title</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;block&quot;</span>
+                <span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">padding</span> <span class="o">=</span> <span class="s1">&#39;10px&#39;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">new_size</span> <span class="o">=</span> <span class="s2">&quot;100%&quot;</span><span class="p">;</span>
+                <span class="nx">button</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;Unzoom&quot;</span><span class="p">;</span>
+                <span class="nx">title</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+                <span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">padding</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span>
+        <span class="p">}</span>
+
+        <span class="nx">zoomed</span> <span class="o">=</span> <span class="o">!</span><span class="nx">zoomed</span><span class="p">;</span>
+
+        <span class="nx">x3d_element</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">new_size</span><span class="p">;</span>
+        <span class="nx">x3d_element</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">new_size</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This code implements a simple toggle function. The boolean variable <tt class="docutils literal"><span class="pre">zoomed</span></tt> tracks the state of the resize. Depending wether the <tt class="docutils literal"><span class="pre">x3d</span></tt> element is sized to 100% or not, the new size is set and applied to the <tt class="docutils literal"><span class="pre">x3d</span></tt> element (<tt class="docutils literal"><span class="pre">x3d_element</span></tt>). Since we use a square viewport <tt class="docutils literal"><span class="pre">width</span></tt> and <tt class="docutils literal"><span class="pre">height</span></tt> have the same values. Additionally, the text of the button is changed to show the action performed when the user is clicking it.</p>
+<p>The rest of the styling affects the surrounding elements like the title and the body. In order to achieve the fullscreen effect we obviously hide the <cite>h1</cite> title and remove the default padding of the <tt class="docutils literal"><span class="pre">body</span></tt> element. Likewise when zooming back, the values are restored.</p>
+<p>The last bit in the puzzle is another style rule which resets margin and padding of the body element. Add this rule in front of all others:</p>
+<div class="highlight-css"><div class="highlight"><pre><span class="o">&lt;</span><span class="nt">style</span><span class="o">&gt;</span>
+    <span class="nt">body</span> <span class="p">{</span>
+        <span class="k">margin</span><span class="o">:</span><span class="m">0</span><span class="p">;</span>
+        <span class="k">padding</span><span class="o">:</span><span class="m">10px</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="o">...</span>
+<span class="o">&lt;/</span><span class="nt">style</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Finally the fully zoomed result looks like this:</p>
+<img alt="../_images/styling4.png" src="../_images/styling4.png" />
+<ul class="simple">
+<li><a class="reference external" href="../_static/tutorial/styling/styling4.mov">See how it works (video)</a></li>
+<li><a class="reference external" href="../_static/tutorial/styling/styling4.html">Try it for yourself (html)</a></li>
+</ul>
+<p>You will also find another example which also styles other properties <a class="reference external" href="http://www.x3dom.org/x3dom/example/x3dom_x3dElementCSSIntegration.html">here</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><!-- 
+<p class="logo"><a href="../index.html">
+  <img class="logo" src="../_static/x3dom-logo-small.png" alt="Logo"/>
+</a></p>
+-->
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Styling with CSS</a><ul>
+<li><a class="reference internal" href="#basic-scene-document">Basic scene document</a></li>
+<li><a class="reference internal" href="#basic-styling">Basic styling</a></li>
+<li><a class="reference internal" href="#adding-interaction">Adding interaction</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Tutorial</a><ul>
+      <li>Previous: <a href="firststeps.html" title="previous chapter">First steps with X3DOM</a></li>
+      <li>Next: <a href="imagesoundmovie.html" title="next chapter">Images, sound and movie formats</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2012, Fraunhofer IGD/VCST.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  
+<style>
+    .internal-node-list ul,
+    .internal-node-list, li {
+        margin:0;
+        padding:0;
+    }
+</style>
+  </body>
+</html>

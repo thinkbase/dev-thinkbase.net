@@ -1,0 +1,165 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Generic 3D data conversion &mdash; X3DOM v1.4.0 documentation</title>
+    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="X3DOM v1.4.0 documentation" href="../index.html" />
+    <link rel="up" title="Tutorial" href="index.html" />
+    <link rel="next" title="Analyzing and optimizing your model for the 3D Web" href="aopt.html" />
+    <link rel="prev" title="Images, sound and movie formats" href="imagesoundmovie.html" />
+   
+    <script src="http://x3dom.org/download/dev/x3dom-full.js"></script>
+  
+  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+
+  </head>
+  <body>
+    <!--<div id="beta_notice"><p><strong>Note: </strong>This documentation is under active development. If you are interested in helping out, <a href="http://sourceforge.net/mailarchive/forum.php?forum_name=x3dom-developers">get in touch</a>.</p></div>-->
+  
+  
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="aopt.html" title="Analyzing and optimizing your model for the 3D Web"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="imagesoundmovie.html" title="Images, sound and movie formats"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">X3DOM v1.4.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="generic-3d-data-conversion">
+<span id="dataconversion"></span><h1>Generic 3D data conversion<a class="headerlink" href="#generic-3d-data-conversion" title="Permalink to this headline">¶</a></h1>
+<p>How to get your 3D asset in your application is one of the essential questions that every 3D runtime environment has to answer.</p>
+<p>X3DOM uses X3D data embedded in (X)HTML pages and optional X3D-XML files referenced by the embedded part. The X3D-XML files can reference further X3D-XML files and therefore build a hierarchy of asset containers.</p>
+<a class="reference internal image-reference" href="../_images/x3dom-content-creation-pipeline.png"><img alt="Content creation pipeline" src="../_images/x3dom-content-creation-pipeline.png" style="width: 514.8px; height: 655.2px;" /></a>
+<p>This tutorial shows how to get your data into the X(HTML) page and how to convert it to X3D-XML so it could be externally referenced.</p>
+<div class="section" id="dcc-export">
+<h2>DCC export<a class="headerlink" href="#dcc-export" title="Permalink to this headline">¶</a></h2>
+<p>Usually people use some form of Digital Content Creation (DCC) tool to build the 3D models. This can be a modeling system like Maya or 3D Studio Max, and also a CAD-System or simulation package.</p>
+<p>They all usually allow exporting the internal representation to some form of 3D data file. Most support X3D or VRML, some even both (e.g. blender) plus other formats. For X3DOM you should look for a X3D exporter. VRML is your second best choice. X3D is a VRML derivate and superset.</p>
+</div>
+<div class="section" id="converter">
+<h2>Converter<a class="headerlink" href="#converter" title="Permalink to this headline">¶</a></h2>
+<p>If your DCC-tool does not support X3D or VRML you are forced to utilize another tool which will introduce a extra level of conversion. Depending on your format there are usually different converters. Refer to <a class="reference external" href="http://www.web3d.org/x3d/content/examples/X3dResources.html#Conversions">X3D/web3d.org data conversion</a> for more information.</p>
+<p>However, you should really try to avoid this step and export directly to X3D or VRML.</p>
+</div>
+<div class="section" id="transcoding">
+<h2>Transcoding<a class="headerlink" href="#transcoding" title="Permalink to this headline">¶</a></h2>
+<p>If you have an X3D-XML or VRML file you can easily recode your data without any data loss. There are different options but the easiest right now is properly the Avalon-Optimizer (aopt) from the <a class="reference external" href="http://www.instantreality.org/">InstantReality</a> packages. You can <a class="reference external" href="http://www.instantreality.org/tools/x3d_encoding_converter/">use it online</a> or on your local machine to recode your data.</p>
+<div class="section" id="offline-transcoding">
+<h3>Offline Transcoding<a class="headerlink" href="#offline-transcoding" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://www.instantreality.org/downloads/">Download</a> and install the InstantPlayer system. The package includes a command line tool called aopt(.exe) which we will use for conversion. Setup your shell-environment to find and include the binary. The usually paths are:</p>
+<ul class="simple">
+<li>Windows: <tt class="docutils literal"><span class="pre">C:\Program</span> <span class="pre">Files\Instant</span> <span class="pre">Player\bin\aopt.exe</span></tt></li>
+<li>Mac: <tt class="docutils literal"><span class="pre">/Applications/Instant</span> <span class="pre">Player.app/Contents/MacOS/aopt</span></tt></li>
+<li>Linux: <tt class="docutils literal"><span class="pre">/opt/instantReality/bin/aopt</span></tt></li>
+</ul>
+<p>Then run <tt class="docutils literal"><span class="pre">aopt</span> <span class="pre">-h</span></tt> command to get a full list of options and usage instructions. For this tutorial the most important are:</p>
+<div class="highlight-python"><pre>aopt -i foo.wrl -x foo.x3d      # Convert VRML to X3D-XML
+aopt -i foo.x3d -N foo.html     # Convert VRML or X3D-XML to HTML
+aopt -i foo.x3d -M foo.xhtml    # Convert VMRL or X3D-XML to XHTML
+aopt -i foo.x3d -u -N foo.html  # Optimization and build DEF/USE reuses</pre>
+</div>
+</div>
+</div>
+<div class="section" id="building-the-file-hierarchy">
+<h2>Building the File Hierarchy<a class="headerlink" href="#building-the-file-hierarchy" title="Permalink to this headline">¶</a></h2>
+<p>A hierarchy of files can be built up with Inline nodes. The advantage here is that bigger objects/ meshes do not need to be directly part of a page’s source code, but can be loaded in parallel in the background.</p>
+<p><strong>Important:</strong> If you use <tt class="docutils literal"><span class="pre">&lt;Inline</span> <span class="pre">url=”foo.x3d”</span> <span class="pre">/&gt;</span></tt> nodes in your content, you need a real server to run your application. This will not work locally from your disc.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><!-- 
+<p class="logo"><a href="../index.html">
+  <img class="logo" src="../_static/x3dom-logo-small.png" alt="Logo"/>
+</a></p>
+-->
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Generic 3D data conversion</a><ul>
+<li><a class="reference internal" href="#dcc-export">DCC export</a></li>
+<li><a class="reference internal" href="#converter">Converter</a></li>
+<li><a class="reference internal" href="#transcoding">Transcoding</a><ul>
+<li><a class="reference internal" href="#offline-transcoding">Offline Transcoding</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#building-the-file-hierarchy">Building the File Hierarchy</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Tutorial</a><ul>
+      <li>Previous: <a href="imagesoundmovie.html" title="previous chapter">Images, sound and movie formats</a></li>
+      <li>Next: <a href="aopt.html" title="next chapter">Analyzing and optimizing your model for the 3D Web</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2012, Fraunhofer IGD/VCST.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  
+<style>
+    .internal-node-list ul,
+    .internal-node-list, li {
+        margin:0;
+        padding:0;
+    }
+</style>
+  </body>
+</html>

@@ -1,0 +1,322 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Release notes &mdash; X3DOM v1.4.0 documentation</title>
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="X3DOM v1.4.0 documentation" href="index.html" />
+    <link rel="next" title="License" href="license.html" />
+    <link rel="prev" title="Resources" href="notes/resources.html" />
+   
+    <script src="http://x3dom.org/download/dev/x3dom-full.js"></script>
+  
+  <link media="only screen and (max-device-width: 480px)" href="_static/small_flask.css" type= "text/css" rel="stylesheet" />
+
+  </head>
+  <body>
+    <!--<div id="beta_notice"><p><strong>Note: </strong>This documentation is under active development. If you are interested in helping out, <a href="http://sourceforge.net/mailarchive/forum.php?forum_name=x3dom-developers">get in touch</a>.</p></div>-->
+  
+  
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="license.html" title="License"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="notes/resources.html" title="Resources"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">X3DOM v1.4.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="release-notes">
+<span id="releasenotes"></span><h1>Release notes<a class="headerlink" href="#release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-1-4">
+<h2>Version 1.4<a class="headerlink" href="#version-1-4" title="Permalink to this headline">¶</a></h2>
+<p>Welcome to X3DOM 1.4!</p>
+<p>After almost one year in the making we are proud to announce a new X3DOM release.
+With this latest installment of our defacto standard JavasSript library that marries
+HTML with declarative 3D content, we provide many fixes and enhancements.</p>
+<div class="section" id="new-in-1-4">
+<h3>New in 1.4<a class="headerlink" href="#new-in-1-4" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul>
+<li><dl class="first docutils">
+<dt>Experimental geometry nodes that externalize vertex data in binary containers:</dt>
+<dd><ul class="first last simple">
+<li>ImageGeometry (which holds vertex attributes in images),</li>
+<li>BinaryGeometry (which holds vertex data in binary files,
+where attributes can have - besides standard 32-bit - 8-bit and 16-bit precision),</li>
+<li>BitLODGeometry (which also holds vertex attributes in external files,
+though here the containers can consist of variable bit precision for JPEG-like effects)</li>
+<li>Tutorial for image and binary geometry generation (<a class="reference internal" href="tutorial/aopt.html#aopt"><em>Analyzing and optimizing your model for the 3D Web</em></a>)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">OrthoViewpoint and Viewfrustum</p>
+</li>
+<li><p class="first">Basic support for VolumeRendering component (VolumeData node, OpacityMapVolumeStyle, MPRVolumeStyle)</p>
+</li>
+<li><p class="first">Programmatic documentation API (<a class="reference internal" href="api.html#runtime-api"><em>API</em></a>)</p>
+</li>
+<li><p class="first">MultiTouch integration now supporting iOS devices, Chrome, and Mozilla</p>
+</li>
+<li><p class="first">Added attribute setters, viewpointChanged event, helicopter mode etc.</p>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="enhancements-and-fixes">
+<h3>Enhancements and Fixes<a class="headerlink" href="#enhancements-and-fixes" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul>
+<li><p class="first">Enhanced picking with a max. of 65,535 objects, while the corresponding mouse or touch event
+also provides the picked position with 16-bit precision and the object normal at this position</p>
+</li>
+<li><p class="first">More rendering features like the sortKey/sortType Appearance fields for defining the
+rendering order, or the DepthMode (App. child) to define if an object shall be readOnly</p>
+</li>
+<li><dl class="first docutils">
+<dt>Multiline Text support per specification</dt>
+<dd><ul class="first last simple">
+<li>changed FontStyle size field to X3D default behavior</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">Enhanced JavaScript runtime API now with a plenthora of additional methods  (<a class="reference internal" href="api.html#runtime-api"><em>API</em></a>)</p>
+</li>
+<li><p class="first">Lots of Flash backend fixes (e.g., LOD now also in Flash renderer supported)</p>
+</li>
+<li><p class="first">Many more bugfixes in IndexedFaceSet, skybox background node etc.</p>
+</li>
+</ul>
+</div></blockquote>
+<p>For a complete and exhaustive list of changes, please refer to the <a class="reference external" href="http://x3dom.org/download/1.4/CHANGELOG">CHANGELOG</a>
+file or <a class="reference external" href="https://github.com/x3dom/x3dom/issues?page=1&amp;sort=updated&amp;state=closed">GitHub Issue Tracker</a>.</p>
+<p>You can get the this X3DOM release from:</p>
+<blockquote>
+<div><a class="reference external" href="http://x3dom.org/download/1.4/">http://x3dom.org/download/1.4/</a></div></blockquote>
+</div>
+</div>
+<div class="section" id="version-1-3">
+<h2>Version 1.3<a class="headerlink" href="#version-1-3" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li>Our participation at the W3C was officially launched</li>
+<li>We have moved from SF to GitHub</li>
+<li>We have added some unit tests</li>
+<li>We have renewed our documentation and added some tutorials</li>
+<li>We have added component support for X3DOM to hold the core tight and allow (non-)standardized extensions</li>
+<li>With the release of Flash 11 we are now able to use a non-beta API for the Flash fallback</li>
+<li><tt class="docutils literal"><span class="pre">`&lt;x3d</span> <span class="pre">src='foo.x3d'</span> <span class="pre">/&gt;`</span></tt> support allows integration of 3D content like
+native images. Note: this will not behave like including images and only work in a client/server
+environment due the fact that we have to use the XMLHttpRequest functionality</li>
+<li>We have redesigned our multitouch support. It now works on iOS devices and
+multitouch setups with Mozilla. For Android and Firefox there seem to be
+some bugs in the android implementation and this should work only
+after these bugs are closed</li>
+<li>We worked on the WebGL-backend, reducing the shader complexity to run on
+mobile hardware. The shaders are now chosen using a cabs-like system.</li>
+<li>Added support for billboards</li>
+<li>Redesigned our build system</li>
+<li>We have implemented functionality for reflecting inlined scenes into the
+namespace of parent scenes. With this it is now possible to access
+elements from the parent scene to address elements within the inlined
+scene. Due to the lack of supporting such a concept in the X3D and
+HTML standard we have made use of a custom extension (see field
+nameSpaceName)</li>
+<li>Inline support in a flash renderer</li>
+<li>Support for a <tt class="docutils literal"><span class="pre">`&lt;param&gt;`</span></tt> tag. This allows to configure
+the framework runtime at a single point</li>
+<li>Extended triangulation for generating triangles out of concave geometry</li>
+<li>New components</li>
+<li>Various fixes &amp; new features</li>
+</ul>
+</div></blockquote>
+<p>With the new component model we have added the first two optional components:</p>
+<blockquote>
+<div><ul class="simple">
+<li>2D primitive support for the use of elements like rectangles, discs, lines, etc.</li>
+<li>Initial support for some GEO referencing elements from the X3D specification</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="version-1-2">
+<h2>Version 1.2<a class="headerlink" href="#version-1-2" title="Permalink to this headline">¶</a></h2>
+<p>After many months of work, we’re proud to announce the release today of
+X3DOM 1.2. There’s plenty of cool stuff we have worked on since the last
+release. You can also swing by the downloads page to grab a copy of the
+release package:</p>
+<p><a class="reference external" href="http://x3dom.org/x3dom/release/">http://x3dom.org/x3dom/release/</a></p>
+<p>The new version supports an additional render-backend. The system now looks
+for a Flash11 plugin if the browser does not provide a SAI-Plugin or WebGL
+interface. This enables the user to view X3DOM pages, with some restrictions,
+using the Internet Explorer 9 browser. It utilizes the Adobe Flash MoleHill
+3D-API for GPU-Accelerated rendering. To use Adobe Flash-based X3DOM you need
+the latest Adobe Flash Player Incubator build (11.01.3d).</p>
+<p>Our <tt class="docutils literal"><span class="pre">x3dom.swf</span></tt> must either be placed in the same folder as your xhtml/html
+files, or you can specify a path with the swfpath-Parameter of the X3D-Node.
+With the X3D-Nodes backend-Parameter you can set Flash as default backend.</p>
+<p>At the moment the Flash-backend is still in an early beta state with most of
+base nodes working. Special features like multiple lights, shadows,
+CommonSurfaceShader, etc. are being worked on</p>
+<blockquote>
+<div><ul class="simple">
+<li>Internal reorganization of sources. Node type have now their own submodule
+(src/nodes) and are split into groups.</li>
+<li>Text node is partially working now. You can use any font available to the
+browser. This includes WebFonts of CSS3.</li>
+<li>Added system to pass parameters to runtime. The use attributes with the
+X3D element will be deprecated in 1.3. Currently supported parameters</li>
+<li>Partially working MT support with on Firefox beta. Experimental.</li>
+<li>It is now possible to directly apply CSS styles to the X3D element.</li>
+<li>Fixed display problem with textures which have dimensions not to the
+power of two.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="verison-1-1">
+<h2>Verison 1.1<a class="headerlink" href="#verison-1-1" title="Permalink to this headline">¶</a></h2>
+<p>Second stable release after almost 7 month.</p>
+<p><a class="reference external" href="http://x3dom.org/download/x3dom-v1.1.js">http://x3dom.org/download/x3dom-v1.1.js</a></p>
+<p>Most features from the 1.1. milestone are implemented:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Unified HTML/XHTML encoding</li>
+<li>HTML5 &lt;canvas&gt;, &lt;img&gt; and &lt;video&gt; as texture element supported</li>
+<li>CSS 3D Transforms</li>
+<li>Shader composition framework</li>
+<li>multiple lights and support for Spot-, Point- and DirectionalLight</li>
+<li>Fog</li>
+<li>LOD</li>
+<li>Support for large meshes</li>
+<li>Improved normal generation</li>
+<li>Follower component</li>
+<li>WebGL compatibility</li>
+<li>The proposed HTML profile is almost implemented</li>
+<li>The fallback-model has changed a bit. We partially support X3D-SAI
+plugins now and removed O3D as technology.</li>
+</ul>
+</div></blockquote>
+<p>Recently there have been several changes in the WebGL-API (e.g. interface
+changes in texImage2D() method, replacement of old WebGL array types with
+the new TypedArray specification, enforcement of precision modifiers in
+shader code, and changed behavior of NPOT textures). This leads to
+incompatibilities with previous versions, why the 1.0 X3DOM release does
+no longer work together with recent browser versions.</p>
+</div>
+<div class="section" id="version-1-0">
+<h2>Version 1.0<a class="headerlink" href="#version-1-0" title="Permalink to this headline">¶</a></h2>
+<p>First stable release of the framework.</p>
+<p><a class="reference external" href="http://x3dom.org/download/x3dom-v1.0.js">http://x3dom.org/download/x3dom-v1.0.js</a></p>
+<p>All initially planned features are implemented:</p>
+<blockquote>
+<div><ul class="simple">
+<li>HTML / XHTML Support</li>
+<li>Monitoring of DOM element add/remove and attribute change</li>
+<li>JS-Scenegraph synchronizer</li>
+<li>ROUTEs</li>
+<li>DEF/USE support</li>
+<li>External Subtree (via X3D Inline)</li>
+<li>Image (Texture), Movie (Texture) and Sound (Emitter) support</li>
+<li>Navigation: Examine</li>
+<li>WebGL Render backend</li>
+<li>The proposed HTML profile is partially implemented.</li>
+</ul>
+</div></blockquote>
+<p><a class="reference external" href="http://www.x3dom.org/?p=781">Full release note</a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><!-- 
+<p class="logo"><a href="index.html">
+  <img class="logo" src="_static/x3dom-logo-small.png" alt="Logo"/>
+</a></p>
+-->
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Release notes</a><ul>
+<li><a class="reference internal" href="#version-1-4">Version 1.4</a><ul>
+<li><a class="reference internal" href="#new-in-1-4">New in 1.4</a></li>
+<li><a class="reference internal" href="#enhancements-and-fixes">Enhancements and Fixes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#version-1-3">Version 1.3</a></li>
+<li><a class="reference internal" href="#version-1-2">Version 1.2</a></li>
+<li><a class="reference internal" href="#verison-1-1">Verison 1.1</a></li>
+<li><a class="reference internal" href="#version-1-0">Version 1.0</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="notes/resources.html" title="previous chapter">Resources</a></li>
+      <li>Next: <a href="license.html" title="next chapter">License</a></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2012, Fraunhofer IGD/VCST.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  
+<style>
+    .internal-node-list ul,
+    .internal-node-list, li {
+        margin:0;
+        padding:0;
+    }
+</style>
+  </body>
+</html>

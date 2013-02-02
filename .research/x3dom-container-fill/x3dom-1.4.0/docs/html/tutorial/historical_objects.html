@@ -1,0 +1,190 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>3D Lightbox Gallery of Historical Objects &mdash; X3DOM v1.4.0 documentation</title>
+    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="X3DOM v1.4.0 documentation" href="../index.html" />
+    <link rel="up" title="Tutorial" href="index.html" />
+    <link rel="next" title="Camera Navigation" href="../navigation.html" />
+    <link rel="prev" title="Flash + AR / X3DOM Mashup" href="flash_mashup.html" />
+   
+    <script src="http://x3dom.org/download/dev/x3dom-full.js"></script>
+  
+  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+
+  </head>
+  <body>
+    <!--<div id="beta_notice"><p><strong>Note: </strong>This documentation is under active development. If you are interested in helping out, <a href="http://sourceforge.net/mailarchive/forum.php?forum_name=x3dom-developers">get in touch</a>.</p></div>-->
+  
+  
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../navigation.html" title="Camera Navigation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="flash_mashup.html" title="Flash + AR / X3DOM Mashup"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">X3DOM v1.4.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="d-lightbox-gallery-of-historical-objects">
+<span id="historical"></span><h1>3D Lightbox Gallery of Historical Objects<a class="headerlink" href="#d-lightbox-gallery-of-historical-objects" title="Permalink to this headline">¶</a></h1>
+<p>This tutorial describes how to load arbitrary 3D geometry inside your web page with x3dom. We are going to develop an <a class="reference external" href="http://x3dom.org/x3dom/example/3d-coform/index.html">online catalog of 3D objects</a>, that popup inside our page using the popular lightbox overlay principle (<a class="reference external" href="http://x3dom.org/x3dom/example/3d-coform/index.html">click here for the demo</a>). In our case, the 3D objects are X3D files of 3D scanned historical objects. By Jens Keil.</p>
+<a class="reference external image-reference" href="http://x3dom.org/x3dom/example/3d-coform/index.html"><div align="center" class="align-center"><img alt="../_images/coform3d_1.png" class="align-center" src="../_images/coform3d_1.png" /></div>
+</a>
+<div class="section" id="generating-the-grid">
+<h2>Generating the grid<a class="headerlink" href="#generating-the-grid" title="Permalink to this headline">¶</a></h2>
+<p>Our main page is only the overview of all objects. Hence, we are going to generate a grid with thumbnail images of our objects. We link these images to a second page with the X3DOM content. Since we have 36 objects our grid consists of 6 rows and 6 columns. Let’s use a table for that.</p>
+<div class="highlight-html"><pre>&lt;table id="demo_table" class="gallery clearfix &gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;a href="external_html_page"&gt;&lt;img /&gt;&lt;/a&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;</pre>
+</div>
+<div align="center" class="align-center"><img alt="../_images/coform3d_2.png" class="align-center" src="../_images/coform3d_2.png" /></div>
+<p>As mentioned, our 3D content is displayed inside a lightbox popup. This is a JavaScript based script that is normally used to overlays images inside the current web page. In our case, we are going to overlay a external page with the 3D object in it. We have used the <a class="reference external" href="http://www.no-margin-for-errors.com/projects/prettyphoto-jquery-lightbox-clone/">prettyPhoto lightbox version of Stephane Caron</a>, since it features the <a class="reference external" href="http://en.wikipedia.org/wiki/HTML_element#Frames">iframes</a> which we need to load a second HTML file into our main page.</p>
+<p>In order to tell the script that our linked content should be opened inside the overlay, we add some query parameters at the end of the URL. For example:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;dcm200310301737.html?iframe=true&amp;width=500&amp;height=600&quot;</span>
+   <span class="na">rel=</span><span class="s">&quot;prettyPhoto[iframe]&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>Having finished to set up the grid, we initialize the lightbox script after the table definition:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">charset=</span><span class="s">&quot;utf-8&quot;</span><span class="nt">&gt;</span>
+    <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.gallery a[rel^=&#39;prettyPhoto&#39;]&quot;</span><span class="p">).</span><span class="nx">prettyPhoto</span><span class="p">(</span>
+            <span class="p">{</span><span class="nx">theme</span><span class="o">:</span><span class="s1">&#39;light_rounded&#39;</span><span class="p">});</span>
+        <span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-up-the-3d-objects-html-file">
+<h2>Setting up the 3D object’s HTML file<a class="headerlink" href="#setting-up-the-3d-objects-html-file" title="Permalink to this headline">¶</a></h2>
+<p>Now, let’s take a look on the inlined page. We have such a page for every 3D object inside our grid. First, we export the scanned data into the X3D file format. Then we convert the X3D file into a X3DOM/HTML file (see <a class="reference internal" href="dataconversion.html#dataconversion"><em>Generic 3D data conversion</em></a>).</p>
+<div align="center" class="align-center"><img alt="../_images/coform3d_3.png" class="align-center" src="../_images/coform3d_3.png" /></div>
+<p>Our X3D decoded 3D content is inside the generated HTML now. We may add a headline or some textual explanation here; indeed, even any other media we’d like to be displayed inside our lightbox overlay. Note, that adding the script node with a link to <tt class="docutils literal"><span class="pre">x3dom.js</span></tt> at the end is doing all the magic: from declarative X3D/HTML5 to visual 3D content inside your web page.</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;head&gt;&lt;/head&gt;</span>
+  <span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>dcm200409012807<span class="nt">&lt;/h1&gt;</span>
+    <span class="nt">&lt;x3d</span> <span class="na">id=</span><span class="s">&#39;someUniqueId&#39;</span> <span class="na">showStat=</span><span class="s">&#39;false&#39;</span> <span class="na">showLog=</span><span class="s">&#39;false&#39;</span> <span class="na">x=</span><span class="s">&#39;0px&#39;</span> <span class="na">y=</span><span class="s">&#39;0px&#39;</span> <span class="na">width=</span><span class="s">&#39;400px&#39;</span> <span class="na">height=</span><span class="s">&#39;400px&#39;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;scene</span> <span class="na">DEF=</span><span class="s">&#39;scene&#39;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;worldInfo</span> <span class="na">title=</span><span class="s">&#39;dcm200409012807&#39;</span><span class="nt">&gt;&lt;/worldInfo&gt;</span>
+        <span class="nt">&lt;navigationInfo</span> <span class="na">headlight=</span><span class="s">&#39;true&#39;</span> <span class="na">type=</span><span class="s">&#39;&quot;EXAMINE&quot;&#39;</span><span class="nt">&gt;&lt;/navigationInfo&gt;</span>
+        <span class="nt">&lt;directionalLight</span> <span class="na">on=</span><span class="s">&#39;false&#39;</span> <span class="na">ambientIntensity=</span><span class="s">&#39;1&#39;</span> <span class="na">intensity=</span><span class="s">&#39;0&#39;</span><span class="nt">&gt;&lt;/directionalLight&gt;</span>
+        <span class="nt">&lt;transform</span> <span class="na">DEF=</span><span class="s">&#39;ORITGT&#39;</span> <span class="na">rotation=</span><span class="s">&#39;1 1 1 -2.094&#39;</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;shape&gt;</span>
+            <span class="nt">&lt;appearance&gt;</span>
+              <span class="nt">&lt;imageTexture</span> <span class="na">url=</span><span class="s">&#39;&quot;dcm200409012807_texture.0.jpg&quot;&#39;</span><span class="nt">&gt;&lt;/imageTexture&gt;</span>
+            <span class="nt">&lt;/appearance&gt;</span>
+            <span class="nt">&lt;indexedFaceSet</span> <span class="na">texCoordIndex=</span><span class="s">&#39; ... &#39;</span> <span class="nt">/&gt;</span>
+              <span class="nt">&lt;coordinate</span> <span class="na">DEF=</span><span class="s">&quot;COORD&quot;</span> <span class="na">point=</span><span class="s">&#39; ... &#39;</span> <span class="nt">/&gt;&lt;/textureCoordinate&gt;</span>
+            <span class="nt">&lt;/indexedFaceSet&gt;</span>
+          <span class="nt">&lt;/shape&gt;</span>
+        <span class="nt">&lt;/transform&gt;</span>
+        <span class="nt">&lt;background</span> <span class="na">skyColor=</span><span class="s">&#39;1 1 1&#39;</span><span class="nt">&gt;&lt;/background&gt;</span>
+        <span class="nt">&lt;viewpoint</span> <span class="na">position=</span><span class="s">&#39;0 0 4&#39;</span><span class="nt">&gt;&lt;/viewpoint&gt;</span>
+      <span class="nt">&lt;/scene&gt;</span>
+    <span class="nt">&lt;/x3d&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&#39;text/javascript&#39;</span> <span class="na">src=</span><span class="s">&#39;../x3dom.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>This tutorial explained how to generate a grid of 3D object inside a web page. Clicking on a thumbnail image opens the 3D object inside a lightbox popup within the current page. Rendering as well as basic navigation is handled by the X3DOM Javascript back end.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><!-- 
+<p class="logo"><a href="../index.html">
+  <img class="logo" src="../_static/x3dom-logo-small.png" alt="Logo"/>
+</a></p>
+-->
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">3D Lightbox Gallery of Historical Objects</a><ul>
+<li><a class="reference internal" href="#generating-the-grid">Generating the grid</a></li>
+<li><a class="reference internal" href="#setting-up-the-3d-objects-html-file">Setting up the 3D object’s HTML file</a></li>
+<li><a class="reference internal" href="#summary">Summary</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Tutorial</a><ul>
+      <li>Previous: <a href="flash_mashup.html" title="previous chapter">Flash + AR / X3DOM Mashup</a></li>
+      <li>Next: <a href="../navigation.html" title="next chapter">Camera Navigation</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2012, Fraunhofer IGD/VCST.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  
+<style>
+    .internal-node-list ul,
+    .internal-node-list, li {
+        margin:0;
+        padding:0;
+    }
+</style>
+  </body>
+</html>

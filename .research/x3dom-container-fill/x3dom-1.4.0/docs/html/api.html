@@ -1,0 +1,875 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>API &mdash; X3DOM v1.4.0 documentation</title>
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="X3DOM v1.4.0 documentation" href="index.html" />
+    <link rel="next" title="Nodes" href="nodes/index.html" />
+    <link rel="prev" title="Troubleshooting" href="troubleshooting.html" />
+   
+    <script src="http://x3dom.org/download/dev/x3dom-full.js"></script>
+  
+  <link media="only screen and (max-device-width: 480px)" href="_static/small_flask.css" type= "text/css" rel="stylesheet" />
+
+  </head>
+  <body>
+    <!--<div id="beta_notice"><p><strong>Note: </strong>This documentation is under active development. If you are interested in helping out, <a href="http://sourceforge.net/mailarchive/forum.php?forum_name=x3dom-developers">get in touch</a>.</p></div>-->
+  
+  
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="nodes/index.html" title="Nodes"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="troubleshooting.html" title="Troubleshooting"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">X3DOM v1.4.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="api">
+<span id="runtime-api"></span><h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
+<p>The X3DOM API is currently split into two parts:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Runtime</li>
+<li>Docs</li>
+</ul>
+</div></blockquote>
+<p>The runtime api provides progrmmatic live access to the system. The
+Documnetation API allows to dynamically generate documentation
+artifacts embedded derived from the source code (e.g. a list of
+loaded nodes).</p>
+<div class="section" id="runtime">
+<h2>Runtime<a class="headerlink" href="#runtime" title="Permalink to this headline">¶</a></h2>
+<p>The X3DOM runtime API provides proxy object to programmatically read
+and modify runtime parameters. The runtime proxy is attached to each
+X3D element and can be used in the following manner:</p>
+<div class="highlight-python"><pre>var e = document.getElementById('the_x3delement');
+e.runtime.showAll();
+e.runtime.resetView();
+...</pre>
+</div>
+<p>Some methods, like the <tt class="docutils literal"><span class="pre">x3dom.ready()</span></tt> function need to be called
+before the proxy object can be initialized. You can still override
+these functions globally. In order to provide you with the means to
+scope your actions to a specific X3D element, the methods receive
+the X3D element they are working on as first parameter:</p>
+<div class="highlight-python"><pre>x3dom.ready = function(element) {
+    if (element == target_element) {
+        // do something
+    }
+};</pre>
+</div>
+<dl class="function">
+<dt id="ready">
+<tt class="descname">ready</tt><big>(</big><big>)</big><a class="headerlink" href="#ready" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called once the system initialized and is ready to
+render the first time. It is therefore possible to execute custom
+action by overriding this method in your code:</p>
+<div class="highlight-python"><pre>x3dom.runtime.ready = function() {
+    alert("About to render something the first time");
+};</pre>
+</div>
+<p>It is important to create this override before the document onLoad event
+has fired. Therefore putting it directly under the inclusion of
+<tt class="docutils literal"><span class="pre">x3dom.js</span></tt> is the preferred way to ensure overloading of this function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="enterFrame">
+<tt class="descname">enterFrame</tt><big>(</big><big>)</big><a class="headerlink" href="#enterFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called just before the next frame is rendered. It is
+therefore possible to execute custom actions by overriding this
+method in your code:</p>
+<div class="highlight-python"><pre>var element = document.getElementById('my_element');
+element.runtime.enterFrame = function() {
+    alert('hello custom enter frame');
+};</pre>
+</div>
+<p>During initialization, just after <tt class="docutils literal"><span class="pre">ready()</span></tt> executed and before the very
+first frame is rendered, only the global override of this method works.</p>
+<p>If you need to execute code before the first frame renders, it is
+therefore best to use the <tt class="docutils literal"><span class="pre">ready()</span></tt> function instead.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="getActiveBindable">
+<tt class="descname">getActiveBindable</tt><big>(</big><em>typeName</em><big>)</big><a class="headerlink" href="#getActiveBindable" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>typeName</strong> (<em>string</em>) &#8211; A valid Bindable node (e.g. Viewpoint, Background,</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Active dom element</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This method returns the currently active bindable DOM element of the given
+type.</p>
+<p>For example:</p>
+<div class="highlight-python"><pre>var element, bindable;
+element = doucment.getElementById('the_x3delement');
+bindable = element.runtime.getActiveBindable('background');
+bindable.setAttribute('set_bind', 'false');</pre>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="nextView">
+<tt class="descname">nextView</tt><big>(</big><big>)</big><a class="headerlink" href="#nextView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Navigates to the next viewpoint.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="prevView">
+<tt class="descname">prevView</tt><big>(</big><big>)</big><a class="headerlink" href="#prevView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Navigates to the previous viewpoint.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="viewpoint">
+<tt class="descname">viewpoint</tt><big>(</big><big>)</big><a class="headerlink" href="#viewpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current viewpoint.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="viewMatrix">
+<tt class="descname">viewMatrix</tt><big>(</big><big>)</big><a class="headerlink" href="#viewMatrix" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">Matrix object</td>
+</tr>
+</tbody>
+</table>
+<p>Returns the current view matrix object.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="projectionMatrix">
+<tt class="descname">projectionMatrix</tt><big>(</big><big>)</big><a class="headerlink" href="#projectionMatrix" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">Matrix object</td>
+</tr>
+</tbody>
+</table>
+<p>Returns the current projection matrix object.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="getWorldToCameraCoordinatesMatrix">
+<tt class="descname">getWorldToCameraCoordinatesMatrix</tt><big>(</big><big>)</big><a class="headerlink" href="#getWorldToCameraCoordinatesMatrix" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">Matrix object</td>
+</tr>
+</tbody>
+</table>
+<p>Returns the current world to camera coordinates matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="getCameraToWorldCoordinatesMatrix">
+<tt class="descname">getCameraToWorldCoordinatesMatrix</tt><big>(</big><big>)</big><a class="headerlink" href="#getCameraToWorldCoordinatesMatrix" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">Matrix object</td>
+</tr>
+</tbody>
+</table>
+<p>Returns the current camera to world coordinates matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="getViewingRay">
+<tt class="descname">getViewingRay</tt><big>(</big><em>x</em>, <em>y</em><big>)</big><a class="headerlink" href="#getViewingRay" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> &#8211; World X position</li>
+<li><strong>y</strong> &#8211; World Y position</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Line object</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Returns the width of the canvas element.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="getWidth">
+<tt class="descname">getWidth</tt><big>(</big><big>)</big><a class="headerlink" href="#getWidth" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">Width in pixels</td>
+</tr>
+</tbody>
+</table>
+<p>Returns the width of the canvas element.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="getHeight">
+<tt class="descname">getHeight</tt><big>(</big><big>)</big><a class="headerlink" href="#getHeight" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">Height in pixels</td>
+</tr>
+</tbody>
+</table>
+<p>Returns the height of the canvas element.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="mousePosition">
+<tt class="descname">mousePosition</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#mousePosition" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>event</strong> &#8211; The event</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">[x,y] position</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Returns the 2d canvas layer position [x,y] for a given mouse event, i.e.,
+the mouse cursor&#8217;s x and y positions relative to the canvas (x3d) element.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="calcCanvasPos">
+<tt class="descname">calcCanvasPos</tt><big>(</big><em>wx</em>, <em>wy</em>, <em>xz</em><big>)</big><a class="headerlink" href="#calcCanvasPos" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>wx</strong> &#8211; World coordiante X axis</li>
+<li><strong>wy</strong> &#8211; World coordiante Y axis</li>
+<li><strong>wz</strong> &#8211; World coordiante Z axis</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Array with 2D corrdinates (x,y)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Takes world coordinates (x,y,z) of the scene and calculates
+the relating 2D X/Y coordinates respective to the canvas
+the scene is rendered on.</p>
+<p>This allows you to relate 3D world coordinates
+to a specific position on the 2D canvas. This can be usable
+to position a HTML element over the canvaas (like a hint window
+for exmaple).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="calcPagePos">
+<tt class="descname">calcPagePos</tt><big>(</big><em>wx</em>, <em>wy</em>, <em>xz</em><big>)</big><a class="headerlink" href="#calcPagePos" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>wx</strong> &#8211; World coordiante X axis</li>
+<li><strong>wy</strong> &#8211; World coordiante Y axis</li>
+<li><strong>wz</strong> &#8211; World coordiante Z axis</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Array with 2D corrdinates (x,y)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Takes world coordinates (x,y,z) of the scene and calculates
+the relating 2D X/Y coordinates relative to the document the
+scene is rendered in.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="calcClientPos">
+<tt class="descname">calcClientPos</tt><big>(</big><em>wx</em>, <em>wy</em>, <em>xz</em><big>)</big><a class="headerlink" href="#calcClientPos" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>wx</strong> &#8211; World coordiante X axis</li>
+<li><strong>wy</strong> &#8211; World coordiante Y axis</li>
+<li><strong>wz</strong> &#8211; World coordiante Z axis</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Array with 2D corrdinates (x,y)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Takes world coordinates (x,y,z) of the scene and calculates
+the relating 2D X/Y coordinates relative to the window the
+scene is rendered in.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="getScreenshot">
+<tt class="descname">getScreenshot</tt><big>(</big><big>)</big><a class="headerlink" href="#getScreenshot" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">URL to image</td>
+</tr>
+</tbody>
+</table>
+<p>Returns a URL to a Base64 encoded png image consisting of
+the current rendering.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lightMatrix">
+<tt class="descname">lightMatrix</tt><big>(</big><big>)</big><a class="headerlink" href="#lightMatrix" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">The current light matrix</td>
+</tr>
+</tbody>
+</table>
+<p>Returns the current light matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="resetView">
+<tt class="descname">resetView</tt><big>(</big><big>)</big><a class="headerlink" href="#resetView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Navigates to the initial viewpoint.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lightView">
+<tt class="descname">lightView</tt><big>(</big><big>)</big><a class="headerlink" href="#lightView" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">True if navigation was possible, false otherwise.</td>
+</tr>
+</tbody>
+</table>
+<p>Navigates to the first light, if any.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="uprightView">
+<tt class="descname">uprightView</tt><big>(</big><big>)</big><a class="headerlink" href="#uprightView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Navigates to upright view.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="showAll">
+<tt class="descname">showAll</tt><big>(</big><big>)</big><a class="headerlink" href="#showAll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Zooms so that all objects are visible.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>axis</strong> (<em>string</em>) &#8211; the axis as string: posX, negX, posY, negY, posZ, negZ</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="showObject">
+<tt class="descname">showObject</tt><big>(</big><em>obj</em>, <em>axis</em><big>)</big><a class="headerlink" href="#showObject" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>obj</strong> &#8211; the scene-graph element on which to focus</li>
+<li><strong>axis</strong> &#8211; the axis as string, one of: posX, negX, posY, negY, posZ, negZ</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Zooms so that a given object is fully visible.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="getCenter">
+<tt class="descname">getCenter</tt><big>(</big><em>domNode</em><big>)</big><a class="headerlink" href="#getCenter" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>domNode</strong> &#8211; the node for which its center shall be returned</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Node center or &#8216;null&#8217; if donNode is not a Shape or Geometry</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Returns the center of a X3DShapeNode or X3DGeometryNode as SF3Vec3f object.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="getCurrentTransform">
+<tt class="descname">getCurrentTransform</tt><big>(</big><em>domNode</em><big>)</big><a class="headerlink" href="#getCurrentTransform" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>domNode</strong> &#8211; the node for which its transformation shall be returned</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Transformation matrix (or null no valid node is given)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Returns the current to world transformation of a given node. If no valid
+node is given <tt class="docutils literal"><span class="pre">null</span></tt> is returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="debug">
+<tt class="descname">debug</tt><big>(</big><em>show</em><big>)</big><a class="headerlink" href="#debug" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>show</strong> (<em>boolean</em>) &#8211; true/false to show or hide the debug window</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The current visibility status of the debug window (true/false)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Displays or hides the debug window. If the paramter is omitted, the
+current visibility satus is returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="navigationType">
+<tt class="descname">navigationType</tt><big>(</big><big>)</big><a class="headerlink" href="#navigationType" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">A string representing the active navigation type.</td>
+</tr>
+</tbody>
+</table>
+<p>A readout of the currently active navigation type.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="examine">
+<tt class="descname">examine</tt><big>(</big><big>)</big><a class="headerlink" href="#examine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Switches to examine mode.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lookAt">
+<tt class="descname">lookAt</tt><big>(</big><big>)</big><a class="headerlink" href="#lookAt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Switches to lookAt mode.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lookAround">
+<tt class="descname">lookAround</tt><big>(</big><big>)</big><a class="headerlink" href="#lookAround" title="Permalink to this definition">¶</a></dt>
+<dd><p>Switches to lookAround mode.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="walk">
+<tt class="descname">walk</tt><big>(</big><big>)</big><a class="headerlink" href="#walk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Switches to walk mode.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="game">
+<tt class="descname">game</tt><big>(</big><big>)</big><a class="headerlink" href="#game" title="Permalink to this definition">¶</a></dt>
+<dd><p>Switches to game mode.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="helicopter">
+<tt class="descname">helicopter</tt><big>(</big><big>)</big><a class="headerlink" href="#helicopter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Switches to helicopter mode.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="resetExamin">
+<tt class="descname">resetExamin</tt><big>(</big><big>)</big><a class="headerlink" href="#resetExamin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets all variables required by examin mode to init state</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="togglePoints">
+<tt class="descname">togglePoints</tt><big>(</big><big>)</big><a class="headerlink" href="#togglePoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Toggles points attribute</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pickRect">
+<tt class="descname">pickRect</tt><big>(</big><em>x1</em>, <em>y1</em>, <em>x2</em>, <em>y2</em><big>)</big><a class="headerlink" href="#pickRect" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>x1</strong> &#8211; x1 coordinate of rectangle</li>
+<li><strong>y1</strong> &#8211; y1 coordinate of rectangle</li>
+<li><strong>x2</strong> &#8211; x2 coordinate of rectangle</li>
+<li><strong>z2</strong> &#8211; y2 coordinate of rectangle</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p>Array of shape elements</p>
+<p>Returns an array of all shape elements that are within the picked
+rectangle defined by (x1, y1) and (x2, y2) in canvas coordinates</p>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pickMode">
+<tt class="descname">pickMode</tt><big>(</big><em>options</em><big>)</big><a class="headerlink" href="#pickMode" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>options</strong> (<em>object</em>) &#8211; An object of properties i.e. options = {&#8216;internals&#8217;: true}</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p>The current intersect type value suitable to use with changePickMode</p>
+<p>Get the current pickmode intersect type. If the option &#8216;internals&#8217;:true is
+provided, the interal representation is returned.</p>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="changePickMode">
+<tt class="descname">changePickMode</tt><big>(</big><em>type</em>, <em>options</em><big>)</big><a class="headerlink" href="#changePickMode" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>type</strong> (<em>string</em>) &#8211; The new intersect type: idbuf, color, textcoord, or box.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if the type hase been changed, false otherwise</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Alter the value of intersct type. Can be one of: idbuf, color, textcoord, box.
+Other values are ignored.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="speed">
+<tt class="descname">speed</tt><big>(</big><em>newSpeed</em><big>)</big><a class="headerlink" href="#speed" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>newSpeed</strong> (<em>float</em>) &#8211; The new speed value (optional)</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The current speed value</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Get the current speed value. If parameter is given the new speed value is
+set accordingly.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="statistics">
+<tt class="descname">statistics</tt><big>(</big><em>mode</em><big>)</big><a class="headerlink" href="#statistics" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>mode</strong> (<em>boolean</em>) &#8211; true/false to enable or disable the stats info</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The current visibility of the stats info (true/false)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Get or set the visibility of the statistics information. If parameter is
+omitted, this method returns the visibility status as boolean.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="isA">
+<tt class="descname">isA</tt><big>(</big><em>domNode</em>, <em>nodeType</em><big>)</big><a class="headerlink" href="#isA" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>domNode</strong> (<em>object</em>) &#8211; the node to test for</li>
+<li><strong>nodeType</strong> (<em>string</em>) &#8211; node name to test domNode against</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True or false</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Test a DOM node object against a node type string. This method
+can be used to determine the &#8220;type&#8221; of a DOM node.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="processIndicator">
+<tt class="descname">processIndicator</tt><big>(</big><em>mode</em><big>)</big><a class="headerlink" href="#processIndicator" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>mode</strong> (<em>boolean</em>) &#8211; true to show indicator, false to hide</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The current visibility of the process indicator info (true = visible, false = invisible)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Enable or disable the process indicator. If parameter is omitted, this method
+only returns the the visibility status of the statistics info overlay.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="backendName">
+<tt class="descname">backendName</tt><big>(</big><big>)</big><a class="headerlink" href="#backendName" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">The current render backend name as string</td>
+</tr>
+</tbody>
+</table>
+<p>Returns the currently used render backend name.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="properties">
+<tt class="descname">properties</tt><big>(</big><big>)</big><a class="headerlink" href="#properties" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">Properties object</td>
+</tr>
+</tbody>
+</table>
+<p>Returns the properties object of the X3D element.
+This holds all configuration parameters of the X3D element.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="docs">
+<h2>Docs<a class="headerlink" href="#docs" title="Permalink to this headline">¶</a></h2>
+<p>The documentation API is a set of static functions (object literal)
+which allows to obtain documetantion related information form the
+library:</p>
+<div class="highlight-python"><pre>var info;
+var info_pane;
+info = x3dom.docs.getNodeTreeInfo();
+info_pane = getElementById('infopane');
+info_pane.innerHTML = info;</pre>
+</div>
+<p>The documentation module is optional and only provided with the
+x3dom-full package.</p>
+<dl class="function">
+<dt id="getNodeTreeInfo">
+<tt class="descname">getNodeTreeInfo</tt><big>(</big><big>)</big><a class="headerlink" href="#getNodeTreeInfo" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">A div element containin the nodes and link to specification</td>
+</tr>
+</tbody>
+</table>
+<p>Return a div filled with nodes implemented and link to documentation.
+This can be used to build interactive documentation.</p>
+<p>Note: Unstable API method. Name and retrun value might change</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="getComponentInfo">
+<tt class="descname">getComponentInfo</tt><big>(</big><big>)</big><a class="headerlink" href="#getComponentInfo" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">A div element containin the nodes and link to specification,
+grouped by components and sorted alphabetically</td>
+</tr>
+</tbody>
+</table>
+<p>Return a div filled with nodes implemented and link to documentation.
+This particular method returns the the nodes grouped by components
+and sorted alphabetically.</p>
+<p>This can be used to build interactive documentation.</p>
+<p>Note: Unstable API method. Name and retrun value might change</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><!-- 
+<p class="logo"><a href="index.html">
+  <img class="logo" src="_static/x3dom-logo-small.png" alt="Logo"/>
+</a></p>
+-->
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">API</a><ul>
+<li><a class="reference internal" href="#runtime">Runtime</a></li>
+<li><a class="reference internal" href="#docs">Docs</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="troubleshooting.html" title="previous chapter">Troubleshooting</a></li>
+      <li>Next: <a href="nodes/index.html" title="next chapter">Nodes</a></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2012, Fraunhofer IGD/VCST.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  
+<style>
+    .internal-node-list ul,
+    .internal-node-list, li {
+        margin:0;
+        padding:0;
+    }
+</style>
+  </body>
+</html>

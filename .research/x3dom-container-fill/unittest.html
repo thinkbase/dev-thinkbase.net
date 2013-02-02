@@ -1,0 +1,116 @@
+<!DOCTYPE html >
+<html >
+<head>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<title>Fill3D Test</title>
+    <link rel="stylesheet" type="text/css" href="x3dom-1.4.0/x3dom.css" />
+	<script type="text/javascript" src="JSON-js/json2.js"></script>
+	<script type="text/javascript" src="x3dom-1.4.0/x3dom.js"></script>
+	<script type="text/javascript" src="x3dom-container-fill.js"></script>
+    <script type="text/javascript">
+        var boxData = [
+            { id: "BOX001", position: {x: 0, y: 0, z: 0.5}, size: {width: 0.3, height: 2.3, depth: 2.2} },
+            { id: "BOX002", position: {x: 0, y: 0, z: 0}, size: {width: 0.3, height: 1.3, depth: 0.5} },
+            { id: "BOX003", position: {x: 0.3, y: 0, z: 0}, size: {width: 2.3, height: 1.0, depth: 1.0} },
+            { id: "BOX004", position: {x: 1.3, y: 1.0, z: 0}, size: {width: 0.3, height: 0.3, depth: 0.5} },
+            { position: {x: 4.0, y: 0, z: 0.5}, size: {width: 1.3, height: 2.3, depth: 2.2}, color: "darkorange" },
+            { position: {x: 3.0, y: 0, z: 0}, size: {width: 2.3, height: 1.3, depth: 0.5}, color: "darkorange" },
+            { position: {x: 5.3, y: 0, z: 0}, size: {width: 2.3, height: 1.0, depth: 2.5}, color: "darkorange" },
+            { position: {x: 6.3, y: 1.0, z: 2.0}, size: {width: 0.8, height: 0.3, depth: 0.8}, color: "darkorange" },
+        ];
+    </script>
+    <script type="text/javascript">
+        x3dom.runtime.ready = function() {
+            var fill3d = window.x3dom_fill3d.buildFill3D("cargotainer", "root");
+            fill3d.boxHighlightCallback = function(boxElm, isHighlight){
+                var hs = document.getElementById("highlightStatusBar");
+                var ns = document.getElementById("normalizeStatusBar");
+                if (isHighlight){
+                    hs.innerText = "Last highlight: "+boxElm.id;
+                }else{
+                    ns.innerText = "Last normalize: "+boxElm.id;
+                }
+            }
+            //Build the container
+            fill3d.createContainer();
+        }
+        
+        function _doLoad(){
+            var fill3d = window.x3dom_fill3d.getFill3D("cargotainer");
+            
+            //从数据产生模型
+            for (var i=0; i<boxData.length; i++){
+                var d = boxData[i];
+                fill3d.addBox(d.id, d.position, d.size, d.color);
+            }
+            
+            //测试用途 - 填充所有显示的 Box 供选择
+            var selObj = document.getElementById("loadedIds");
+            for (var i=selObj.options.length-1; i>=0; i--){     //清除原有的所有下拉项
+                selObj.options.remove(i);
+            }
+            selObj.options.add(new Option("(无选择)", "N/A"));  //默认 - 不选择任何一个
+            for (var i=0; i<fill3d.allBoxIds.length; i++){      //添加所有 Box 的 ID 到下拉框
+                var id = fill3d.allBoxIds[i];
+                selObj.options.add(new Option(id, id));
+            }
+        }
+        
+        function _doReset(){
+            alert("注意: 目前版本存在 bug, 在 Flash backend 中测试时, 执行'清除'之后 Box 的鼠标移动自动加亮位置不准确.");
+            
+            var fill3d = window.x3dom_fill3d.getFill3D("cargotainer");
+            fill3d.cleanBoxes();
+            fill3d.createContainer();
+        }
+        
+        function _switchRotation(sideName){
+            var fill3d = window.x3dom_fill3d.getFill3D("cargotainer");
+            fill3d.rotateToSide(sideName);
+        }
+        
+        function _selectBox(selObj){
+            var id = selObj.value;
+            var fill3d = window.x3dom_fill3d.getFill3D("cargotainer");
+            fill3d.highlightBox(id);
+        }
+        
+        function _getRuntime(){
+            var fill3d = window.x3dom_fill3d.getFill3D("cargotainer");
+            return fill3d.getRuntime();
+        }
+    </script>
+</head>
+   
+<body>
+    <h1>X3D 装箱测试</h1><br/>
+    <a href="javascript:_doLoad()">装载</a>
+    |
+    <a href="javascript:_switchRotation('default');">默认视角</a>
+    <a href="javascript:_switchRotation('front');">正面</a>
+    <a href="javascript:_switchRotation('top');">俯视</a>
+    <a href="javascript:_switchRotation('right');">右侧面</a>
+    |
+    <a href="javascript:_getRuntime().showAll();">全景</a>
+    <a href="javascript:_getRuntime().resetView();">复原</a>
+    |
+    <a href="javascript:_doReset()">清除</a>
+    |
+    <select id="loadedIds" style="width: 180px" onchange="_selectBox(this)"></select>
+    |
+    <span id="highlightStatusBar" style="background-color: orange; padding: 3px"></span>
+    <span id="normalizeStatusBar" style="background-color: orange; padding: 3px"></span>
+    <hr/>
+    <x3d xmlns="http://www.x3dom.org/x3dom"
+         showStat="false" showLog="false"
+         x="0px" y="0px" width="1000px" height="500px"
+         swfpath="x3dom-1.4.0/x3dom.swf">
+      <scene>
+        <viewpoint position="0 0 10" orientation="0 0 1 0" fieldOfView="0.7"></viewpoint>
+        <background transparency="0" skyColor="white" ></background>
+        <transform id="root" translation="0 0 0" rotation="0.5 -0.5 0 0.5"></transform>
+      </scene>
+    </x3d>
+</body>
+</html>

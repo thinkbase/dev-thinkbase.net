@@ -1,0 +1,265 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Loading resources from external servers &mdash; X3DOM v1.4.0 documentation</title>
+    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="X3DOM v1.4.0 documentation" href="../index.html" />
+    <link rel="up" title="Notes" href="index.html" />
+    <link rel="next" title="Complex models" href="complex_models.html" />
+    <link rel="prev" title="Notes" href="index.html" />
+   
+    <script src="http://x3dom.org/download/dev/x3dom-full.js"></script>
+  
+  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+
+  </head>
+  <body>
+    <!--<div id="beta_notice"><p><strong>Note: </strong>This documentation is under active development. If you are interested in helping out, <a href="http://sourceforge.net/mailarchive/forum.php?forum_name=x3dom-developers">get in touch</a>.</p></div>-->
+  
+  
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="complex_models.html" title="Complex models"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Notes"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">X3DOM v1.4.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Notes</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="loading-resources-from-external-servers">
+<span id="cors"></span><h1>Loading resources from external servers<a class="headerlink" href="#loading-resources-from-external-servers" title="Permalink to this headline">¶</a></h1>
+<p>Sometimes it is desirable to load resources, like textures, from other
+locations than your web server. The most common use case being serving
+textures from a <a class="reference external" href="http://en.wikipedia.org/wiki/Content_delivery_network">CDN</a>.
+While technically not a problem, there are security mechanisms
+in place to prevent injection of malicious code into your application.
+Browser vendors started to block loading of resources originating from
+domains unless these resources marked safe by the foreign web server.</p>
+<p>The corresponding W3C specification is called
+Cross-Origin Resource Sharing <a class="reference internal" href="#cors2010">[CORS2010]</a> and adhered to by most browsers.
+And in essence, you need to configure the
+foreign web server to add a HTTP header that marks the resource safe for
+your domain. Say, your application is served from <tt class="docutils literal"><span class="pre">http://yoursite.org</span></tt> and
+needs to load resources from <tt class="docutils literal"><span class="pre">http://othersite.org</span></tt>, the webserver of
+<tt class="docutils literal"><span class="pre">othersite.org</span></tt> needs to set a HTTP header that marks <tt class="docutils literal"><span class="pre">yoursite.org</span></tt>
+safe for cross site requests. For example:</p>
+<div class="highlight-python"><pre>Access-Control-Allow-Origin: http://yoursite.org</pre>
+</div>
+<p>If you don&#8217;t care and want to allow access to all users, you can add e.g.
+the following to your httpd.conf (given you are using Apache2):</p>
+<div class="highlight-python"><pre>&lt;Directory /&gt;
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Headers "Content-Type"
+    Header set Access-Control-Allow-Methods "GET, PUT, OPTIONS, DELETE, POST"
+&lt;/Directory&gt;</pre>
+</div>
+<p>An alternative to adhering to the CORS protocol, is to setting
+up a proxy server forwarding requests to the foreign server in the background.
+If you can do away with the benefits CDN provides this technique may be
+a viable alternative.</p>
+<p><em>More information on CORS and setting HTTP headers:</em></p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.w3.org/TR/cors/">Cross-Origin Resource Sharing</a></li>
+<li><a class="reference external" href="http://httpd.apache.org/docs/2.1/en/mod/mod_headers.html">Apache mod_headers</a></li>
+<li><a class="reference external" href="http://redmine.lighttpd.net/wiki/1/Docs:ModSetEnv">Lighttpd mod_setenv</a></li>
+<li><a class="reference external" href="http://wiki.nginx.org/HttpHeadersModule">NGINX headers module</a></li>
+<li><a class="reference external" href="http://enable-cors.org/">Others</a></li>
+</ul>
+<p><em>More information on proxy configuration:</em></p>
+<ul class="simple">
+<li><a class="reference external" href="http://httpd.apache.org/docs/2.1/mod/mod_proxy.html">Apache mod_proxy</a></li>
+<li><a class="reference external" href="http://redmine.lighttpd.net/wiki/1/Docs:ModProxy">Lighttpd ModProxy</a></li>
+<li><a class="reference external" href="http://wiki.nginx.org/HttpProxyModule">NGINX proxy module</a></li>
+</ul>
+<div class="section" id="developing-locally">
+<h2>Developing locally<a class="headerlink" href="#developing-locally" title="Permalink to this headline">¶</a></h2>
+<p>While the HTTP headers method presented above is the best practice
+in production environments, it is unpractical for local development
+of your application. Fortunately there are a couple of workarounds
+making you develop with pleasure.</p>
+<ul class="simple">
+<li>Use a real web server (e.g. Apache) to deliver your site locally</li>
+<li>Use a web server with proxy module to fetch external resources
+form a live website</li>
+<li>Use browser flags to disable security measures</li>
+</ul>
+<p>The latter one being the most flaky. It is not guaranteed that
+the browser will support disabling security in the long run. Also
+strange behaviour in case of magically enabled security after
+updates in combination with browser caches.</p>
+<div class="section" id="using-a-web-server">
+<h3>Using a web server<a class="headerlink" href="#using-a-web-server" title="Permalink to this headline">¶</a></h3>
+<p>Installing a web server locally and serving your files under
+the localhost domain is the best way of developing web applications. We also
+recommend you use this technique when developing with X3DOM. Using a full web
+stack locally ensures that your browser behaves the same way it would when
+loading a website over the internet. Requests are sent and received by the
+browser just like they would in a production environment. It is also
+the only way to properly test Ajax functionality and HTTP features, like
+expiry headers.</p>
+<p>There are various ways to install a web server on your machine. In case of
+Mac OS X, Apache is already installed and you can just put your documents in
+your <cite>Site</cite> folder.</p>
+<p>On Linux there are
+<a class="reference external" href="http://www.google.com/?q=linux+apache+howto">various ways to install Apache</a>
+depending on your distribution. Most likely two or three commands should
+suffice.</p>
+<p>Windows users are best served with a package called
+<a class="reference external" href="http://www.apachefriends.org">XAMPP</a>, which also caters  various Unix based
+systems.</p>
+</div>
+<div class="section" id="using-a-web-server-with-proxy-pass">
+<h3>Using a web server with proxy pass<a class="headerlink" href="#using-a-web-server-with-proxy-pass" title="Permalink to this headline">¶</a></h3>
+<p>What about external resources in local development, I want to develop locally
+and load textures from <tt class="docutils literal"><span class="pre">textureheaven.net</span></tt>. You could install as system wide
+proxy server, which processes the request and response to <tt class="docutils literal"><span class="pre">textureheaven.net</span></tt>
+and adds the correspoding CORS header to the response. Another straight forward
+way is to leverage the power of what you already have: your local web server.</p>
+<p>The setup is more elaborate and out of the scope of this document. Here are
+some pointer of how to get started.</p>
+<p>First you need to confiture your web server to answer requests to
+<tt class="docutils literal"><span class="pre">textureheaven.net</span></tt> instead of sending those requests to the real
+<tt class="docutils literal"><span class="pre">textureheaven.net</span></tt> web server. To do so you need to make an entry in
+your <tt class="docutils literal"><span class="pre">/etc/hosts</span></tt> file so the address does not resolve to the real site
+but to <tt class="docutils literal"><span class="pre">localhost</span></tt>. Within your web server configuration you now create
+a virtual host that answers requests to <tt class="docutils literal"><span class="pre">textureheaven.net</span></tt> and proxies
+them request to the real <tt class="docutils literal"><span class="pre">textureheaven.net</span></tt> site. In order to make this
+all work, you finally need to add a CORS header to the response
+(e.g. <tt class="docutils literal"><span class="pre">Access-Control-Allow-Origin:</span> <span class="pre">http://localhost</span></tt>)</p>
+<p>Sounds too complicated? There&#8217;s a shortcut way. But as with all shortcuts,
+use it with caution.</p>
+</div>
+<div class="section" id="disable-browser-security">
+<h3>Disable browser security<a class="headerlink" href="#disable-browser-security" title="Permalink to this headline">¶</a></h3>
+<p>If you have all resources locally, there is a shortcut for circumventing
+the CORS mechanisms. Please use with care.</p>
+<div class="section" id="chrome">
+<h4>Chrome<a class="headerlink" href="#chrome" title="Permalink to this headline">¶</a></h4>
+<p>The Chrome browser allows you to disable a security precaution that prevents
+you loading resources from disk. Use the following startup parameters:</p>
+<div class="highlight-python"><pre>--allow-file-access-from-files
+--allow-file-access
+--disable-web-security</pre>
+</div>
+</div>
+<div class="section" id="firefox">
+<h4>Firefox<a class="headerlink" href="#firefox" title="Permalink to this headline">¶</a></h4>
+<p>Enter the following in your location bar:</p>
+<div class="highlight-python"><pre>about:config</pre>
+</div>
+<p>Acknowledge the secuirty warning and enter the following in the filter bar:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fileuri</span>
+</pre></div>
+</div>
+<p>Look for the option called <strong>security.fileuri.strict_origin_policy</strong> and
+set it to <strong>false</strong>.</p>
+<table class="docutils citation" frame="void" id="cors2010" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[CORS2010]</a></td><td>Cross-Origin Resource Sharing, W3C, 2010.
+Available online at <a class="reference external" href="http://www.w3.org/TR/cors/">http://www.w3.org/TR/cors/</a></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><!-- 
+<p class="logo"><a href="../index.html">
+  <img class="logo" src="../_static/x3dom-logo-small.png" alt="Logo"/>
+</a></p>
+-->
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Loading resources from external servers</a><ul>
+<li><a class="reference internal" href="#developing-locally">Developing locally</a><ul>
+<li><a class="reference internal" href="#using-a-web-server">Using a web server</a></li>
+<li><a class="reference internal" href="#using-a-web-server-with-proxy-pass">Using a web server with proxy pass</a></li>
+<li><a class="reference internal" href="#disable-browser-security">Disable browser security</a><ul>
+<li><a class="reference internal" href="#chrome">Chrome</a></li>
+<li><a class="reference internal" href="#firefox">Firefox</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Notes</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Notes</a></li>
+      <li>Next: <a href="complex_models.html" title="next chapter">Complex models</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2012, Fraunhofer IGD/VCST.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  
+<style>
+    .internal-node-list ul,
+    .internal-node-list, li {
+        margin:0;
+        padding:0;
+    }
+</style>
+  </body>
+</html>

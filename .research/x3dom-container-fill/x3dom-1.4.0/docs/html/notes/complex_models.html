@@ -1,0 +1,278 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Complex models &mdash; X3DOM v1.4.0 documentation</title>
+    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="X3DOM v1.4.0 documentation" href="../index.html" />
+    <link rel="up" title="Notes" href="index.html" />
+    <link rel="next" title="Platform Notes" href="platforms.html" />
+    <link rel="prev" title="Loading resources from external servers" href="cors.html" />
+   
+    <script src="http://x3dom.org/download/dev/x3dom-full.js"></script>
+  
+  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+
+  </head>
+  <body>
+    <!--<div id="beta_notice"><p><strong>Note: </strong>This documentation is under active development. If you are interested in helping out, <a href="http://sourceforge.net/mailarchive/forum.php?forum_name=x3dom-developers">get in touch</a>.</p></div>-->
+  
+  
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="platforms.html" title="Platform Notes"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cors.html" title="Loading resources from external servers"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">X3DOM v1.4.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Notes</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <p id="complex-models"><em>+++ Draft +++</em></p>
+<div class="section" id="id1">
+<h1>Complex models<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>While X3DOM is very well suited for small models up to a few
+kilobytes in size, big models can become a major problem. This
+section takes a look at the different aspects involved and
+tries to find partial solutions to the problem. The problems can
+be broken down to the following areas:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Loading a HTML/X3D file containing a lot of data</li>
+<li>Parsing data into the DOM</li>
+<li>Storing data in memory</li>
+</ul>
+</div></blockquote>
+<p>And server side:</p>
+<blockquote>
+<div><ul class="simple">
+<li>I/O when sending big files (sendfile)</li>
+<li>Server stalling because user presses &#8220;reload&#8221; endlessly when
+not informed that an operation is in progress and consequently
+exhausting free server slots.</li>
+</ul>
+</div></blockquote>
+<p>While most of these problems are inherent to the domain we are moving in,
+and not X3DOM specific, measures can be taken to optimize loading of
+large chunks of data, especially cutting down transmission time over
+the network.</p>
+<p>Another, more complex problem, is presented by the way JavaScript and DOM
+work. There is no manual memory management possible and freeing up memory
+is left to the garbage collector that runs at intervals out of our control.
+We can not even manually start garbage collection. And if we could, there
+is quite some overhead involved in garbage collection.</p>
+<p>The only alternative to cope with the memory specific problem is
+circumventing the DOM entirely parsing. While this somewhat defies the
+purpose of X3DOM, it may present a viable alternative for performance critical
+applications. Various techniques and ideas are explored further in the
+following sections.</p>
+<p>It is paramount to keep in mind, no matter how much we optimize, the use of
+complex models is limited by the following boundaries:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Memory of client (storing more data)</li>
+<li>Processing power of client machine (parsing more faster)</li>
+</ul>
+</div></blockquote>
+<p>In the following sections we are presenting various tools and techniques
+to optimize various aspects of loading big models.</p>
+<div class="section" id="delivering-deflated-content-http-1-1">
+<h2>Delivering deflated content (HTTP/1.1)<a class="headerlink" href="#delivering-deflated-content-http-1-1" title="Permalink to this headline">¶</a></h2>
+<p>The most obvious idea is to compress the HTML/XML files. Luckily this is
+the easiest to implement and will improve performance of loading time
+significantly. Most web browsers support the deflate algorithms (ZIP) and
+can handle compressed files on the fly. The web server is configured to
+compress HTML files before delivering them to the client. By means of
+setting the HTTP (<a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html">Accpet-Encoding</a>),
+header, denoting a compressed file arrives, the client can act on this
+information and decompress the deflated file on the fly. Any browser
+that supports the HTTP/1.1 should be able to handle deflated input.</p>
+<p>In order to enable your webserver to compress the files during
+transport, the configuration needs to be alterd. How to achieve this
+can be found in you web server documentation. For exmaple:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="http://httpd.apache.org/docs/current/mod/mod_deflate.html">Apache</a></li>
+<li><a class="reference external" href="http://wiki.nginx.org/HttpGzipModule">NGINX</a></li>
+<li><a class="reference external" href="http://redmine.lighttpd.net/wiki/1/Docs:ModCompress">Lighttpd</a></li>
+</ul>
+</div></blockquote>
+<p>If you are using a different web server, refer to its documentation.</p>
+<p><strong>Benefits</strong></p>
+<p>It is considered good practice for web development to enable in-memory
+compression for text resources like HTML, CSS, JS. Tests showed that
+file size can be reduced to about 50%. Transmission time should be
+typically cut in half. For exmaple, the vary large model of the walking
+soldier () is about 13MB in size. Using GZIP compression, this model
+is only 5.2MB big.</p>
+<p><strong>Drawbacks</strong></p>
+<p>This method does not present us with any significant drawbacks.</p>
+<p>A slight overhead on server- and client-side processing power is
+inherent with on-the-fly compression. Caching techniques of
+web servers and browser mitigate the small performance hit of
+on-the-fly compression.</p>
+<p>An actual benchmark of decompressing the soldier model has not
+yet been conducted. However the ventured guess is that the savings
+of network time outperform the decompression algorithm which
+runs naively.</p>
+<p>For very large files this technique may not be beneficial since
+the server may block too long during compression or the client,
+especially with slow clients, may take to long to decompress. This
+however needs to be verified and tested.</p>
+<p>We recommend to enable compression on your web server and only out out
+if there are  performance hits than can be attributed to compression.</p>
+</div>
+<div class="section" id="makeing-use-of-browser-side-caching">
+<h2>Makeing use of browser side caching<a class="headerlink" href="#makeing-use-of-browser-side-caching" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li>Etags</li>
+<li>Expire headers</li>
+<li>HTML5 offline stuff?</li>
+<li>etc.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="using-asynchronous-loading-aka-ajax">
+<h2>Using asynchronous loading (aka Ajax)<a class="headerlink" href="#using-asynchronous-loading-aka-ajax" title="Permalink to this headline">¶</a></h2>
+<p>X3D inline
+Ajax</p>
+<p><strong>Benefits</strong></p>
+<p><strong>Drawbacks</strong></p>
+<p>The most significant drawback of the current XMLHttpRequest object
+implementations is the complete ignorance of the HTTP Accept-Encoding
+header. While lazy loading geometry data is possible using either the
+X3D inline element or custom code to load a model and modify the DOM,
+the lack of compression makes this process rather slow.</p>
+</div>
+<div class="section" id="using-geometry-images">
+<h2>Using geometry images<a class="headerlink" href="#using-geometry-images" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="http://research.microsoft.com/en-us/um/people/hoppe/proj/gim/">http://research.microsoft.com/en-us/um/people/hoppe/proj/gim/</a></li>
+<li><a class="reference external" href="http://graphicrants.blogspot.com/2009/01/virtual-geometry-images.html">http://graphicrants.blogspot.com/2009/01/virtual-geometry-images.html</a></li>
+<li><a class="reference external" href="http://www.cs.jhu.edu/%7Ebpurnomo/">http://www.cs.jhu.edu/%7Ebpurnomo/</a></li>
+<li><a class="reference external" href="http://www.uni-koblenz.de/~cg/Studienarbeiten/gpu_mesh_painting_ritschel.pdf">http://www.uni-koblenz.de/~cg/Studienarbeiten/gpu_mesh_painting_ritschel.pdf</a></li>
+<li><a class="reference external" href="http://wiki.secondlife.com/wiki/Sculpted_prim">http://wiki.secondlife.com/wiki/Sculpted_prim</a></li>
+</ul>
+</div></blockquote>
+<p><strong>Benefits</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Uses canvas to decode (native speed)</li>
+<li>Circumvents the DOM for better performance</li>
+</ul>
+</div></blockquote>
+<p><strong>Drawbacks</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Circumvents the DOM</li>
+<li>Use cases limited to simpler geometry?</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="web-server-optimizations">
+<h2>Web server optimizations<a class="headerlink" href="#web-server-optimizations" title="Permalink to this headline">¶</a></h2>
+<p>Optimization of a web server is not exactly a core topic of X3DOM. To give you
+a starting point, we collected some resources that should get you going:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Apache</li>
+<li>YSlow</li>
+<li>yada, et cetera et al.</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><!-- 
+<p class="logo"><a href="../index.html">
+  <img class="logo" src="../_static/x3dom-logo-small.png" alt="Logo"/>
+</a></p>
+-->
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Complex models</a><ul>
+<li><a class="reference internal" href="#delivering-deflated-content-http-1-1">Delivering deflated content (HTTP/1.1)</a></li>
+<li><a class="reference internal" href="#makeing-use-of-browser-side-caching">Makeing use of browser side caching</a></li>
+<li><a class="reference internal" href="#using-asynchronous-loading-aka-ajax">Using asynchronous loading (aka Ajax)</a></li>
+<li><a class="reference internal" href="#using-geometry-images">Using geometry images</a></li>
+<li><a class="reference internal" href="#web-server-optimizations">Web server optimizations</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Notes</a><ul>
+      <li>Previous: <a href="cors.html" title="previous chapter">Loading resources from external servers</a></li>
+      <li>Next: <a href="platforms.html" title="next chapter">Platform Notes</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2012, Fraunhofer IGD/VCST.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  
+<style>
+    .internal-node-list ul,
+    .internal-node-list, li {
+        margin:0;
+        padding:0;
+    }
+</style>
+  </body>
+</html>

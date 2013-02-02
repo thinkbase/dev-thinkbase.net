@@ -1,0 +1,136 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>3ds Max Export &mdash; X3DOM v1.4.0 documentation</title>
+    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="X3DOM v1.4.0 documentation" href="../index.html" />
+    <link rel="up" title="Tutorial" href="index.html" />
+    <link rel="next" title="Maya export" href="maya_export.html" />
+    <link rel="prev" title="Blender export" href="blender_export.html" />
+   
+    <script src="http://x3dom.org/download/dev/x3dom-full.js"></script>
+  
+  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+
+  </head>
+  <body>
+    <!--<div id="beta_notice"><p><strong>Note: </strong>This documentation is under active development. If you are interested in helping out, <a href="http://sourceforge.net/mailarchive/forum.php?forum_name=x3dom-developers">get in touch</a>.</p></div>-->
+  
+  
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="maya_export.html" title="Maya export"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="blender_export.html" title="Blender export"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">X3DOM v1.4.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="ds-max-export">
+<span id="max-export"></span><h1>3ds Max Export<a class="headerlink" href="#ds-max-export" title="Permalink to this headline">¶</a></h1>
+<p>If you are using <a class="reference external" href="http://usa.autodesk.com/adsk/servlet/pc/index?id=13567410&amp;siteID=123112">Autodesk 3ds Max</a> for modeling (available only for Microsoft Windows), you can install our exporter plug-in InstantExport. If you do not yet have installed 3ds Max, there is also a 30-day trial version of the modeling software available.
+Nightly beta builds of <a class="reference external" href="ftp://ftp.igd.fraunhofer.de/outgoing/irbuild/InstantExport/">InstantExport</a> are available for download <a class="reference external" href="ftp://ftp.igd.fraunhofer.de/outgoing/irbuild/InstantExport/">here</a>.</p>
+<p>InstantExport is the <a class="reference external" href="http://www.instantreality.org/">InstantReality</a> X3D exporter for 3ds Max and not only exports XML-based X3D as well as VRML, its classic encoding, but it can also now directly export to HTML/XHTML.
+But please note that – as the exporter plug-in is still under development – there are still lots of features in Max, which yet cannot be properly exported. So, if you find a bug, please report it in the <a class="reference external" href="http://forum.instantreality.org/index.php?board=19.0">InstantReality forum</a>.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>After having downloaded the exporter, unzip the zip file and choose the correct version for your system and Max version. After that, (assumed you are using the standard installation path and 3ds Max 2008) copy the file <tt class="docutils literal"><span class="pre">InstantExport.dle</span></tt> (the Max version of a DLL) into <tt class="docutils literal"><span class="pre">C:\Program</span> <span class="pre">Files\Autodesk\3ds</span> <span class="pre">Max</span> <span class="pre">2008\plugins</span></tt>.</p>
+</div>
+<div class="section" id="export">
+<h2>Export<a class="headerlink" href="#export" title="Permalink to this headline">¶</a></h2>
+<p>Then start 3ds Max, load the 3d model you want to export, choose <em>Export</em> in the File menu, type in a file name, e.g. <tt class="docutils literal"><span class="pre">test.xhtml</span></tt>, and select the file type – in this case <em>InstantExport (</em>.WRL,*.XHTML,*.X3D)*
+After that, the exporter GUI pops up. Here, under <em>Encoding</em> choose <em>XHTML</em>, as shown in the screenshot below. Finally, press the <em>Export</em> button. For more information, the zip file also includes a help file for the exporter.</p>
+<a class="reference internal image-reference" href="../_images/instantExport1.png"><img alt="../_images/instantExport1.png" src="../_images/instantExport1.png" style="width: 382.85px; height: 382.85px;" /></a>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><!-- 
+<p class="logo"><a href="../index.html">
+  <img class="logo" src="../_static/x3dom-logo-small.png" alt="Logo"/>
+</a></p>
+-->
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">3ds Max Export</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#export">Export</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Tutorial</a><ul>
+      <li>Previous: <a href="blender_export.html" title="previous chapter">Blender export</a></li>
+      <li>Next: <a href="maya_export.html" title="next chapter">Maya export</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2012, Fraunhofer IGD/VCST.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  
+<style>
+    .internal-node-list ul,
+    .internal-node-list, li {
+        margin:0;
+        padding:0;
+    }
+</style>
+  </body>
+</html>

@@ -1,0 +1,331 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Camera Navigation &mdash; X3DOM v1.4.0 documentation</title>
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="X3DOM v1.4.0 documentation" href="index.html" />
+    <link rel="next" title="Configuration" href="configuration.html" />
+    <link rel="prev" title="3D Lightbox Gallery of Historical Objects" href="tutorial/historical_objects.html" />
+   
+    <script src="http://x3dom.org/download/dev/x3dom-full.js"></script>
+  
+  <link media="only screen and (max-device-width: 480px)" href="_static/small_flask.css" type= "text/css" rel="stylesheet" />
+
+  </head>
+  <body>
+    <!--<div id="beta_notice"><p><strong>Note: </strong>This documentation is under active development. If you are interested in helping out, <a href="http://sourceforge.net/mailarchive/forum.php?forum_name=x3dom-developers">get in touch</a>.</p></div>-->
+  
+  
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="configuration.html" title="Configuration"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tutorial/historical_objects.html" title="3D Lightbox Gallery of Historical Objects"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">X3DOM v1.4.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="camera-navigation">
+<span id="navigation"></span><h1>Camera Navigation<a class="headerlink" href="#camera-navigation" title="Permalink to this headline">¶</a></h1>
+<p>X3DOM provides some generic interaction and navigation methods.
+Interactive objects will be handled by HTML-like events.
+Navigation can be user-defined or controlled by specific predefined modes.</p>
+<p>Currently X3DOM supports the following interactive navigation modes:</p>
+<ul class="simple">
+<li>Examine</li>
+<li>Walk</li>
+<li>Fly</li>
+<li>Look-at</li>
+<li>Look-around</li>
+<li>Game</li>
+<li>Helicopter</li>
+</ul>
+<p>Non-Interactive movement encompasses the functionality of:</p>
+<ul class="simple">
+<li>Resetting a view</li>
+<li>Showing all</li>
+<li>Upright view</li>
+</ul>
+<div class="section" id="interactive-camera-movement">
+<h2>Interactive camera movement<a class="headerlink" href="#interactive-camera-movement" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="examine">
+<h3>Examine<a class="headerlink" href="#examine" title="Permalink to this headline">¶</a></h3>
+<p>Activate this mode by pressing the <tt class="docutils literal"><span class="pre">&quot;e&quot;</span></tt> key.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="44%" />
+<col width="56%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Function</th>
+<th class="head">Mouse Button</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Rotate</td>
+<td>Left / Left + Shift</td>
+</tr>
+<tr><td>Pan</td>
+<td>Mid / Left + Ctrl</td>
+</tr>
+<tr><td>Zoom</td>
+<td>Right / Wheel / Left + Alt</td>
+</tr>
+<tr><td>Set center of rotation</td>
+<td>Double-click left</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="walk">
+<h3>Walk<a class="headerlink" href="#walk" title="Permalink to this headline">¶</a></h3>
+<p>Activate this mode by pressing the <tt class="docutils literal"><span class="pre">&quot;w&quot;</span></tt> key.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="44%" />
+<col width="56%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Function</th>
+<th class="head">Mouse Button</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Move forward</td>
+<td>Left</td>
+</tr>
+<tr><td>Move backward</td>
+<td>Right</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="fly">
+<h3>Fly<a class="headerlink" href="#fly" title="Permalink to this headline">¶</a></h3>
+<p>Activate this mode by pressing the <tt class="docutils literal"><span class="pre">&quot;f&quot;</span></tt> key.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="44%" />
+<col width="56%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Function</th>
+<th class="head">Mouse Button</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Move forward</td>
+<td>Left</td>
+</tr>
+<tr><td>Move backward</td>
+<td>Right</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="helicopter">
+<h3>Helicopter<a class="headerlink" href="#helicopter" title="Permalink to this headline">¶</a></h3>
+<p>Activate this mode by pressing the <tt class="docutils literal"><span class="pre">&quot;h&quot;</span></tt> key.</p>
+<p>To look downwards/upwards and to move higher/lower use the keys (8/9 and 6/7).</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="44%" />
+<col width="56%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Function</th>
+<th class="head">Mouse Button</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Move forward</td>
+<td>Left</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="look-at">
+<h3>Look at<a class="headerlink" href="#look-at" title="Permalink to this headline">¶</a></h3>
+<p>Activate this mode by pressing the <tt class="docutils literal"><span class="pre">&quot;l&quot;</span></tt> key.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="44%" />
+<col width="56%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Function</th>
+<th class="head">Mouse Button</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Move in</td>
+<td>Left</td>
+</tr>
+<tr><td>Move out</td>
+<td>Right</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="game">
+<h3>Game<a class="headerlink" href="#game" title="Permalink to this headline">¶</a></h3>
+<p>Activate this mode by pressing the <tt class="docutils literal"><span class="pre">&quot;g&quot;</span></tt> key.</p>
+<p>To look around (rotate view) move the mouse.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="44%" />
+<col width="56%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Function</th>
+<th class="head">Key</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Move forward</td>
+<td>Cursor up</td>
+</tr>
+<tr><td>Move backward</td>
+<td>Cursor down</td>
+</tr>
+<tr><td>Strafe Left</td>
+<td>Cursor left</td>
+</tr>
+<tr><td>Strafe Right</td>
+<td>Cursor right</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="non-interactive-camera-movement">
+<h2>Non-interactive camera movement<a class="headerlink" href="#non-interactive-camera-movement" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="44%" />
+<col width="56%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Function</th>
+<th class="head">Key</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Reset view</td>
+<td>r</td>
+</tr>
+<tr><td>Show all</td>
+<td>a</td>
+</tr>
+<tr><td>Upright</td>
+<td>u</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="mid-button-troubleshooting">
+<h2>Mid-Button troubleshooting<a class="headerlink" href="#mid-button-troubleshooting" title="Permalink to this headline">¶</a></h2>
+<p>If the web page has scroll bars and autoscrolling is enabled, Mid-Button
+currently does not work correctly. As a workaround, you can disable autoscrolling
+by unchecking the <strong>Use autoscrolling</strong> checkbox in the Firefox browser
+options, as is shown in the screenshot below (for the Firefox case).</p>
+<img alt="_images/UseAutoscrolling.png" src="_images/UseAutoscrolling.png" />
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><!-- 
+<p class="logo"><a href="index.html">
+  <img class="logo" src="_static/x3dom-logo-small.png" alt="Logo"/>
+</a></p>
+-->
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Camera Navigation</a><ul>
+<li><a class="reference internal" href="#interactive-camera-movement">Interactive camera movement</a><ul>
+<li><a class="reference internal" href="#examine">Examine</a></li>
+<li><a class="reference internal" href="#walk">Walk</a></li>
+<li><a class="reference internal" href="#fly">Fly</a></li>
+<li><a class="reference internal" href="#helicopter">Helicopter</a></li>
+<li><a class="reference internal" href="#look-at">Look at</a></li>
+<li><a class="reference internal" href="#game">Game</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#non-interactive-camera-movement">Non-interactive camera movement</a></li>
+<li><a class="reference internal" href="#mid-button-troubleshooting">Mid-Button troubleshooting</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="tutorial/historical_objects.html" title="previous chapter">3D Lightbox Gallery of Historical Objects</a></li>
+      <li>Next: <a href="configuration.html" title="next chapter">Configuration</a></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2012, Fraunhofer IGD/VCST.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  
+<style>
+    .internal-node-list ul,
+    .internal-node-list, li {
+        margin:0;
+        padding:0;
+    }
+</style>
+  </body>
+</html>

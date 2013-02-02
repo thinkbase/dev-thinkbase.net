@@ -1,0 +1,178 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>First steps with X3DOM &mdash; X3DOM v1.4.0 documentation</title>
+    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="X3DOM v1.4.0 documentation" href="../index.html" />
+    <link rel="up" title="Tutorial" href="index.html" />
+    <link rel="next" title="Styling with CSS" href="styling.html" />
+    <link rel="prev" title="Tutorial" href="index.html" />
+   
+    <script src="http://x3dom.org/download/dev/x3dom-full.js"></script>
+  
+  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+
+  </head>
+  <body>
+    <!--<div id="beta_notice"><p><strong>Note: </strong>This documentation is under active development. If you are interested in helping out, <a href="http://sourceforge.net/mailarchive/forum.php?forum_name=x3dom-developers">get in touch</a>.</p></div>-->
+  
+  
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="styling.html" title="Styling with CSS"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Tutorial"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">X3DOM v1.4.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="first-steps-with-x3dom">
+<span id="firststeps"></span><h1>First steps with X3DOM<a class="headerlink" href="#first-steps-with-x3dom" title="Permalink to this headline">¶</a></h1>
+<p>This tutorial is intended to be a quick start for people who have no experience with 3D graphics so far but want to try out X3DOM. Those who want to learn more about it, should have a look at the book <a class="reference external" href="http://x3dgraphics.com/">X3D: Extensible 3D Graphics for Web Authors</a> about X3D, on which X3DOM is based, by Don Brutzman and Leonard Daly.</p>
+<p>Authoring X3DOM content is very similar to authoring HTML. So just open an editor and start with the  usual stuff as shown next. Please note the <tt class="docutils literal"><span class="pre">&lt;link&gt;</span></tt> tag, which includes the X3DOM stylesheet for having everything nicely formatted, and the <tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt> tag, which includes all JavaScript functions that are necessary to run your 3D scene:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;title&gt;</span>My first X3DOM page<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span>
+          <span class="na">href=</span><span class="s">&quot;http://www.x3dom.org/download/x3dom.css&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;/link&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span>
+            <span class="na">src=</span><span class="s">&quot;http://www.x3dom.org/download/x3dom.js&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;/script&gt;</span>
+  <span class="nt">&lt;/head&gt;</span>
+  <span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>My X3DOM world<span class="nt">&lt;/h1&gt;</span>
+    <span class="nt">&lt;p&gt;</span>
+      This is my first html page with some 3d objects.
+    <span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+</div>
+<p>Save your file and open it in an <a class="reference external" href="http://www.x3dom.org/?page_id=9">WebGL capable browser</a>. As you can see, there is only some text. What’s missing are the X3DOM-specific tags for specifying the 3D objects.</p>
+<p>Hence, we’ll now insert a red box into our page by inserting the following code after the closing <tt class="docutils literal"><span class="pre">&lt;p&gt;</span></tt> tag. Similar to a <tt class="docutils literal"><span class="pre">&lt;p&gt;</span></tt> or <tt class="docutils literal"><span class="pre">&lt;div&gt;</span></tt> element, the <tt class="docutils literal"><span class="pre">&lt;x3d&gt;</span></tt> element defines a rectangular region that contains all its children elements (in this case the red box).</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;x3d</span> <span class="na">width=</span><span class="s">&quot;500px&quot;</span> <span class="na">height=</span><span class="s">&quot;400px&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;scene&gt;</span>
+    <span class="nt">&lt;shape&gt;</span>
+      <span class="nt">&lt;appearance&gt;</span>
+        <span class="nt">&lt;material</span> <span class="na">diffuseColor=</span><span class="s">&#39;red&#39;</span><span class="nt">&gt;&lt;/material&gt;</span>
+      <span class="nt">&lt;/appearance&gt;</span>
+      <span class="nt">&lt;box&gt;&lt;/box&gt;</span>
+    <span class="nt">&lt;/shape&gt;</span>
+  <span class="nt">&lt;/scene&gt;</span>
+<span class="nt">&lt;/x3d&gt;</span>
+</pre></div>
+</div>
+<p>You might wonder, why the <tt class="docutils literal"><span class="pre">&lt;box&gt;</span></tt> tag isn’t enough and what the other tags are good for. <tt class="docutils literal"><span class="pre">&lt;scene&gt;</span></tt> simply says, that you are going to define a 3D scene. And a <tt class="docutils literal"><span class="pre">&lt;shape&gt;</span></tt> defines the geometry (here a <tt class="docutils literal"><span class="pre">&lt;box&gt;</span></tt>) as well as the <tt class="docutils literal"><span class="pre">&lt;appearance&gt;</span></tt> of an object. In our example, the whole appearance only consists of a red <tt class="docutils literal"><span class="pre">&lt;material&gt;</span></tt>. If you want to learn more about these elements (or nodes as they are called in X3D), just follow <a class="reference external" href="http://x3dom.org/download/dumpNodeTypeTree.html">this link</a> and click on the node you are interested in.</p>
+<p>Because simply looking at one side of the box is bit boring, you can navigate within your scene with the help of the mouse. If you move the mouse with pressed left mouse button inside the area surrounded by a black border, you’ll rotate the point of view. With the middle mouse button you can pan around and with the right button you can zoom in and out. For more information see:  <a class="reference internal" href="../navigation.html#navigation"><em>Camera Navigation</em></a>.</p>
+<p>Ok, now you can move around, but admittedly this scene still is sort of boring. Thus, we’ll add another object, a blue <tt class="docutils literal"><span class="pre">&lt;sphere&gt;</span></tt>, into our little scene. As is shown next, the <tt class="docutils literal"><span class="pre">&lt;shape&gt;</span></tt> is now surrounded by another element, the <tt class="docutils literal"><span class="pre">&lt;transform&gt;</span></tt> tag. This is necessary, because otherwise both objects would appear at the same position, namely the virtual origin of the 3D scene.</p>
+<p>Thereto, the ‘translation’ attribute of the first <tt class="docutils literal"><span class="pre">&lt;transform&gt;</span></tt> element moves the box two units to the left, and the ‘translation’ attribute of the second <tt class="docutils literal"><span class="pre">&lt;transform&gt;</span></tt> element moves the sphere two units to the right. As can be seen in the example below, the value of the ‘translation’ attribute consists of three numbers. The first denotes the local x-axis (movement to the left/ right), the second defines the movement along the local y-axis (up/ down), and the third defines the movement along the local z-axis (back/ front).</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;x3d</span> <span class="na">width=</span><span class="s">&quot;500px&quot;</span> <span class="na">height=</span><span class="s">&quot;400px&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;scene&gt;</span>
+    <span class="nt">&lt;transform</span> <span class="na">translation=</span><span class="s">&quot;-2 0 0&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;shape&gt;</span>
+        <span class="nt">&lt;appearance&gt;</span>
+          <span class="nt">&lt;material</span> <span class="na">diffuseColor=</span><span class="s">&#39;red&#39;</span><span class="nt">&gt;&lt;/material&gt;</span>
+        <span class="nt">&lt;/appearance&gt;</span>
+        <span class="nt">&lt;box&gt;&lt;/box&gt;</span>
+      <span class="nt">&lt;/shape&gt;</span>
+    <span class="nt">&lt;/transform&gt;</span>
+    <span class="nt">&lt;transform</span> <span class="na">translation=</span><span class="s">&quot;2 0 0&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;shape&gt;</span>
+        <span class="nt">&lt;appearance&gt;</span>
+          <span class="nt">&lt;material</span> <span class="na">diffuseColor=</span><span class="s">&#39;blue&#39;</span><span class="nt">&gt;&lt;/material&gt;</span>
+        <span class="nt">&lt;/appearance&gt;</span>
+        <span class="nt">&lt;sphere&gt;&lt;/sphere&gt;</span>
+      <span class="nt">&lt;/shape&gt;</span>
+    <span class="nt">&lt;/transform&gt;</span>
+  <span class="nt">&lt;/scene&gt;</span>
+<span class="nt">&lt;/x3d&gt;</span>
+</pre></div>
+</div>
+<p>Now you know the basics of X3DOM. As you might have expected, there are certainly more nodes or elements you can try out like the <tt class="docutils literal"><span class="pre">&lt;cone&gt;</span></tt> or the <tt class="docutils literal"><span class="pre">&lt;cylinder&gt;</span></tt>. Also, there are other material properties like ‘specularColor’ and ‘transparency’. By applying an <tt class="docutils literal"><span class="pre">&lt;imageTexture&gt;</span></tt> to your object, you can achieve fancy effects like a teapot that looks like earth as demonstrated in <a class="reference external" href="http://x3dom.org/x3dom/example/x3dom_objectAndText.xhtml">this example</a>. When you have a look at the example’s source code, you’ll find a new tag called <tt class="docutils literal"><span class="pre">&lt;indexedFaceSet&gt;</span></tt>, which can be used for creating arbitrary kinds of geometry.</p>
+<p>The example discussed here is also <a class="reference external" href="http://www.x3dom.org/x3dom/example/x3dom_gettingStarted.html">available online</a>. Moreover, there are already lots of other <a class="reference external" href="http://www.x3dom.org/?page_id=5">X3DOM examples</a>. Just try them out, and even more important, have a look at the source code to learn what’s going on.</p>
+<p>Please note, that there are slight differences between XHTML and HTML encoding: e.g. the latter does not yet work with self-closing tags but requires that tags are always closed in the form <tt class="docutils literal"><span class="pre">&lt;/tagName&gt;</span></tt>.</p>
+<p>If you ever have problems, please first check the <a class="reference internal" href="../troubleshooting.html#troubleshooting"><em>Troubleshooting</em></a> section of this guide, much helpful information is collected there.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><!-- 
+<p class="logo"><a href="../index.html">
+  <img class="logo" src="../_static/x3dom-logo-small.png" alt="Logo"/>
+</a></p>
+--><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Tutorial</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Tutorial</a></li>
+      <li>Next: <a href="styling.html" title="next chapter">Styling with CSS</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2012, Fraunhofer IGD/VCST.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  
+<style>
+    .internal-node-list ul,
+    .internal-node-list, li {
+        margin:0;
+        padding:0;
+    }
+</style>
+  </body>
+</html>

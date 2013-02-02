@@ -1,0 +1,177 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Maya export &mdash; X3DOM v1.4.0 documentation</title>
+    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="X3DOM v1.4.0 documentation" href="../index.html" />
+    <link rel="up" title="Tutorial" href="index.html" />
+    <link rel="next" title="World of Warcraft Models to X3DOM" href="wow_export.html" />
+    <link rel="prev" title="3ds Max Export" href="max_export.html" />
+   
+    <script src="http://x3dom.org/download/dev/x3dom-full.js"></script>
+  
+  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+
+  </head>
+  <body>
+    <!--<div id="beta_notice"><p><strong>Note: </strong>This documentation is under active development. If you are interested in helping out, <a href="http://sourceforge.net/mailarchive/forum.php?forum_name=x3dom-developers">get in touch</a>.</p></div>-->
+  
+  
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="wow_export.html" title="World of Warcraft Models to X3DOM"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="max_export.html" title="3ds Max Export"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">X3DOM v1.4.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="maya-export">
+<span id="id1"></span><h1>Maya export<a class="headerlink" href="#maya-export" title="Permalink to this headline">¶</a></h1>
+<p>If you are working with <a class="reference external" href="http://www.autodesk.com/">Autodesk Maya</a> for modeling, shading and animating your 3d scenes, use this tutorial to create an interactive X3DOM website out of your model. This tutorial is tested with Autodesk Maya 2011. Nevertheless, the procedure should work even for older Maya versions.</p>
+<p>The basic idea is to export your scene to VRML and convert this to an X3DOM/HTMLsite using InstantReality’s <tt class="docutils literal"><span class="pre">aopt</span></tt> binary (see <a class="reference internal" href="dataconversion.html#dataconversion"><em>Generic 3D data conversion</em></a>).</p>
+<a class="reference external image-reference" href="http://x3dom.org/x3dom/example/mayaExport/spaceship.html"><div align="center" class="align-center"><img alt="../_images/maya0.png" class="align-center" src="../_images/maya0.png" style="width: 345.6px; height: 275.4px;" /></div>
+</a>
+<div class="section" id="step-1">
+<h2>Step 1<a class="headerlink" href="#step-1" title="Permalink to this headline">¶</a></h2>
+<p>Model and shade in Maya as usual. You should use PNG images for texturing.</p>
+<a class="reference internal image-reference" href="../_images/maya1.png"><div align="center" class="align-center"><img alt="../_images/maya1.png" class="align-center" src="../_images/maya1.png" style="width: 640.0px; height: 339.2px;" /></div>
+</a>
+</div>
+<div class="section" id="step-2">
+<h2>Step 2<a class="headerlink" href="#step-2" title="Permalink to this headline">¶</a></h2>
+<p>Open ‘Window | Settings/Preferences | Plug-in manager’ and check the ‘loaded’ or ‘Auto load’ option vrml2Export.</p>
+<div align="center" class="align-center"><img alt="../_images/maya2.png" class="align-center" src="../_images/maya2.png" /></div>
+</div>
+<div class="section" id="step-3">
+<h2>Step 3<a class="headerlink" href="#step-3" title="Permalink to this headline">¶</a></h2>
+<p>Open the Export dialog under ‘File | Export All..’, Enter a filename (.wrl suffix) and switch to filetype ‘vrml2′. Don’t forget to check the following export options:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Hierarchy: Full</div>
+<div class="line">Texture Options: Original</div>
+<div class="line">Export: Normals and Textures</div>
+</div>
+</div></blockquote>
+<p>Click the “Export All” button. This will create a vrml2 file in your scenes folder.</p>
+<div align="center" class="align-center"><img alt="../_images/maya3.png" class="align-center" src="../_images/maya3.png" /></div>
+</div>
+<div class="section" id="step-4">
+<h2>Step 4<a class="headerlink" href="#step-4" title="Permalink to this headline">¶</a></h2>
+<p>Open a terminal or command prompt, change to the folder containing your vrml2 model and your textures and run <cite>aopt</cite> (part of <a class="reference external" href="http://www.instantreality.org/">InstantReality</a>, see <a class="reference internal" href="dataconversion.html#dataconversion"><em>Generic 3D data conversion</em></a> for details) by typing the following command (assuming to be <cite>spaceship.wrl</cite> the name of your model):</p>
+<div class="highlight-python"><pre>| aopt -i spaceship.wrl -d Switch -f ImageTexture:repeatS:false
+|      -f ImageTexture:repeatT:false -u -N spaceship.html</pre>
+</div>
+<p><strong>Note:</strong> <tt class="docutils literal"><span class="pre">aopt</span></tt> is automatically coming with your InstantReality player installation. You will find the executable within the <tt class="docutils literal"><span class="pre">bin</span></tt> folder of the Player. If you don’t have Instant Reality installed yet, download and install from <a class="reference external" href="http://www.instantreality.org">www.instantreality.org</a>.</p>
+</div>
+<div class="section" id="step-5">
+<h2>Step 5<a class="headerlink" href="#step-5" title="Permalink to this headline">¶</a></h2>
+<p>Maya is using absolute path names. Therefore, open your html file with a standard text editor (vi, emacs, notepad++, etc.) and remove all paths from <tt class="docutils literal"><span class="pre">ImageTexture</span></tt>. For example, replace:</p>
+<div class="highlight-python"><pre>url=’”c:\users\me\maya\project\sourceimages\spaceship_color.png”‘</pre>
+</div>
+<p>with:</p>
+<div class="highlight-python"><pre>url=’”spaceship_color.png”‘</pre>
+</div>
+</div>
+<div class="section" id="step-6">
+<h2>Step 6<a class="headerlink" href="#step-6" title="Permalink to this headline">¶</a></h2>
+<p>Copy HTML and textures into your web folder and open the website with your <a class="reference external" href="http://x3dom.org/check">X3DOM capable</a> browser.</p>
+<p>If you want to try out this tutorial: Here is a <a class="reference external" href="../_static/tutorial/maya_export/spaceship1.zip">zip archive</a> (208 kb) containing all relevant files including Maya model and texture.</p>
+<p>You want to see the result live in your browser? Here is the <a class="reference external" href="http://x3dom.org/x3dom/example/mayaExport/spaceship.html">final webpage</a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><!-- 
+<p class="logo"><a href="../index.html">
+  <img class="logo" src="../_static/x3dom-logo-small.png" alt="Logo"/>
+</a></p>
+-->
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Maya export</a><ul>
+<li><a class="reference internal" href="#step-1">Step 1</a></li>
+<li><a class="reference internal" href="#step-2">Step 2</a></li>
+<li><a class="reference internal" href="#step-3">Step 3</a></li>
+<li><a class="reference internal" href="#step-4">Step 4</a></li>
+<li><a class="reference internal" href="#step-5">Step 5</a></li>
+<li><a class="reference internal" href="#step-6">Step 6</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Tutorial</a><ul>
+      <li>Previous: <a href="max_export.html" title="previous chapter">3ds Max Export</a></li>
+      <li>Next: <a href="wow_export.html" title="next chapter">World of Warcraft Models to X3DOM</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2012, Fraunhofer IGD/VCST.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  
+<style>
+    .internal-node-list ul,
+    .internal-node-list, li {
+        margin:0;
+        padding:0;
+    }
+</style>
+  </body>
+</html>

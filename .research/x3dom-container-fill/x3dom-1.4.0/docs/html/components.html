@@ -1,0 +1,282 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Components &mdash; X3DOM v1.4.0 documentation</title>
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="X3DOM v1.4.0 documentation" href="index.html" />
+    <link rel="next" title="Notes" href="notes/index.html" />
+    <link rel="prev" title="Nodes" href="nodes/index.html" />
+   
+    <script src="http://x3dom.org/download/dev/x3dom-full.js"></script>
+  
+  <link media="only screen and (max-device-width: 480px)" href="_static/small_flask.css" type= "text/css" rel="stylesheet" />
+
+  </head>
+  <body>
+    <!--<div id="beta_notice"><p><strong>Note: </strong>This documentation is under active development. If you are interested in helping out, <a href="http://sourceforge.net/mailarchive/forum.php?forum_name=x3dom-developers">get in touch</a>.</p></div>-->
+  
+  
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="notes/index.html" title="Notes"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="nodes/index.html" title="Nodes"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">X3DOM v1.4.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="components">
+<span id="id1"></span><h1>Components<a class="headerlink" href="#components" title="Permalink to this headline">¶</a></h1>
+<p>X3DOM features a component system which allows you to load parts of the system at runtime. Components are a set of X3D nodes logically grouped together and put into a file. For example, the Geometry2D component consists of nodes named Arc2D, Circle2D, etc and is stored in a file named <tt class="docutils literal"><span class="pre">Geometry2D.js</span></tt>. Those components are then further grouped into <a class="reference external" href="http://www.web3d.org/x3d/specifications/OLD/ISO-IEC-19775-X3DAbstractSpecification/Part01/Architecture.html">profiles</a> which combine them for specific application domains. For example there is a <a class="reference external" href="http://www.web3d.org/x3d/specifications/OLD/ISO-IEC-19775-X3DAbstractSpecification/Part01/coreprofile.html">core profile</a>, an immersive profile, Interchange profile, and so on. Except for the full profile, profiles are an abstract concept and not reflected in file layout.</p>
+<p>While logical grouping like this falls mostly into the category of code organization, it can be utilized to load only the parts you need for your application. With X3DOM there are two versions of the library in the distribution package:</p>
+<blockquote>
+<div><ul class="simple">
+<li>the standard full profile file: <tt class="docutils literal"><span class="pre">x3dom-full.js</span></tt></li>
+<li>the core containing only basic nodes: <tt class="docutils literal"><span class="pre">x3dom.js</span></tt></li>
+</ul>
+</div></blockquote>
+<p>You will find these files in release directory of X3DOM. Note that this is currently the development version of X3DOM. <a class="reference external" href="http://x3dom.org/download/dev/">http://x3dom.org/download/dev/</a>.</p>
+<p>The full profile contains all the nodes of the official <a class="reference external" href="http://www.web3d.org/x3d/specifications/OLD/ISO-IEC-19775-X3DAbstractSpecification/Part01/">X3D specification</a>, as far as they are implemented in X3DOM, merged into one file.</p>
+<p>When using <tt class="docutils literal"><span class="pre">x3dom.js</span></tt> (core) you may need to either include or dynamically load additional nodes you need to render your model. This can be achieved by including the required node implementations files in your HTML using the <tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt> tag, or by instructing X3DOM to load the components at runtime.</p>
+<p>By default X3DOM comes with the following additional nodes:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Geometry2D</li>
+<li>VolumeRendering</li>
+<li>Geospatial</li>
+</ul>
+</div></blockquote>
+<p>If you are using <tt class="docutils literal"><span class="pre">x3dom.js</span></tt> and you need to load the nodes above, you can use one of the methods described below.</p>
+<p><em>Note:</em> It is recommended that you use the full X3DOM version (<tt class="docutils literal"><span class="pre">x3dom-full.js</span></tt>) in production environments - unless there is a very specific reason not to. The full version is compacted, optimized and in almost all cases the right way of including X3DOM. Should you opt for using the methods described here, you are trading negligible saving in initial download size for a much slower loading system, additional requests, way more complicated setup and maintenance, inability to use the browsers cache, problems with firewalls, proxy servers, CORS issues, CDNs, and not being able to run run locally without a web server.</p>
+<div class="section" id="static-component-loading">
+<h2>Static component loading<a class="headerlink" href="#static-component-loading" title="Permalink to this headline">¶</a></h2>
+<p>This technique works by manually including the X3DOM core library plus the components you need for rendering your model. Your resulting HTML could look like this.</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;x3dom.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;Primitives2D.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;Other.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+</div>
+<p>Benefits of this approach:</p>
+<blockquote>
+<div><ul class="simple">
+<li>static loading (no ajax requests)</li>
+<li>works locally without a web server instance</li>
+</ul>
+</div></blockquote>
+<p>Drawbacks of this approach:</p>
+<blockquote>
+<div><ul class="simple">
+<li>more requests are required</li>
+<li>more files to manage in complex setups (could be somewhat mitigated using something like Sprockets)</li>
+</ul>
+</div></blockquote>
+<p>This is essentially how we build the full profile library, except that we deliver everything in one optimized file. When you write your own components, you can use this method - it also works with the full profile X3DOM file.</p>
+<p>When to use this method:</p>
+<blockquote>
+<div><ul class="simple">
+<li>When you write your own components</li>
+<li>During development and testing</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="dynamic-component-loading">
+<h2>Dynamic component loading<a class="headerlink" href="#dynamic-component-loading" title="Permalink to this headline">¶</a></h2>
+<p>X3DOM features a mechanism to load files at runtime. With this approach it is possible to load anything from anywhere and inject that code into your application. Be aware of this possible exploit when using the technique described here.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">In order to allow dynamic loading of components, you need to tell X3DOM to turn off its security precautions <em>before</em> including the X3DOM library. These precaution prevents the library from executing code that is known to be insecure. Only use this feature if there is absolutely no other option for you.</p>
+</div>
+<p>In order to disable security measures in X3DOM, put the following statement in your document <tt class="docutils literal"><span class="pre">&lt;head&gt;</span></tt> section and before the inclusion of X3DOM:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;head&gt;</span>
+  <span class="nt">&lt;script&gt;</span>
+    <span class="nx">X3DOM_SECURITY_OFF</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="nt">&lt;/script&gt;</span>
+  <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;x3dom.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+  ...
+<span class="nt">&lt;/head&gt;</span>
+</pre></div>
+</div>
+<p>Now, dynamic loading components at runtime is enabled and can be used by putting the following parameters in you X3D scene.</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;x3d&gt;</span>
+    <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;component&quot;</span> <span class="na">value=</span><span class="s">&quot;Primitives2D,Other&quot;</span><span class="nt">&gt;&lt;/param&gt;</span>
+    <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;loadpath&quot;</span> <span class="na">value=</span><span class="s">&quot;http://yourserver/path/&quot;</span><span class="nt">&gt;&lt;/param&gt;</span>
+    ...
+<span class="nt">&lt;/x3d&gt;</span>
+</pre></div>
+</div>
+<p>If <cite>loadpath</cite> is not set X3DOM tries to load the component from the documents parent URL.</p>
+<p>Keep in mind that the dynamic loading of X3DOM components performs an <strong>synchronous</strong> Ajax request. As such all the limitations of Ajax requests apply, plus the library is blocking your browser until it gets a response.</p>
+<p>Drawbacks of this approach:</p>
+<blockquote>
+<div><ul class="simple">
+<li>load order is important and has to be maintained by developer</li>
+<li>needs a web server running (ajax)</li>
+<li>blocks the browser during loading of files</li>
+<li>code injection possibility high</li>
+<li>needs much more requests</li>
+<li>ajax request caching not really supported</li>
+</ul>
+</div></blockquote>
+<p>When to use this method:</p>
+<blockquote>
+<div><ul class="simple">
+<li>never (unless there&#8217;s no other feasible way)</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="extending-x3dom">
+<h2>Extending X3DOM<a class="headerlink" href="#extending-x3dom" title="Permalink to this headline">¶</a></h2>
+<p>In this chapter you will learn how to extend X3DOM with your own nodes which you can load using the methods outlined above. We recommend to use the static loading approach in combination with the core profile <tt class="docutils literal"><span class="pre">x3dom.js</span></tt>. This results in the inclusion of <tt class="docutils literal"><span class="pre">x3dom.js</span></tt> and <tt class="docutils literal"><span class="pre">YourComponent.js</span></tt> which will contain your custom code.</p>
+<p>To follow this chapter you need at least basic understanding of the following concepts, principles, or technologies:</p>
+<blockquote>
+<div><ul class="simple">
+<li>object orientation</li>
+<li>class based object model</li>
+<li>programming in general</li>
+<li>Javascript programming</li>
+<li>the Javascript object model</li>
+<li>XML and HTML5</li>
+</ul>
+</div></blockquote>
+<div class="section" id="object-system">
+<h3>Object system<a class="headerlink" href="#object-system" title="Permalink to this headline">¶</a></h3>
+<p>In order to register a new node within the X3DOM system, you need to create the equivalent of a <em>class</em> that inherits properties from a superclass. Javascript itself does not implement a class based object model, it provides a <a class="reference external" href="http://en.wikipedia.org/wiki/Prototype-based_programming">prototype model</a>. A prototype based object model can be seen as a superset of a traditional class based model. With a prototype based object system, one can implement a more limited class based system. That is exactly what X3DOM does.</p>
+<p>For each node you want to implement in X3DOM you need to call the function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">x3dom</span><span class="o">.</span><span class="n">registerNodeType</span><span class="p">(</span><span class="s">&quot;YourNodeName&quot;</span><span class="p">,</span> <span class="s">&quot;GroupName&quot;</span><span class="p">,</span> <span class="n">definitionObj</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>This registers a node within the X3DOM system and provides a hook to the implementation of this class. The first parameter also is the name of the XML tag you are writing code for. The third parameter to registerNodeType is the return value of a call to the X3DOM function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">defineClass</span><span class="p">(</span><span class="n">superclassObj</span><span class="p">,</span> <span class="n">constructorObj</span><span class="p">,</span> <span class="n">implementationObj</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>This function is roughly equivalent to creating a class definition in a language with an traditional class based object system.</p>
+<p><em>Note:</em> The <tt class="docutils literal"><span class="pre">defineClass</span></tt> function resides in the global Javascript namespace whereas the <tt class="docutils literal"><span class="pre">registerNodeType</span></tt> function is nested within the <tt class="docutils literal"><span class="pre">x3dom</span></tt> namespace. This is intentionally so and not a typo.</p>
+</div>
+<div class="section" id="hello-world">
+<h3>Hello World<a class="headerlink" href="#hello-world" title="Permalink to this headline">¶</a></h3>
+<p>Let&#8217;s say we want to implement a custom node which echos a &#8220;Hello World&#8221; to the console, we first need to decided how the XML should look like. In this case, we simply want another XML tag that looks like this:</p>
+<div class="highlight-xml"><pre>&lt;x3d&gt;
+  &lt;scene&gt;
+    &lt;hello&gt;&lt;/hello&gt;    &lt;-- this is new
+  &lt;/scene&gt;
+&lt;/x3d&gt;</pre>
+</div>
+<p>Since there is no <em>Hello</em> node in the X3DOM system nothing happens when we run this X3D in the browser. The <tt class="docutils literal"><span class="pre">&lt;hello&gt;</span></tt> tag is not recognized and therefore ignored by X3DOM. In order to make X3DOM aware of the <tt class="docutils literal"><span class="pre">&lt;hello&gt;</span></tt> tag we need to register a new node with the system and provide an implementation for that node. In order to do so we are using the two function calls described above:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">x3dom</span><span class="p">.</span><span class="nx">registerNodeType</span><span class="p">(</span>
+    <span class="s2">&quot;Hello&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Core&quot;</span><span class="p">,</span>
+    <span class="nx">defineClass</span><span class="p">(</span><span class="nx">x3dom</span><span class="p">.</span><span class="nx">nodeTypes</span><span class="p">.</span><span class="nx">X3DNode</span><span class="p">,</span>
+        <span class="kd">function</span> <span class="p">(</span><span class="nx">ctx</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">x3dom</span><span class="p">.</span><span class="nx">nodeTypes</span><span class="p">.</span><span class="nx">Hello</span><span class="p">.</span><span class="nx">superClass</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">ctx</span><span class="p">);</span>
+        <span class="p">},</span> <span class="p">{</span>
+              <span class="nx">nodeChanged</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                  <span class="nx">x3dom</span><span class="p">.</span><span class="nx">debug</span><span class="p">.</span><span class="nx">logInfo</span><span class="p">(</span><span class="s1">&#39;Hello World from the console&#39;</span><span class="p">);</span>
+              <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<p>First, the hello node is registered with X3DOM, the hello node belongs to the core nodes. We then create an implementation object of the type <tt class="docutils literal"><span class="pre">x3dom.nodeTypes.X3DNode</span></tt>, the superclass. We also define a constructor for our node in form of a function object that we pass to the <tt class="docutils literal"><span class="pre">defineClass()</span></tt> function (second positional parameter). The last parameter consists of an object literal containing function definitions for the node API. In this example we implement a function called <tt class="docutils literal"><span class="pre">nodeChanged</span></tt> which will be called by X3DOM anytime there is a change to the node element in the DOM. It is also called when the node is encountered the first time. This is the place where print a message to the console using the X3DOM debug facilities.</p>
+<p>The <tt class="docutils literal"><span class="pre">nodeChanged</span></tt> function is not the only function you can pass your implementation. For example, there is a <tt class="docutils literal"><span class="pre">fieldChanged</span></tt> method which is called whenever a attribute in the DOM changes, and you can implement your own methods here.</p>
+</div>
+<div class="section" id="more">
+<h3>More<a class="headerlink" href="#more" title="Permalink to this headline">¶</a></h3>
+<p>For more examples of nodes, please refer to <a class="reference external" href="https://github.com/x3dom/x3dom/tree/master/src/nodes">the source code of the X3DOM nodes</a>. It&#8217;s the best way to learn how to deal with the X3DOM node system.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><!-- 
+<p class="logo"><a href="index.html">
+  <img class="logo" src="_static/x3dom-logo-small.png" alt="Logo"/>
+</a></p>
+-->
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Components</a><ul>
+<li><a class="reference internal" href="#static-component-loading">Static component loading</a></li>
+<li><a class="reference internal" href="#dynamic-component-loading">Dynamic component loading</a></li>
+<li><a class="reference internal" href="#extending-x3dom">Extending X3DOM</a><ul>
+<li><a class="reference internal" href="#object-system">Object system</a></li>
+<li><a class="reference internal" href="#hello-world">Hello World</a></li>
+<li><a class="reference internal" href="#more">More</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="nodes/index.html" title="previous chapter">Nodes</a></li>
+      <li>Next: <a href="notes/index.html" title="next chapter">Notes</a></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2012, Fraunhofer IGD/VCST.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  
+<style>
+    .internal-node-list ul,
+    .internal-node-list, li {
+        margin:0;
+        padding:0;
+    }
+</style>
+  </body>
+</html>
