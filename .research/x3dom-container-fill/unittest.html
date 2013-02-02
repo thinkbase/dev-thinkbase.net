@@ -84,7 +84,9 @@
 </head>
    
 <body>
-    <h1>X3D 装箱测试</h1><br/>
+    <h1>X3D 装箱测试</h1>
+    使用说明: <span style="color: darkgreen">鼠标左键: 旋转; 鼠标中键: 前后拉升; 鼠标右键: 位置移动</span>
+    <hr/>
     <a href="javascript:_doLoad()">装载</a>
     |
     <a href="javascript:_switchRotation('default');">默认视角</a>
@@ -97,10 +99,10 @@
     |
     <a href="javascript:_doReset()">清除</a>
     |
-    <select id="loadedIds" style="width: 180px" onchange="_selectBox(this)"></select>
+    选择: <select id="loadedIds" style="width: 180px" onchange="_selectBox(this)"></select>
     |
     <span id="highlightStatusBar" style="background-color: orange; padding: 3px"></span>
-    <span id="normalizeStatusBar" style="background-color: orange; padding: 3px"></span>
+    <span id="normalizeStatusBar" style="background-color: lightgray; padding: 3px"></span>
     <hr/>
     <x3d xmlns="http://www.x3dom.org/x3dom"
          showStat="false" showLog="false"
