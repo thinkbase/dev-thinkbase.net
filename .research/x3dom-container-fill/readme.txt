@@ -10,5 +10,5 @@ Note: To run the demo properly, files should deploy to a http server.
 
 
 The additional:
-  - We include "X3dTooltips.zip" as the handbook, please get the file in "docs" folder;
+  - We include "X3dTooltips.zip" as the handbook, please get it from "docs" folder;
   - JSON is required, please see the folder "JSON-js";
