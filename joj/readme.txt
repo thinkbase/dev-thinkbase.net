@@ -6,3 +6,11 @@ The roadmap:
  - joj-runtime: The core runtime
  - joj-web: The web layer(Servlet/Template/...)
  - ...
+
+====
+ - data line version control
+ - data access layer - MySQL / Oracle / MSSQL / DB2 , auto database schema update
+ - NoSQL? transaction?
+ - Security framework
+ - Standard database table fields
+
