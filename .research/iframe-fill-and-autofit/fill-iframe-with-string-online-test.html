@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<head>
+	<title>iframe Demo</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<style>
+		html, body {height: 100%; padding:0px; margin:0px;font-family: Consolas, Comic Sans MS; font-size: 10pt;}
+	    h2 {font-size: 14pt; padding: 16px; margin: 0px;}
+	    hr {border-width:0px; border-top:1px solid CornflowerBlue; height:0px}
+	</style>
+</head>
+<script>
+(function(global){
+    /** 使用 html 字符串填充指定的 iframe 对象, 可以传递初始参数 */
+    var fillIFrame = function(iframeId, html, initParams){
+        if (null==initParams) initParams = {};
+        var theIframe = document.getElementById(iframeId);
+        var iFrameWindow = theIframe.contentWindow || theIframe.documentWindow;
+        var iframeDoc = iFrameWindow.document;
+        iframeDoc.open();
+        for (var o in initParams){
+            iFrameWindow[o] = initParams[o];
+        }
+        iframeDoc.write(html);
+        iframeDoc.close();
+    }
+    
+    /** 设置 iframe 高度的自适应 */
+    var setAutoHeight = function(iframe){
+        if (iframe.location){
+            //It's a window(of the iframe content)
+            setAutoHeight(iframe.frameElement);
+        }else{
+            /**
+            alert(
+                 navigator.userAgent + ":\n" + 
+                "\t documentWindow: "+iframe.documentWindow+"\n"+
+                "\t contentWindow: "+iframe.contentWindow+"\n"+
+                "\t Document: "+iframe.Document+"\n"+
+                "\t contentDocument.body.offsetHeight: "
+                    +((iframe.contentDocument)?(iframe.contentDocument.body?iframe.contentDocument.body.offsetHeight:"N/A"):"N/A")+"\n"+
+                "\t Document.body.scrollHeight: "
+                    +((iframe.Document)?(iframe.Document.body?iframe.Document.body.scrollHeight:"N/A"):"N/A")
+            );
+            */
+            if (iframe.Document){
+                //IE8
+                iframe.height = iframe.Document.body.scrollHeight;
+            }else if (iframe.contentDocument){
+                //IE9, Firefox, Chrome
+                iframe.height = iframe.contentDocument.body.offsetHeight + 35;
+            }else{
+                throw "argument ["+iframe+"] is not a window or iframe"
+            }
+        }
+    }
+    
+    if (! global.thinkbaseDemo){
+        global.thinkbaseDemo = {};
+    }
+    
+    global.thinkbaseDemo.iframe = {
+        fillIFrame: fillIFrame,
+        setAutoHeight: setAutoHeight
+    };
+})(window);
+</script>
+<body>
+    <h2>HTML 文本建议使用隐藏的 textarea 存储(style="display:none")</h2>
+    <textarea id="htmlSource" readonly="true" style="width:90%;height:180px;margin:10px">
+        <head>
+            <title>iframe content</title>
+            <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+            <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+            <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+            <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+        </head>
+        <!--IE 中嵌入的 script 会先于 head 部分引用的 js 文件执行, 因此建议通过 onload 事件来初始化页面-->
+        <body onload="initPage()">
+            <h2>It works!</h2>
+            <div id="testDiv"></div>
+            <h2>jQuery UI</h2>
+            <div id="datepicker"></div>
+            <script>
+            function initPage(){
+                document.getElementById("testDiv").innerHTML = "P1="+P1+"; P2=" + P2 + "; Now=" + Now;
+                $( "#datepicker" ).datepicker();
+                parent.thinkbaseDemo.iframe.setAutoHeight(parent.document.getElementById("ifmWorkspace"));
+                //parent.thinkbaseDemo.iframe.setAutoHeight(window);
+            }
+            </script>
+        </body>
+    </textarea>
+    
+    <hr/>
+    
+    <h2>测试用 iframe</h2>
+    <iframe id="ifmWorkspace" name="ifmWorkspace " frameborder="0" src="" style="width:90%;border:red 1px dotted;margin:10px" scrolling="no"></iframe>
+    
+    <script>
+        var html = document.getElementById("htmlSource").value;
+        thinkbaseDemo.iframe.fillIFrame("ifmWorkspace", html, {P1: "Hello", P2: "World", Now: ""+new Date()});
+    </script>
+
+</body>
