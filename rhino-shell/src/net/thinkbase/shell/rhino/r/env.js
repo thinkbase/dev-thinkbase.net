@@ -5,8 +5,8 @@
     };
     
     this.load = function(resource){
-        Packages.net.thinkbase.shell.rhino.Main.load(resource);
+        __CTX__.load(resource);
     }
     
-    //arguments was initialized in net.thinkbase.shell.rhino.Main#injectArguments
+    //arguments was initialized in net.thinkbase.shell.rhino.Main
 })();

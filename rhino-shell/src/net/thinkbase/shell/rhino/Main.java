@@ -18,44 +18,50 @@ import org.apache.commons.io.IOUtils;
  * @author root
  */
 public class Main {
-	private static JsEngine currentEngine = null;
+	private JsEngine currentEngine = null;
+	private int exitCode = 0;
+	
 	public static void main(String[] args) throws Exception {
+		Main m = new Main();
+		m.start(args);
+	}
+	public void start(String[] args) throws Exception {
 		log("Rhino-shell starting ...");
 		try{
 			EngineManager.initEnv();
 			currentEngine = EngineManager.getRootEngine();
-			//Prepare RequireJS
-			injectArguments(args);
-			doLoad("r/env.js");
-			doLoad("r/r.js");
 			//Prepare shell build-in variables
 			currentEngine.addObject("__ARGS__", args);	/*The command-line arguments*/
+			currentEngine.addObject("__CTX__", this);	/*The context object*/
+			//Prepare RequireJS
+			currentEngine.addObject("arguments", args); //"arguments" object is needed by r.js
+			doLoad("r/env.js");
+			doLoad("r/r.js");
 			//Run application
 			currentEngine = EngineManager.buildEngine("App");
 			doLoad("/app.js");
 		}finally{
 			EngineManager.cleanEnv();
 		}
-		log("Rhino-shell complete.");
+		log("Rhino-shell exit with errorCode="+exitCode);
+		System.exit(exitCode);		//Force exit to avoid program hanging-up(always cause by Debugger thread)
 	}
 
-	private static void doLoad(String resource) throws IOException{
-		URL url = Main.class.getResource(resource);
-		String code = IOUtils.toString(Main.class.getResourceAsStream(resource), "UTF-8");
-		currentEngine.eval(url.toExternalForm(), code);
-	}
-
-	public static void load(String resource) throws IOException{
+	public void load(String resource) throws IOException{
 		log("Loading ["+resource+"] ...");
 		doLoad(resource);
 		log("Load ["+resource+"] successfully.");
 	}
-	private static void injectArguments(String[] args){
-		//"arguments" object is needed by r.js
-		EngineManager.getRootEngine().addObject("arguments", args);
+	public void setExitCode(int code){
+		this.exitCode = code;
 	}
 
-	private static void log(String s){
+	private void doLoad(String resource) throws IOException{
+		URL url = Main.class.getResource(resource);
+		String code = IOUtils.toString(Main.class.getResourceAsStream(resource), "UTF-8");
+		currentEngine.eval(url.toExternalForm(), code);
+	}
+	private void log(String s){
 		System.out.println("[Shell] " + s);
 	}
 }
