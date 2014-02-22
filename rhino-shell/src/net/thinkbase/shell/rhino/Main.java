@@ -1,6 +1,7 @@
 package net.thinkbase.shell.rhino;
 
 import java.io.IOException;
+import java.net.URL;
 
 import net.thinkbase.js.rhino.JsEngine;
 import net.thinkbase.js.rhino.ext.EngineManager;
@@ -37,8 +38,9 @@ public class Main {
 	}
 
 	private static void doLoad(String resource) throws IOException{
+		URL url = Main.class.getResource(resource);
 		String code = IOUtils.toString(Main.class.getResourceAsStream(resource), "UTF-8");
-		currentEngine.eval(resource, code);
+		currentEngine.eval(url.toExternalForm(), code);
 	}
 
 	public static void load(String resource) throws IOException{
