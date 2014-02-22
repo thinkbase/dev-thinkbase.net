@@ -2,6 +2,7 @@ package net.thinkbase.shell.rhino;
 
 import java.io.IOException;
 
+import net.thinkbase.js.rhino.JsEngine;
 import net.thinkbase.js.rhino.ext.EngineManager;
 
 import org.apache.commons.io.IOUtils;
@@ -16,34 +17,41 @@ import org.apache.commons.io.IOUtils;
  * @author root
  */
 public class Main {
+	private static JsEngine currentEngine = null;
 	public static void main(String[] args) throws Exception {
+		log("Rhino-shell starting ...");
 		try{
 			EngineManager.initEnv();
+			currentEngine = EngineManager.getRootEngine();
+			//Prepare RequireJS
 			injectArguments(args);
-			load("boot.js");
-			load("r/r.js");
-			load("/loader.js");
+			doLoad("r/boot.js");
+			doLoad("r/r.js");
+			//Run application
+			currentEngine = EngineManager.buildEngine("App");
+			doLoad("/app.js");
 		}finally{
 			EngineManager.cleanEnv();
 		}
+		log("Rhino-shell complete.");
+	}
+
+	private static void doLoad(String resource) throws IOException{
+		String code = IOUtils.toString(Main.class.getResourceAsStream(resource), "UTF-8");
+		currentEngine.eval(resource, code);
 	}
 
 	public static void load(String resource) throws IOException{
 		log("Loading ["+resource+"] ...");
-		String code = readResource(resource);
-		EngineManager.getRootEngine().eval(resource, code);
+		doLoad(resource);
 		log("Load ["+resource+"] successfully.");
 	}
-
 	private static void injectArguments(String[] args){
-		//arguments is needed by r.js
+		//"arguments" object is needed by r.js
 		EngineManager.getRootEngine().addObject("arguments", args);
 	}
+
 	private static void log(String s){
-		System.out.println("[Main] " + s);
-	}
-	private static String readResource(String resource) throws IOException {
-		String code = IOUtils.toString(Main.class.getResourceAsStream(resource), "UTF-8");
-		return code;
+		System.out.println("[Shell] " + s);
 	}
 }
