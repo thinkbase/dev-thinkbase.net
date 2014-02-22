@@ -26,8 +26,10 @@ public class Main {
 			currentEngine = EngineManager.getRootEngine();
 			//Prepare RequireJS
 			injectArguments(args);
-			doLoad("r/boot.js");
+			doLoad("r/env.js");
 			doLoad("r/r.js");
+			//Prepare shell build-in variables
+			currentEngine.addObject("__ARGS__", args);	/*The command-line arguments*/
 			//Run application
 			currentEngine = EngineManager.buildEngine("App");
 			doLoad("/app.js");
