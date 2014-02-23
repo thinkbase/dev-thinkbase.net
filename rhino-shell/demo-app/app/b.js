@@ -1,10 +1,10 @@
-print(" >> module [b] is loading ...");
+print("module [b] is loading ...");
 
 define(function () {
     require (["libs/c", "libs/d"], function(c,  d) {
-        print(' >>> modules [c,d] loaded');
-        print('  >> c.name = ' + c.name);
-        print('  >> d.name = ' + d.name);
+        getLogger("b.js").info('modules [c,d] loaded');
+        getLogger("b.js-info").info('c.name = ' + c.name);
+        getLogger("b.js-info").info('d.name = ' + d.name);
     });
     return {
         name: "B",

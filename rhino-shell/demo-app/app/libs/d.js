@@ -1,4 +1,4 @@
-print(" >> module [d] is loading ...");
+print("module [d] is loading ...");
 define(function () {
     return {
         name: "D",

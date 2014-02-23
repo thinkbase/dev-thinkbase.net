@@ -3,5 +3,7 @@ require.config({
 });
 
 require (["a", "b"], function(a,  b) {
-    print(' > modules [a,b] loaded');
+    print('modules [a,b] loaded');
 });
+
+print('app.js finished.');

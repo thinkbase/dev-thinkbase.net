@@ -1,8 +1,9 @@
-print(" >> module [a] is loading ...");
+print("module [a] is loading ...");
 define(function () {
+    var log = getLogger("a.js");
     require (["libs/c"], function(c) {
-        print(' >>> modules [c] loaded');
-        print('  >> c.name = ' + c.name);
+        log.info('modules [c] loaded');
+        getLogger("a.js-info").info('c.name = ' + c.name);
     });
     return {
         name: "A",

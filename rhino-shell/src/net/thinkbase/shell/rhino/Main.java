@@ -7,6 +7,7 @@ import net.thinkbase.js.rhino.JsEngine;
 import net.thinkbase.js.rhino.ext.EngineManager;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 
 /**
  * The JavasSript shell runner based on <a href="https://github.com/thinkbase/dev-thinkbase.net/tree/master/rhino-js">rhino-js-engine</a>;
@@ -18,6 +19,8 @@ import org.apache.commons.io.IOUtils;
  * @author root
  */
 public class Main {
+	private static final Logger log = Logger.getLogger(Main.class.getName());
+	
 	private JsEngine currentEngine = null;
 	private int exitCode = 0;
 	
@@ -26,7 +29,7 @@ public class Main {
 		m.start(args);
 	}
 	public void start(String[] args) throws Exception {
-		log("Rhino-shell starting ...");
+		log.info("Rhino-shell starting ...");
 		try{
 			EngineManager.initEnv();
 			currentEngine = EngineManager.getRootEngine();
@@ -35,7 +38,7 @@ public class Main {
 			currentEngine.addObject("__CTX__", this);	/*The context object*/
 			//Prepare RequireJS
 			currentEngine.addObject("arguments", args); //"arguments" object is needed by r.js
-			doLoad("r/env.js");
+			doLoad("r/r-env.js");
 			doLoad("r/r.js");
 			//Run application
 			currentEngine = EngineManager.buildEngine("App");
@@ -43,25 +46,29 @@ public class Main {
 		}finally{
 			EngineManager.cleanEnv();
 		}
-		log("Rhino-shell exit with errorCode="+exitCode);
+		if (exitCode !=0){
+			log.warn("Rhino-shell exited with errorCode="+exitCode);
+		}else{
+			log.info("Rhino-shell finished.");
+		}
 		System.exit(exitCode);		//Force exit to avoid program hanging-up(always cause by Debugger thread)
 	}
 
 	public void load(String resource) throws IOException{
-		log("Loading ["+resource+"] ...");
+		log.debug("Loading ["+resource+"] ...");
 		doLoad(resource);
-		log("Load ["+resource+"] successfully.");
+		log.debug("Load ["+resource+"] successfully.");
 	}
 	public void setExitCode(int code){
 		this.exitCode = code;
+	}
+	public Logger getLogger(String logger){
+		return Logger.getLogger("_script_." + logger);
 	}
 
 	private void doLoad(String resource) throws IOException{
 		URL url = Main.class.getResource(resource);
 		String code = IOUtils.toString(Main.class.getResourceAsStream(resource), "UTF-8");
 		currentEngine.eval(url.toExternalForm(), code);
-	}
-	private void log(String s){
-		System.out.println("[Shell] " + s);
 	}
 }
