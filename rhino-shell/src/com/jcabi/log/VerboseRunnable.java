@@ -30,9 +30,9 @@
 package com.jcabi.log;
 
 import java.util.concurrent.Callable;
-import javax.validation.constraints.NotNull;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 /**
  * Wrapper of {@link Runnable}, that logs all uncaught runtime exceptions.
@@ -63,10 +63,8 @@ import lombok.ToString;
  * @see VerboseThreads
  * @link <a href="http://www.ibm.com/developerworks/java/library/j-jtp05236/index.html">Java theory and practice: Dealing with InterruptedException</a>
  */
-@ToString
-@EqualsAndHashCode(of = { "origin", "swallow" })
-@SuppressWarnings("PMD.DoNotUseThreads")
 public final class VerboseRunnable implements Runnable {
+	private static final Logger log = Logger.getLogger(VerboseRunnable.class);
 
     /**
      * Original runnable.
@@ -87,7 +85,7 @@ public final class VerboseRunnable implements Runnable {
      * Default constructor, doesn't swallow exceptions.
      * @param runnable Runnable to wrap
      */
-    public VerboseRunnable(@NotNull final Runnable runnable) {
+    public VerboseRunnable(final Runnable runnable) {
         this(runnable, false);
     }
 
@@ -96,7 +94,7 @@ public final class VerboseRunnable implements Runnable {
      * @param callable Callable to wrap
      * @since 0.7.17
      */
-    public VerboseRunnable(@NotNull final Callable<?> callable) {
+    public VerboseRunnable(final Callable<?> callable) {
         this(callable, false);
     }
 
@@ -110,7 +108,7 @@ public final class VerboseRunnable implements Runnable {
      *  using {@link Logger}.
      * @since 0.1.10
      */
-    public VerboseRunnable(@NotNull final Callable<?> callable,
+    public VerboseRunnable(final Callable<?> callable,
         final boolean swallowexceptions) {
         this(callable, swallowexceptions, true);
     }
@@ -128,13 +126,13 @@ public final class VerboseRunnable implements Runnable {
      *  ({@code TRUE}) or just its message in one line ({@code FALSE})
      * @since 0.7.17
      */
-    @SuppressWarnings("PMD.AvoidCatchingGenericException")
-    public VerboseRunnable(@NotNull final Callable<?> callable,
+    public VerboseRunnable(final Callable<?> callable,
         final boolean swallowexceptions, final boolean fullstacktrace) {
-        this(
+    	this(
             new Runnable() {
                 @Override
                 public void run() {
+                	assert(null!=callable);
                     try {
                         callable.call();
                     // @checkstyle IllegalCatch (1 line)
@@ -144,6 +142,7 @@ public final class VerboseRunnable implements Runnable {
                 }
                 @Override
                 public String toString() {
+                	assert(null!=callable);
                     return callable.toString();
                 }
             },
@@ -162,7 +161,7 @@ public final class VerboseRunnable implements Runnable {
      *  using {@link Logger}.
      * @since 0.1.4
      */
-    public VerboseRunnable(@NotNull final Runnable runnable,
+    public VerboseRunnable(final Runnable runnable,
         final boolean swallowexceptions) {
         this(runnable, swallowexceptions, true);
     }
@@ -180,8 +179,11 @@ public final class VerboseRunnable implements Runnable {
      *  ({@code TRUE}) or just its message in one line ({@code FALSE})
      * @since 0.7.17
      */
-    public VerboseRunnable(@NotNull final Runnable runnable,
+    public VerboseRunnable(final Runnable runnable,
         final boolean swallowexceptions, final boolean fullstacktrace) {
+
+    	assert(null!=runnable);
+
         this.origin = runnable;
         this.swallow = swallowexceptions;
         this.verbose = fullstacktrace;
@@ -195,55 +197,42 @@ public final class VerboseRunnable implements Runnable {
      * of {@code Runnable#run()} method.
      */
     @Override
-    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     public void run() {
         try {
             this.origin.run();
         // @checkstyle IllegalCatch (1 line)
         } catch (RuntimeException ex) {
             if (!this.swallow) {
-                Logger.warn(this, "escalated exception: %s", this.tail(ex));
+        		logEx("escalated exception: ", ex, Level.WARN);
                 throw ex;
             }
-            Logger.warn(this, "swallowed exception: %s", this.tail(ex));
+    		logEx("swallowed exception: ", ex, Level.WARN);
         // @checkstyle IllegalCatch (1 line)
         } catch (Error error) {
             if (!this.swallow) {
-                Logger.error(this, "escalated error: %s", this.tail(error));
+            	logEx("escalated error: ", error, Level.ERROR);
                 throw error;
             }
-            Logger.error(this, "swallowed error: %s", this.tail(error));
+        	logEx("swallowed error: ", error, Level.ERROR);
         }
         if (this.swallow) {
             try {
                 Thread.sleep(1L);
             } catch (InterruptedException ex) {
-                Logger.debug(
-                    this,
-                    "interrupted status cleared of %s: %s",
-                    Thread.currentThread().getName(), ex
+                logEx(
+                    "interrupted status cleared of "+Thread.currentThread().getName(),
+                    ex, Level.DEBUG
                 );
             }
         }
     }
 
-    /**
-     * Make a tail of the error/warning message, using the exception thrown.
-     * @param throwable The exception/error caught
-     * @return The message to show in logs
-     */
-    private String tail(final Throwable throwable) {
-        final String tail;
-        if (this.verbose) {
-            tail = Logger.format("%[exception]s", throwable);
-        } else {
-            tail = Logger.format(
-                "%[type]s('%s')",
-                throwable,
-                throwable.getMessage()
-            );
+    private void logEx(String msg, Throwable ex, Level level){
+        if (this.verbose){
+        	log.log(level, msg, ex);
+        }else{
+        	log.log(level, msg + ex.getMessage());
         }
-        return tail;
+    	
     }
-
 }

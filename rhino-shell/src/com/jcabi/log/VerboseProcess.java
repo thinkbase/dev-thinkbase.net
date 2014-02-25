@@ -37,11 +37,9 @@ import java.nio.charset.Charset;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import javax.validation.constraints.NotNull;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.apache.commons.lang3.CharEncoding;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 /**
  * Utility class for getting {@code stdout} from a running process
@@ -62,9 +60,14 @@ import org.apache.commons.lang3.CharEncoding;
  * @version $Id$
  * @since 0.5
  */
-@ToString
-@EqualsAndHashCode(of = "process")
 public final class VerboseProcess {
+	private static final Logger log = Logger.getLogger(VerboseProcess.class);
+	private static final Logger consoleLog = Logger.getLogger("_console_");
+	
+	/** The capacity of stdout buffer */
+	private static final int CAPACITY_STDOUT = 1024;
+	/** The capacity of stder buffer */
+	private static final int CAPACITY_STDERR = 0;
 
     /**
      * The process we're working with.
@@ -86,7 +89,7 @@ public final class VerboseProcess {
      * @param prc The process to work with
      */
     public VerboseProcess(final Process prc) {
-        this(prc, Level.INFO, Level.WARNING);
+        this(prc, Level.INFO, Level.WARN);
     }
 
     /**
@@ -94,9 +97,7 @@ public final class VerboseProcess {
      * the {@code stdout} and will receive an empty {@code stdin}).
      * @param builder Process builder to work with
      */
-    public VerboseProcess(
-        @NotNull(message = "process builder can't be NULL")
-        final ProcessBuilder builder) {
+    public VerboseProcess(final ProcessBuilder builder) {
         this(VerboseProcess.start(builder));
     }
 
@@ -108,10 +109,11 @@ public final class VerboseProcess {
      * @param stderr Log level for stderr
      * @since 0.11
      */
-    public VerboseProcess(
-        @NotNull(message = "process can't be NULL") final Process prc,
-        @NotNull(message = "stdout level can't be NULL") final Level stdout,
-        @NotNull(message = "stderr level can't be NULL") final Level stderr) {
+    public VerboseProcess(final Process prc, final Level stdout, final Level stderr) {
+    	assert(null!=prc):"process can't be NULL";
+    	assert(null!=stdout):"stdout level can't be NULL";
+    	assert(null!=stderr):"stderr level can't be NULL";
+    	
         this.process = prc;
         this.out = stdout;
         this.err = stderr;
@@ -125,15 +127,12 @@ public final class VerboseProcess {
      * @param stderr Log level for stderr
      * @since 0.12
      */
-    public VerboseProcess(
-        @NotNull(message = "process can't be NULL") final ProcessBuilder bdr,
-        @NotNull(message = "stdout level can't be NULL") final Level stdout,
-        @NotNull(message = "stderr level can't be NULL") final Level stderr) {
+    public VerboseProcess(final ProcessBuilder bdr, final Level stdout, final Level stderr) {
         this(VerboseProcess.start(bdr), stdout, stderr);
     }
 
     /**
-     * Get {@code stdout} from the process, after its finish (the method will
+     * Get {@code stdout}/{@code stderr} from the process, after its finish (the method will
      * wait for the process and log its output).
      *
      * <p>The method will check process exit code, and if it won't be equal
@@ -143,12 +142,12 @@ public final class VerboseProcess {
      *
      * @return Full {@code stdout} of the process
      */
-    public String stdout() {
+    public StringBuffer[] stdout() {
         return this.stdout(true);
     }
 
     /**
-     * Get {@code stdout} from the process, after its finish (the method will
+     * Get {@code stdout}/{@code stderr} from the process, after its finish (the method will
      * wait for the process and log its output).
      *
      * <p>This method ignores exit code of the process. Even if it is
@@ -161,7 +160,7 @@ public final class VerboseProcess {
      * @return Full {@code stdout} of the process
      * @since 0.10
      */
-    public String stdoutQuietly() {
+    public StringBuffer[] stdoutQuietly() {
         return this.stdout(false);
     }
 
@@ -170,8 +169,9 @@ public final class VerboseProcess {
      * @param builder Process builder to work with
      * @return Process started
      */
-    private static Process start(@NotNull final ProcessBuilder builder) {
-        builder.redirectErrorStream(true);
+    private static Process start(final ProcessBuilder builder) {
+    	assert(null!=builder):"ProcessBuilder can't be NULL";
+        //builder.redirectErrorStream(true);
         try {
             final Process process = builder.start();
             process.getOutputStream().close();
@@ -182,13 +182,13 @@ public final class VerboseProcess {
     }
 
     /**
-     * Get standard output and check for non-zero exit code (if required).
+     * Get standard output/error and check for non-zero exit code (if required).
      * @param check TRUE if we should check for non-zero exit code
      * @return Full {@code stdout} of the process
      */
-    private String stdout(final boolean check) {
+    private StringBuffer[] stdout(final boolean check) {
         final long start = System.currentTimeMillis();
-        final String stdout;
+        final StringBuffer[] stdout;
         try {
             stdout = this.waitFor();
         } catch (InterruptedException ex) {
@@ -196,54 +196,46 @@ public final class VerboseProcess {
             throw new IllegalStateException(ex);
         }
         final int code = this.process.exitValue();
-        Logger.debug(
-            this,
-            "#stdout(): process %s completed (code=%d, size=%d) in %[ms]s",
-            this.process, code, stdout.length(),
-            System.currentTimeMillis() - start
+        log.debug(
+            "#stdout(): process "+this.process+" completed (code="+code+")" +
+            " in "+((System.currentTimeMillis() - start)/1000)+"s"
         );
         if (check && code != 0) {
-            throw new IllegalArgumentException(
-                Logger.format("Non-zero exit code %d: %[text]s", code, stdout)
-            );
+            throw new IllegalArgumentException("Non-zero exit code "+code+": "+stdout);
         }
         return stdout;
     }
 
     /**
      * Wait for the process to stop, logging its output in parallel.
-     * @return Stdout produced by the process
+     * @return Stdout/Stderr produced by the process
      * @throws InterruptedException If interrupted in between
      */
-    private String waitFor() throws InterruptedException {
+    private StringBuffer[] waitFor() throws InterruptedException {
         final CountDownLatch done = new CountDownLatch(2);
-        final StringBuffer stdout = new StringBuffer(0);
-        final StringBuffer stderr = new StringBuffer(0);
-        Logger.debug(
-            this,
-            "#waitFor(): waiting for stdout of %s in %s...",
-            this.process,
-            this.monitor(
-                this.process.getInputStream(),
-                done, stdout, this.out
-            )
+        final StringBuffer stdout = new StringBuffer();
+        final StringBuffer stderr = new StringBuffer();
+        log.debug(
+            "#waitFor(): waiting for stdout of "+this.process+" in "+
+    		this.monitor(
+                    this.process.getInputStream(),
+                    done, stdout, CAPACITY_STDOUT, this.out
+            )+"..."
         );
-        Logger.debug(
-            this,
-            "#waitFor(): waiting for stderr of %s in %s...",
-            this.process,
+        log.debug(
+            "#waitFor(): waiting for stderr of "+this.process+" in "+
             this.monitor(
                 this.process.getErrorStream(),
-                done, stderr, this.err
-            )
+                done, stderr, CAPACITY_STDERR, this.err
+            )+"..."
         );
         try {
             this.process.waitFor();
         } finally {
-            Logger.debug(this, "#waitFor(): process finished", this.process);
+            log.debug("#waitFor(): process "+this.process+" finished");
             done.await(2L, TimeUnit.SECONDS);
         }
-        return stdout.toString();
+        return new StringBuffer[]{stdout, stderr};
     }
 
     /**
@@ -251,13 +243,13 @@ public final class VerboseProcess {
      * @param stream Stream to monitor
      * @param done Count down latch to signal when done
      * @param buffer Buffer to write to
+     * @param bufferSize The buffer size, zero means no limit
      * @param level Logging level
      * @return Thread which is monitoring
      * @checkstyle ParameterNumber (5 lines)
      */
-    @SuppressWarnings("PMD.DoNotUseThreads")
     private Thread monitor(final InputStream stream, final CountDownLatch done,
-        final StringBuffer buffer, final Level level) {
+        final StringBuffer buffer, final int bufferSize, final Level level) {
         final Thread thread = new Thread(
             new VerboseRunnable(
                 // @checkstyle AnonInnerLength (100 lines)
@@ -267,7 +259,7 @@ public final class VerboseProcess {
                         final BufferedReader reader = new BufferedReader(
                             new InputStreamReader(
                                 stream,
-                                Charset.forName(CharEncoding.UTF_8)
+                                Charset.forName(System.getProperty("file.encoding"))
                             )
                         );
                         try {
@@ -276,20 +268,22 @@ public final class VerboseProcess {
                                 if (line == null) {
                                     break;
                                 }
-                                Logger.log(
-                                    level, VerboseProcess.class,
-                                    ">> %s", line
+                                consoleLog.log(
+                                    level, line
                                 );
-                                buffer.append(line);
+                                int len = buffer.length();
+                                if (bufferSize>0 && len>bufferSize){
+                                	buffer.delete(0, len-bufferSize);
+                                }
+                                buffer.append(line).append("\n");
                             }
                             done.countDown();
                         } finally {
                             try {
                                 reader.close();
                             } catch (IOException ex) {
-                                Logger.error(
-                                    this,
-                                    "failed to close reader: %[exception]s", ex
+                                log.error(
+                                    "failed to close reader: "+ex.getMessage()
                                 );
                             }
                         }
