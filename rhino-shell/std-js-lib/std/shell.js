@@ -33,22 +33,59 @@ define(function () {
     }
     
     /** Start a process with given environment variables */
-    var startProcess = function(cmdLine, envVars){
+    var startProcess = function(cmdLine, envVars, stamp4Kill){
+        _startProcess(cmdLine, envVars, stamp4Kill, true);
+    }
+    var _startProcess = function(cmdLine, envVars, stamp4Kill, withShutdownHook){
+        log.info("Start process [" + cmdLine + "], stamp4Kill=["+stamp4Kill+"], withShutdownHook=["+withShutdownHook+"]");
+    
         var ProcessBuilder = Packages.java.lang.ProcessBuilder;
         var VerboseProcess = Packages.com.jcabi.log.VerboseProcess;
         require (["std/os"], function(os) {
+            var killByStamp = function(stamp){
+                if (os.isWindows){
+                    _startProcess("wmic process where \"name='java.exe' and commandline like '%%"+stamp+"%%'\" call terminate", {}, null, false);
+                }else{
+                    _startProcess("pkill -f '"+stamp+"'", {}, null, false);
+                    java.lang.Thread.sleep(1000);  //FIXME: in linux, pkill should not terminate process immediately
+                }
+            };
+            //If given stamp4Kill, kill subprocess by stamp when shutdown
+            if (stamp4Kill) {
+                log.info("Clean existing subprocess with same stamp: ["+stamp4Kill+"]...");
+                killByStamp(stamp4Kill);
+            }
+        
             var pb;
             if (os.isWindows){
                 pb = new ProcessBuilder("cmd", "/c", cmdLine);
             }else{
-                pb = new ProcessBuilder("/bin/bash", "-c", ". " + cmdLine);
+                pb = new ProcessBuilder("/bin/bash", "-c", cmdLine);
             }
             var env = pb.environment();
             //Put env into environment variables
             for(var o in envVars){
                 env.put(new java.lang.String(o+""), new java.lang.String(envVars[o]+""));
             }
-            (new VerboseProcess(pb)).stdoutQuietly();
+            //Start process
+            var p = pb.start();
+            //Register shutdown hook to destory process
+            if (withShutdownHook){
+                var thread = new java.lang.Thread(new java.lang.Runnable({
+                    run: function () {
+                        log.info("Stop process when JVM shutdown: " + pb.command());
+                        p.destroy();
+                        //If given stamp4Kill, kill subprocess by stamp when shutdown
+                        if (stamp4Kill) {
+                            log.info("Clean subprocess with same stamp: ["+stamp4Kill+"]...");
+                            killByStamp(stamp4Kill);
+                        }
+                    }
+                }), "ShutdownHook-" + pb.command());
+                java.lang.Runtime.getRuntime().addShutdownHook(thread);
+            }
+            //Echo it's stdout and stderr
+            (new VerboseProcess(p)).stdoutQuietly();
         });
     }
     
