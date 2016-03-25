@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry exported="true" kind="lib" path="lib/rhino1_7R4/rhino1_7R4-js.jar" sourcepath="lib/rhino1_7R4/rhino1_7R4-src-toolsrc-xmlimplsrc.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/eclipse-jsdt-wtp-R-3.4.1-20120917174803/org.eclipse.wst.jsdt.debug.rhino.debugger_1.0.301.v201208171701.jar" sourcepath="lib/eclipse-jsdt-wtp-R-3.4.1-20120917174803/org.eclipse.wst.jsdt.debug.rhino.debugger.source_1.0.301.v201208171701.jar"/>
-	<classpathentry kind="lib" path="lib/eclipse-jsdt-wtp-R-3.4.1-20120917174803/org.eclipse.wst.jsdt.debug.transport_1.0.101.v201208171701.jar" sourcepath="lib/eclipse-jsdt-wtp-R-3.4.1-20120917174803/org.eclipse.wst.jsdt.debug.transport.source_1.0.101.v201208171701.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="output" path="bin"/>
-</classpath>
