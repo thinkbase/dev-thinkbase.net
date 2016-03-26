@@ -1,0 +1,30 @@
+{
+  "name": "thinkbase.net-webpack-steps-001",
+  "version": "1.0.0",
+  "description": "webpack-steps-001-simple",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thinkbase/dev-thinkbase.net.git"
+  },
+  "author": "thinkbase.net",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/thinkbase/dev-thinkbase.net/issues"
+  },
+  "homepage": "https://github.com/thinkbase/dev-thinkbase.net#readme",
+  "devDependencies": {
+    "webpack": "^1.12.14",
+    "webpack-dev-server": "^1.14.1"
+  },
+  "dependencies": {
+    "date-format": "0.0.2",
+    "jquery": "^2.2.2"
+  }
+}

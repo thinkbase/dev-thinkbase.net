@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello Webpack</title>
+    <script src="../../bundle.main.js"></script>
+    <script>
+        var showTime = function(){
+            var $ = _require("jquery");
+            var format = _require('date-format');
+            var now = format.asString('yyyy-MM-dd hh:mm:ss.SSS', new Date());
+            $("#console").html("Now："+ now);
+        }
+    </script>
+</head>
+<body>
+    <span id="console">Hello, world!</span>
+    | <a href="javascript:showTime()">Show current time</a>
+</body>
+</html>
