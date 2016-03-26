@@ -6,43 +6,43 @@
 ```shell
 npm init
 #======== [CONSOLE OUTPUT] ========
-    ... ...
-    name: (001-simple) thinkbase.net-webpack-steps-001
-    version: (1.0.0)
-    description: webpack-steps-001-simple
-    entry point: (index.js)
-    test command:
-    git repository: https://github.com/thinkbase/dev-thinkbase.net
-    keywords:
-    author: thinkbase.net
-    license: (ISC) Apache-2.0
-    About to write to /***/dev-thinkbase.net/.research/webpack-steps/001-simple/package.json:
+... ...
+name: (001-simple) thinkbase.net-webpack-steps-001
+version: (1.0.0)
+description: webpack-steps-001-simple
+entry point: (index.js)
+test command:
+git repository: https://github.com/thinkbase/dev-thinkbase.net
+keywords:
+author: thinkbase.net
+license: (ISC) Apache-2.0
+About to write to /***/dev-thinkbase.net/.research/webpack-steps/001-simple/package.json:
 
-    {
-      "name": "thinkbase.net-webpack-steps-001",
-      "version": "1.0.0",
-      "description": "webpack-steps-001-simple",
-      "main": "index.js",
-      "directories": {
-        "doc": "docs"
-      },
-      "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-      },
-      "repository": {
-        "type": "git",
-        "url": "git+https://github.com/thinkbase/dev-thinkbase.net.git"
-      },
-      "author": "thinkbase.net",
-      "license": "Apache-2.0",
-      "bugs": {
-        "url": "https://github.com/thinkbase/dev-thinkbase.net/issues"
-      },
-      "homepage": "https://github.com/thinkbase/dev-thinkbase.net#readme"
-    }
+{
+  "name": "thinkbase.net-webpack-steps-001",
+  "version": "1.0.0",
+  "description": "webpack-steps-001-simple",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thinkbase/dev-thinkbase.net.git"
+  },
+  "author": "thinkbase.net",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/thinkbase/dev-thinkbase.net/issues"
+  },
+  "homepage": "https://github.com/thinkbase/dev-thinkbase.net#readme"
+}
 
 
-    Is this ok? (yes)
+Is this ok? (yes)
 ```
 
 ### 2. Prepare webpack
