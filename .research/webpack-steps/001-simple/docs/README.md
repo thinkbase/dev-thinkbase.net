@@ -53,7 +53,7 @@ npm install webpack --save-dev
 # install webpack-dev-server as devDependency
 npm install webpack-dev-server --save-dev
 ... ...
-# installation copy the commands into .bin  folder
+# installation copy the commands into .bin folder
 ls node_modules/.bin -al
 #======== [CONSOLE OUTPUT] ========
 总用量 8
@@ -86,7 +86,7 @@ npm install date-format --save
 See [`../webpack.config.js`](../webpack.config.js)
 
 ### 5. Create html and js, then build
-See [`../src/main.js`](../src/main.js) and [`../src/test/test.html`](../test/test.html)
+See [`../src/main.js`](../src/main.js) and [`../src/test/test.html`](../src/test/test.html)
 
 ```shell
 # run webpack to build bundle javascript file
