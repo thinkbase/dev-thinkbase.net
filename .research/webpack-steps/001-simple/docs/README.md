@@ -95,7 +95,22 @@ webpack
 webpack-dev-server
 ```
 
-After run `webpack-dev-server`, the test code should be accessed by http://localhost:8080/src/test/test.html, and, if `main.js` changed, `webpack-dev-server` should process hot-swap:
+After run `webpack-dev-server`, the test code should be accessed by http://localhost:8080/src/test/test.html, and, if `main.js` changed, `webpack-dev-server` should process `Automatic Refresh`:
 ![Console](assets/README-webpack-dev-server.png)
+
+### 5. The result:
+![Run test html](assets/README-test-html.png)
+
+### Notes
+ 1. After clone the code from git, the `node_modules` could be re-created with command: `npm install`:
+    - ![npm install](assets/README-npm-install.png)
+    - ![npm install](assets/README-npm-install2.png)
+ 2. Because **The _webpack-dev-server_ will serve the files in the current directory, unless you configure a specific content base.** (see https://github.com/webpack/docs/wiki/webpack-dev-server#content-base ), It's recommanded to **place bundled file into project-root**, else the `Automatic Refresh` should not work properly.
+ 3. Options for webpack:
+    - `webpack` for building once for development
+    - `webpack -p` for building once for production (minification)
+    - `webpack -d` to include source maps
+        * Use option `devtool: "source-map"` in `webpack.config.js` should also force create source maps.
+    - `webpack --watch` for continuous incremental build in development (fast!)
 
 ### END

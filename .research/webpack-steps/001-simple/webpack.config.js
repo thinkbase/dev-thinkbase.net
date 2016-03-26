@@ -1,11 +1,8 @@
 module.exports = {
-    devtool: "source-map",
+    devtool: "source-map",  //Force create source map file
     entry: './src/main.js',
     output: {
         path: __dirname,
-        filename: 'bundle.[name].js',
-        sourceMapFilename: "bundle.[name].js.map",
-        devtoolLineToLine: true,
-        pathinfo: true
+        filename: 'bundle.[name].js'
     }
 }
