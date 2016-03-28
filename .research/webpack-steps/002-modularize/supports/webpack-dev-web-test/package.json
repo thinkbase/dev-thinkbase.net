@@ -1,0 +1,32 @@
+{
+  "name": "webpack-dev-support",
+  "version": "1.0.0",
+  "description": "Support web-based npm module development with webpack and webpack-dev-server",
+  "main": "web-test-server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thinkbase/dev-thinkbase.net.git"
+  },
+  "keywords": [
+    "webpack",
+    "npm",
+    "browser",
+    "test"
+  ],
+  "author": "thinkbase.net",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/thinkbase/dev-thinkbase.net/issues"
+  },
+  "homepage": "https://github.com/thinkbase/dev-thinkbase.net#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "proxy-middleware": "^0.15.0",
+    "url": "^0.11.0",
+    "webpack": "^1.12.14",
+    "webpack-dev-server": "^1.14.1"
+  }
+}
