@@ -21,10 +21,6 @@
     "jquery.transit": "^0.9.12"
   },
   "devDependencies": {
-    "css-loader": "^0.23.1",
-    "file-loader": "^0.8.5",
-    "style-loader": "^0.13.1",
-    "url-loader": "^0.5.7",
     "webpack-dev-support": "../../../supports/webpack-dev-web-test"
   }
 }

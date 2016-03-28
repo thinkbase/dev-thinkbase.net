@@ -4,11 +4,19 @@ This is a wrapper for webpack-dev-server, for browser-based npm modules developm
 
 ## Dependencies
 ```shell
+# Required libraries
 npm install webpack -S
 npm install webpack-dev-server -S
 npm install proxy-middleware -S
 npm install url -S
 npm install express -S
+
+# Default loaders, see also: `webpack.web-test-config.js`
+npm install style-loader -S
+npm install file-loader -S
+npm install url-loader -S
+npm install css-loader -S
+npm install html-loader -S
 ```
 
 ## Usage

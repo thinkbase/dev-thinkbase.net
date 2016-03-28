@@ -40,11 +40,6 @@ npm install ../../../supports/webpack-dev-web-test -D
 npm install jquery -S
 npm install jquery.transit -S
 
-npm install style-loader -D
-npm install file-loader -D
-npm install url-loader -D
-npm install css-loader -D
-
 npm install ../../../supports/webpack-dev-web-test -D
 ```
 

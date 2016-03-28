@@ -1,0 +1,17 @@
+{
+  "name": "error-msg",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dialog-component": "^0.4.4"
+  },
+  "devDependencies": {
+    "webpack-dev-support": "../../../supports/webpack-dev-web-test"
+  }
+}

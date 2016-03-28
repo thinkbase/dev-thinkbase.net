@@ -1,0 +1,8 @@
+.dialog .title {
+    color: darkred;
+    font-weight: bold;
+}
+
+.dialog .body {
+    padding-left: 12px;
+}
