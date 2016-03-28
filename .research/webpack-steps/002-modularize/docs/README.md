@@ -35,6 +35,19 @@ npm install ../../../supports/webpack-dev-web-test -D
 # After install `webpack-dev-web-test`, edit `package.json` to modify reference to `webpack-dev-web-test` with relative path
 ```
 
+### module `thinkbase.net/thinkbase-ui`
+```shell
+npm install jquery -S
+npm install jquery.transit -S
+
+npm install style-loader -D
+npm install file-loader -D
+npm install url-loader -D
+npm install css-loader -D
+
+npm install ../../../supports/webpack-dev-web-test -D
+```
+
 ### NOTES
 #### The default `src/index.js`(or `index.js` at module root)
 ```js

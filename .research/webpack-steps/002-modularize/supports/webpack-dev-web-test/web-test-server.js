@@ -9,6 +9,13 @@ var express = require('express');
 
 module.exports = {
     start: function(cfg, appCallback) {
+        //The dir of main js file
+        var mainDir = require('path').dirname(require.main.filename);
+
+        if (! cfg){
+            cfg = {};
+        }
+        
         var wdsPort = cfg.wdsPort || 8081;
         var httpPort = cfg.httpPort || 8080;
         var wdsPubPath = cfg.wdsPubPath || "web-test";
@@ -19,17 +26,22 @@ module.exports = {
             wdsPubPath = wdsPubPath.substring(0, wdsPubPath.length-1);
         }
 
-
-        var defWebpackCfg = __dirname+"/webpack.web-test-config.js";
+        var defWebpackCfg;
         var webpackCfg = cfg.webpackCfg;
         if (! webpackCfg){
-            webpackCfg = require(defWebpackCfg);
-            console.log(">>> Webpack config(For testing only): "+defWebpackCfg);
+            try{
+                defWebpackCfg = mainDir+"/webpack.web-test-config.js";
+                webpackCfg = require(defWebpackCfg);
+                console.log(">>> Webpack config(For testing only): "+defWebpackCfg);
+            }catch(ex){
+                defWebpackCfg = __dirname+"/webpack.web-test-config.js";
+                webpackCfg = require(defWebpackCfg);
+                console.log(">>> Webpack config(For testing only): "+defWebpackCfg);
+            }
         }
 
-        var dirname = require('path').dirname(require.main.filename);
         var wdsCfg = cfg.wdsCfg || {
-            contentBase: dirname,
+            contentBase: mainDir,
             hot: true,
             quiet: false,
             noInfo: false,

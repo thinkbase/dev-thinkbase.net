@@ -1,0 +1,12 @@
+.thinkbase-ui-translatable {
+    border-color: red;
+    border-style: dotted;
+    border-width: 1px;
+    background-image: url("imgs/translatable.jpg");
+    min-width: 480px;
+    min-height: 320px;
+}
+
+.thinkbase-ui-translatable h2 {
+    
+}
