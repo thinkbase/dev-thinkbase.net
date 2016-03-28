@@ -1,0 +1,18 @@
+{
+  "name": "bizobj-utils",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "date-format": "0.0.2",
+    "tempusjs": "^0.2.18"
+  },
+  "devDependencies": {
+    "mocha": "^2.4.5"
+  }
+}
