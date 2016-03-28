@@ -2,7 +2,7 @@
 
 /* The implementations */
 var dialog = require("dialog-component");
-require("./node_modules/dialog-component/dialog.css");
+require("dialog-component/dialog.css");
 
 require("./index.css");
 

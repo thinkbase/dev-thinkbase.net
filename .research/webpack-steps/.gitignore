@@ -1,4 +1,6 @@
 node_modules
 bundle.*
+*.bundle.*
 test-bundle.*
 *.log
+dist

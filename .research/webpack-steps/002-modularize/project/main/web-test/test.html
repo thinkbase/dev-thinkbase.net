@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test: project-main</title>
+    <script src="/dist/bundle.js"></script>
+    <script>
+    var doTestBizobjUtils = function(){
+        _require("bizobj-utils", function(util){
+            alert("stdDate2String="+util.stdDate2String(new Date()));
+        });
+    }
+    var doTestThinkbaseAjax = function(){
+        _require("thinkbase-ajax", function(ajax){
+            ajax.post("/test-data.json", {}, function(json){
+                alert("Name: "+json.name+"; timestamp: "+json.timestamp);
+            });
+        });
+    }
+    var doTestThinkbaseUI = function(){
+        _require("thinkbase-ui", function(ui){
+            ui.rotate("#box", 30,   500);          // 30 degrees more
+            ui.rotate("#box", -60,  1000);         // 60 degrees less
+            ui.rotate("#box", 30,   500);          // 30 degrees more
+        });
+    }
+    var doTestProjectErrorMsg = function(){
+        _require("error-msg", function(em){
+            em.raiseErr(2);
+        });
+    }
+    var doTestProjectStringUtils = function(){
+        _require("string-utils", function(su){
+            alert("hello ==> "+su.upper("hello"));
+        });
+    }
+    </script>
+</head>
+<body>
+    <h1>Test: project-main</h1>
+    <p><i>Run <u><code>webpack-dev-server</code></u> at module root path, then open <u><code>http://localhost:8080/web-test/test.html</code></u> to run test.</i></p>
+    <hr/>
+
+    <a href="javascript:doTestBizobjUtils()">[Test - bizobj-utils]</a>
+    <br/>
+    <a href="javascript:doTestThinkbaseAjax()">[Test - thinkbase-ajax]</a>
+    | <a href="javascript:doTestThinkbaseUI()">[Test - thinkbase-ui]</a>
+    <br/>
+    <a href="javascript:doTestProjectErrorMsg()">[Test - error-msg]</a>
+    | <a href="javascript:doTestProjectStringUtils()">[Test - string-utils]</a>
+
+    <hr/>
+
+    <div id="box" class="thinkbase-ui-translatable" style="width:300px;height:200px">
+        <h2>translatable</h2>
+    </div>
+
+</body>
+</html>

@@ -15,7 +15,7 @@ module.exports = {
         if (! cfg){
             cfg = {};
         }
-        
+
         var wdsPort = cfg.wdsPort || 8081;
         var httpPort = cfg.httpPort || 8080;
         var wdsPubPath = cfg.wdsPubPath || "web-test";

@@ -1,10 +1,11 @@
-//Webpack configuration JUST FOR TEST
+//Webpack configuration for distribution
 module.exports = {
-    devtool: "source-map",  //Force create source map file
-    entry: './web-test/test.js',
+    devtool: "source-map",      //Force create source map file
+    entry: './src/index.js',
     output: {
-        path: __dirname,
-        filename: 'test-bundle.js'
+        path: __dirname + "/dist",
+        publicPath: "/dist/",    //Importment: MUST refer `bundle.js` with `<script src="/dist/bundle.js"></script>`
+        filename: 'bundle.js'
     },
     resolve: {
         root: [process.cwd(), process.cwd() + '/src', process.cwd() + '/node_modules'],
