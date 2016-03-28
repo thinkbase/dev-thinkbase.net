@@ -1,11 +1,11 @@
 /**
  * REF: http://www.boiajs.com/2015/08/25/webpack-dev-server-and-express-server/
  */
-var webpack = require('webpack');
-var WebpackDevServer = require('webpack-dev-server');
-var proxy = require('proxy-middleware');
-var url = require('url');
-var express = require('express');
+ var webpack = require('webpack');
+ var WebpackDevServer = require('webpack-dev-server');
+ var proxy = require('proxy-middleware');
+ var url = require('url');
+ var express = require('express');
 
 module.exports = {
     start: function(cfg, appCallback) {

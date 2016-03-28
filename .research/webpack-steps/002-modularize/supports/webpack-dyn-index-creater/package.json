@@ -1,0 +1,24 @@
+{
+  "name": "webpack-dyn-index-creater",
+  "version": "1.0.0",
+  "description": "Create \"window._require\" function in index.js to to make html-inline scripts could get modules dynamicly",
+  "main": "dyn-index-creater.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thinkbase/dev-thinkbase.net.git"
+  },
+  "keywords": [
+    "webpack",
+    "_require",
+    "dynamic"
+  ],
+  "author": "thinkbase.net",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/thinkbase/dev-thinkbase.net/issues"
+  },
+  "homepage": "https://github.com/thinkbase/dev-thinkbase.net#readme"
+}
