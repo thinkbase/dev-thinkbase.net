@@ -1,21 +1,13 @@
-/** Webpack configuration for distribution */
-
-/** The resolve path list to find modules and loaders */
-var MODULE_PATH = [process.cwd(), process.cwd() + '/src', process.cwd() + '/node_modules'];
-
+//Webpack configuration JUST FOR TEST
 module.exports = {
-    devtool: "source-map",      //Force create source map file
-    entry: {
-        general: './src/index.js',
-        bootstrap: './src/bootstrap.js'
-    },
+    devtool: "source-map",  //Force create source map file
+    entry: './web-test/test.js',
     output: {
-        path: __dirname + "/dist",
-        publicPath: "/dist/",    //Importment: MUST refer `bundle.js` with `<script src="/dist/bundle.js"></script>`
-        filename: 'bundle.[name].js'
+        path: __dirname,
+        filename: 'test-bundle.js'
     },
     resolve: {
-        root: MODULE_PATH,
+        root: [process.cwd(), process.cwd() + '/src', process.cwd() + '/node_modules'],
         alias: {},
         extensions: ['', '.js', '.css', '.html', '.png', '.jpg']
     },
@@ -37,8 +29,5 @@ module.exports = {
             { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: "file" },
             { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: "url?limit=10000&minetype=image/svg+xml" }
         ]
-    },
-    resolveLoader: {
-        modulesDirectories: MODULE_PATH
     }
 }

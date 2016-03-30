@@ -14,9 +14,15 @@
     "thinkbase-ajax": "../../modules/thinkbase.net/thinkbase-ajax",
     "thinkbase-ui": "../../modules/thinkbase.net/thinkbase-ui",
     "error-msg": "../modules/error-msg",
-    "string-utils": "../modules/string-utils"
+    "string-utils": "../modules/string-utils",
+    "thinkbase-bootstrap": "../../modules/thinkbase.net/thinkbase-bootstrap"
   },
   "devDependencies": {
+    "exports-loader": "^0.6.3",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "imports-loader": "^0.6.5",
+    "less": "^2.6.1",
+    "less-loader": "^2.2.3",
     "webpack-dev-web-test": "../../supports/webpack-dev-web-test"
   }
 }

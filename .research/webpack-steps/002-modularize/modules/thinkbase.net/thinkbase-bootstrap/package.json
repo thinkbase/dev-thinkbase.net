@@ -1,0 +1,41 @@
+{
+  "name": "thinkbase-bootstrap",
+  "version": "1.0.0",
+  "description": "Add bootstrap support based on https://github.com/bline/bootstrap-webpack",
+  "main": "src/bootstrap.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thinkbase/dev-thinkbase.net.git"
+  },
+  "keywords": [
+    "webpack",
+    "bootstrap"
+  ],
+  "author": "thinkbase.net",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/thinkbase/dev-thinkbase.net/issues"
+  },
+  "homepage": "https://github.com/thinkbase/dev-thinkbase.net#readme",
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "bootstrap-webpack": "0.0.5",
+    "jquery": "^1.9.1"
+  },
+  "devDependencies": {
+    "css-loader": "^0.23.1",
+    "exports-loader": "^0.6.3",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.8.5",
+    "imports-loader": "^0.6.5",
+    "less": "^2.6.1",
+    "less-loader": "^2.2.3",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.12.14",
+    "webpack-dev-web-test": "../../../supports/webpack-dev-web-test"
+  }
+}

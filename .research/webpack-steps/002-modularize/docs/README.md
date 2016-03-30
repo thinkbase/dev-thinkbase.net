@@ -43,6 +43,12 @@ npm install jquery.transit -S
 npm install ../../../supports/webpack-dev-web-test -D
 ```
 
+### module `thinkbase-bootstrap`
+```shell
+npm install -D webpack css-loader less less-loader style-loader url-loader file-loader imports-loader exports-loader extract-text-webpack-plugin
+npm install -S jquery bootstrap bootstrap-webpack
+```
+
 ### NOTES
 #### The default `src/index.js`(or `index.js` at module root)
 ```js

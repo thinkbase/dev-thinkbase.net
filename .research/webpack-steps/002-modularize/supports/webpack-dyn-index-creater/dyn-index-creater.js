@@ -88,7 +88,7 @@ module.exports = {
                     buffer = buffer + "\n"
                            + '    if ("'+moduleName+'"==moduleName){\n'
                            + '        require.ensure('+chunkStr+', function(require) {\n'
-                           + '            callback(require("'+module+'"));\n'
+                           + '            if(callback) callback(require("'+module+'"));\n'
                            + '        });\n'
                            + '    }'
                 }
