@@ -10,12 +10,12 @@
   "license": "ISC",
   "dependencies": {
     "jquery": "^1.12.2",
+    "thinkbase-bootstrap": "../../modules/thinkbase.net/thinkbase-bootstrap",
     "bizobj-utils": "../../modules/bizobj.org/bizobj-utils",
     "thinkbase-ajax": "../../modules/thinkbase.net/thinkbase-ajax",
     "thinkbase-ui": "../../modules/thinkbase.net/thinkbase-ui",
     "error-msg": "../modules/error-msg",
-    "string-utils": "../modules/string-utils",
-    "thinkbase-bootstrap": "../../modules/thinkbase.net/thinkbase-bootstrap"
+    "string-utils": "../modules/string-utils"
   },
   "devDependencies": {
     "exports-loader": "^0.6.3",

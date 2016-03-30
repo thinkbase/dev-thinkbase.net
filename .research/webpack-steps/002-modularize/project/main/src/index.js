@@ -1,6 +1,6 @@
 "use strict";
 
-/*Created by `webpack-dyn-index-creater, `, Thu Mar 31 2016 03:32:55 GMT+0800 (CST)*/
+/*Created by `webpack-dyn-index-creater, `, Thu Mar 31 2016 04:01:33 GMT+0800 (CST)*/
 window._require = function(moduleName, callback){
 
     if ("jquery"==moduleName){
