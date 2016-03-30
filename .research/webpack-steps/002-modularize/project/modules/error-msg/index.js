@@ -17,6 +17,10 @@ var _raiseErr = function(code){
     if (!msg){
         msg = defMsg;
     }
+
+    var st = require("../string-utils");
+    msg = st.upper(msg);
+
     dialog("ERROR", msg).closable().modal().show();
 };
 

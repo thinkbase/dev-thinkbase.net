@@ -9,9 +9,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "jquery": "^2.2.2"
+    "jquery": "^1.12.2",
+    "bizobj-utils": "../../modules/bizobj.org/bizobj-utils",
+    "thinkbase-ajax": "../../modules/thinkbase.net/thinkbase-ajax",
+    "thinkbase-ui": "../../modules/thinkbase.net/thinkbase-ui",
+    "error-msg": "../modules/error-msg",
+    "string-utils": "../modules/string-utils"
   },
   "devDependencies": {
-    "webpack-dev-support": "../../supports/webpack-dev-web-test"
+    "webpack-dev-web-test": "../../supports/webpack-dev-web-test"
   }
 }

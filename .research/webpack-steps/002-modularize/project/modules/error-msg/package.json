@@ -12,6 +12,6 @@
     "dialog-component": "^0.4.4"
   },
   "devDependencies": {
-    "webpack-dev-support": "../../../supports/webpack-dev-web-test"
+    "webpack-dev-web-test": "../../../supports/webpack-dev-web-test"
   }
 }

@@ -1,4 +1,8 @@
-//Webpack configuration for distribution
+/** Webpack configuration for distribution */
+
+/** The resolve path list to find modules and loaders */
+var MODULE_PATH = [process.cwd(), process.cwd() + '/src', process.cwd() + '/node_modules'];
+
 module.exports = {
     devtool: "source-map",      //Force create source map file
     entry: './src/index.js',
@@ -8,7 +12,7 @@ module.exports = {
         filename: 'bundle.js'
     },
     resolve: {
-        root: [process.cwd(), process.cwd() + '/src', process.cwd() + '/node_modules'],
+        root: MODULE_PATH,
         alias: {},
         extensions: ['', '.js', '.css', '.html', '.png', '.jpg']
     },
@@ -18,5 +22,8 @@ module.exports = {
             { test: /\.(png|jpg)$/, loader: 'url-loader?limit=256' }, // inline base64 URLs for <=256bytes images, direct URLs for the rest
             { test: /\.html$/, loader: 'html-loader' }
         ]
+    },
+    resolveLoader: {
+        modulesDirectories: MODULE_PATH
     }
 }

@@ -56,6 +56,7 @@ module.exports = {
         var dir2mk = path.dirname(mainDir + "/" + indexJsPath);
         mkdirs(dir2mk, 0777, function(folder){
             console.log(">>> Folder created: "+dir2mk);
+            var allDeps = [];   //Store all dependencies for modify package.json on the fly
 
             var buffer = '"use strict";\n'
                        + '\n'
@@ -63,11 +64,27 @@ module.exports = {
                        + `window._require = function(moduleName, callback){\n`;
             for (var i=0; i<chunkArrays.length; i++){
                 var chunk = chunkArrays[i];
-                var chunkStr = JSON.stringify(chunk);
+
+                //Because index.js was created in "src" folder, so the relative path must add ".."
+                var srcChunks = [];
                 for (var j=0; j<chunk.length; j++){
                     var module = chunk[j];
+                    if (module.startsWith("../")){
+                        module = "../" + module;
+                    }
+                    srcChunks[srcChunks.length] = module;
+                }
+                var chunkStr = JSON.stringify(srcChunks);
+
+                //Create code to refer every module
+                for (var j=0; j<chunk.length; j++){
+                    var module = chunk[j];
+                    allDeps[allDeps.length] = module;
                     console.log("  >> Chunk: "+chunkStr+", Module="+module);
                     var moduleName = splitNameFromPath(module);
+                    if (module.startsWith("../")){
+                        module = "../" + module;
+                    }
                     buffer = buffer + "\n"
                            + '    if ("'+moduleName+'"==moduleName){\n'
                            + '        require.ensure('+chunkStr+', function(require) {\n'
@@ -85,6 +102,31 @@ module.exports = {
                     console.log(">>> Index created: "+indexJsPath);
                 }
             });
+
+            //Modify dependencies in package.json
+            var json = fs.readFileSync('package.json', 'utf-8');
+            var packageObj = JSON.parse(json);
+            var dependencies = packageObj.dependencies;
+            if (!dependencies){
+                dependencies = {};
+                packageObj.dependencies = dependencies;
+            }
+            for (var i=0; i<allDeps.length; i++){
+                var dep = allDeps[i];
+                if (dep.startsWith("../")){
+                    //The module from relative path
+                    var moduleName = splitNameFromPath(dep);
+                    dependencies[moduleName] = dep;
+                }else{
+                    //The module from npm repo - must defined in package.json
+                    if (! dependencies[dep]){
+                        throw "Module '"+dep+"' MUST define in package.json as 'dependencies'";
+                    }
+                }
+            }
+            json = JSON.stringify(packageObj, null, "  ");
+            fs.writeFileSync('package.json', json, {encoding: 'utf-8'});
+            console.log(">>> package.json updated.");
         });
     }
 };

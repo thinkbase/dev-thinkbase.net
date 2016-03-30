@@ -1,16 +1,20 @@
 /**
  * REF: http://www.boiajs.com/2015/08/25/webpack-dev-server-and-express-server/
  */
- var webpack = require('webpack');
- var WebpackDevServer = require('webpack-dev-server');
- var proxy = require('proxy-middleware');
- var url = require('url');
- var express = require('express');
+ //The dir of main js file
+var MAIN_DIR = require('path').dirname(require.main.filename);
+
+/* NOTE: Because the webpack config file (webpack.web-test-config.js) was not loaded at this
+         point, so we must require mudules with absolute path.
+ */
+var webpack = require(MAIN_DIR+'/node_modules/webpack');
+var WebpackDevServer = require(MAIN_DIR+'/node_modules/webpack-dev-server');
+var proxy = require(MAIN_DIR+'/node_modules/proxy-middleware');
+var url = require(MAIN_DIR+'/node_modules/url');
+var express = require(MAIN_DIR+'/node_modules/express');
 
 module.exports = {
     start: function(cfg, appCallback) {
-        //The dir of main js file
-        var mainDir = require('path').dirname(require.main.filename);
 
         if (! cfg){
             cfg = {};
@@ -30,7 +34,7 @@ module.exports = {
         var webpackCfg = cfg.webpackCfg;
         if (! webpackCfg){
             try{
-                defWebpackCfg = mainDir+"/webpack.web-test-config.js";
+                defWebpackCfg = MAIN_DIR+"/webpack.web-test-config.js";
                 webpackCfg = require(defWebpackCfg);
                 console.log(">>> Webpack config(For testing only): "+defWebpackCfg);
             }catch(ex){
@@ -41,7 +45,7 @@ module.exports = {
         }
 
         var wdsCfg = cfg.wdsCfg || {
-            contentBase: mainDir,
+            contentBase: MAIN_DIR,
             hot: true,
             quiet: false,
             noInfo: false,

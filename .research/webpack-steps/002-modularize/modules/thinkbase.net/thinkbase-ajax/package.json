@@ -10,10 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "JSON2": "^0.1.0",
-    "jquery": "^2.2.2"
+    "jquery": "^1.12.2"
   },
   "devDependencies": {
     "mocha": "^2.4.5",
-    "webpack-dev-support": "../../../supports/webpack-dev-web-test"
+    "webpack-dev-web-test": "../../../supports/webpack-dev-web-test"
   }
 }
