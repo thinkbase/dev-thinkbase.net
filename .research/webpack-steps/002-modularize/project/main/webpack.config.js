@@ -11,7 +11,7 @@ module.exports = {
     },
     output: {
         path: __dirname + "/dist",
-        publicPath: "/dist/",    //Importment: MUST refer `bundle.js` with `<script src="/dist/bundle.js"></script>`
+        publicPath: "/dist/",
         filename: 'bundle.[name].js'
     },
     resolve: {
