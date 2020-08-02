@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "jquery": "^1.12.2",
+    "jquery": "^3.5.1",
     "thinkbase-bootstrap": "../../modules/thinkbase.net/thinkbase-bootstrap",
     "bizobj-utils": "../../modules/bizobj.org/bizobj-utils",
     "thinkbase-ajax": "../../modules/thinkbase.net/thinkbase-ajax",
