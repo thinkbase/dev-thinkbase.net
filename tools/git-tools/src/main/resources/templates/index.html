@@ -1,13 +1,192 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
+<!DOCTYPE html>
+<html>
+  <head>
     <title>Index</title>
-    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-</head>
-<body>
-    <div>
-      <span>Hello, </span>
-      <span th:text="${version}">JDK Version</span>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="_/css/normalize.css" />
+    <link rel="stylesheet" href="_/css/font-awesome.css" />
+    <link rel="stylesheet" href="_/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="_/css/templatemo-style.css" />
+    <script src="_/js/modernizr-2.6.2.min.js"></script>
+  </head>
+  <body style="">
+    <div class="site-bg"></div>
+    <div class="site-bg-overlay"></div>
+
+    <!-- TOP HEADER -->
+    <div class="top-header">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <p class="phone-info">
+              Call us:
+              <a href="javascript:void(0)">thinkbase.net@gmail.com</a>
+            </p>
+          </div>
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="social-icons">
+              <ul>
+                <li>
+                  <a href="http://thinkbase.net/" target="blank" class="fa fa-link"></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</body>
+    <!-- .top-header -->
+
+    <div class="visible-xs visible-sm responsive-menu">
+      <a href="javascript:void(0)" class="toggle-menu">
+        <i class="fa fa-bars"></i> 功能菜单
+      </a>
+      <div id="show-menu" class="show-menu">
+        <ul class="main-menu"><!-- Same as #nav .main-menu --></ul>
+      </div>
+    </div>
+    <div class="copyrights">
+      Collect from <a href="http://www.cssmoban.com/">免费模板</a>
+    </div>
+    <div class="container" id="page-content">
+      <div class="row">
+        <div class="col-md-9 col-sm-12 content-holder">
+          <!-- CONTENT -->
+          <div id="menu-container">
+            <div class="logo-holder logo-top-margin">
+              <a href="javascript:void(0)" class="site-brand"><img src="./app/logo.png" alt=""/></a>
+            </div>
+
+            <div class="homepage home-section text-center">
+              <div class="welcome-text">
+                <h2>幸运的人是 <strong class="orange" id="rolling-lucky-one">CRYSTAL</strong></h2>
+                <p id="rolling-prompt" style="visibility:hidden">
+                  倒计时 <span class="green" id="rolling-seconds">60</span> 秒.<br/>或者点击
+                  <a class="green" href="javascript:void(0)" id="rolling-stop">锁定</a> 
+                  直接找到 <span class="orange">幸运的人</span>.
+                </p>
+
+                <div class="subscribe-form">
+                  <div class="row">
+                      <input
+                        name="startRolling"
+                        type="button"
+                        class="button default"
+                        id="startRolling"
+                        value="开始"
+                      />
+                  </div>
+                  <p class="subscribe-text">
+                    点击按钮开始!
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="content contact-section">
+              <div class="row">
+                <div class="col-md-8 col-sm-8">
+                  <div class="box-content">
+                    <h3 class="widget-title">设置</h3>
+                    <form class="settings-form">
+                      <fieldset>
+                        <div>倒计时(秒):</div>
+                        <input
+                          type="number"
+                          min="3" max="120"
+                          id="settingRollingSeconds"
+                          placeholder="输入倒计时秒数..."
+                        />
+                      </fieldset>
+                      <fieldset>
+                        <div>参与人员:</div>
+                        <textarea
+                          id="settingPersons"
+                          cols="30"
+                          rows="4"
+                          placeholder="输入所有人的姓名.."
+                        ></textarea>
+                      </fieldset>
+                      <fieldset style="text-align: right;">
+                        <input
+                          type="submit"
+                          class="button"
+                          id="buttonSave"
+                          value="保存"
+                        />
+                      </fieldset>
+                    </form>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-4">
+                  <div class="box-content">
+                    <h3 class="widget-title">说明</h3>
+                    <p>
+                      <code>倒计时</code>：设置每次执行的 <span class="blue">倒计时</span>
+                      (单位为 <code>秒</code>)，
+                      达到时间后才会锁定 <span class="blue">幸运的人</span>.
+                    </p>
+                    <hr/>
+                    <p>
+                      <code>参与人员</code>：设置 <span class="blue">参与人员</span>，
+                      人员姓名之间使用 <span class="blue">空格</span> 或者
+                      <span class="blue">换行</span> 分隔.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3 hidden-sm">
+          <nav id="nav" class="main-navigation hidden-xs hidden-sm">
+            <ul class="main-menu">
+              <li>
+                <a class="active button-home" href="javascript:void(0)"><i class="fa fa-home"></i>Home</a>
+              </li>
+              <li>
+                <a class="button-settings" href="javascript:void(0)"><i class="fa fa-database"></i>Settings</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <!-- SITE-FOOTER -->
+    <div class="site-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <p>
+              Copyright © 2019 好好学习 天天向上
+            </p>
+            <p style="font-size: 80%">
+              来源: Rectangle is free mobile template brought to you by
+              <span class="orange">template</span><span class="green">mo</span>.com website
+              <br/>
+              Powered By: <span th:text="${version}">...</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- .site-footer -->
+
+    <script src="_/js/jquery-1.10.2.min.js"></script>
+    <script src="_/js/plugins.js"></script>
+    
+    <script src="./app/main.js"></script>
+    
+    <script src="./modules/3rd/jstorage.js"></script>
+
+    <script src="./modules/home.js"></script>
+    <script src="./modules/settings.js"></script>
+    
+    <!-- templatemo 439 rectangle -->
+  </body>
 </html>
