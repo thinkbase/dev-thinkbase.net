@@ -1,0 +1,38 @@
+<div th:fragment="content">
+	<div class="homepage home-section text-center">
+	    <div class="welcome-text">
+			<h2>GIT 工具集</h2>
+			<div class="subscribe-form">
+	             <div class="row">
+	               <input name="startExportLog" type="button" class="button default" id="startExportLog" value="导出日志"/>
+	               <input name="startMore" type="button" class="button default" id="startMore" value="更多 ..."/>
+	             </div>
+			</div>
+	    </div>
+	</div>
+</div>
+
+<div th:fragment="menu">
+	<li>
+		<a class="active button-home" href="javascript:void(0)"><i class="fa fa-home"></i>Home</a>
+	</li>
+</div>
+
+<div th:fragment="script">
+	<script>
+	(function($) {
+		"use strict";
+
+	    $(".main-menu a.button-home").click(function() {
+		    $("#menu-container .content").slideUp("slow");
+		    $("#menu-container .homepage").slideDown("slow");
+		    $(".logo-top-margin").animate({ marginLeft: "40%" }, "slow");
+		    $(".logo-top-margin").animate({ marginTop: "20px" }, "slow");
+		    return false;
+		});
+	    $("#startMore").click(function(){
+	    	alert("更多功能持续增加中 ...");
+	    });
+	})(jQuery);
+	</script>
+</div>

@@ -15,22 +15,6 @@
     return false;
   });
 
-  $(".main-menu a.button-home").click(function() {
-    $("#menu-container .content").slideUp("slow");
-    $("#menu-container .homepage").slideDown("slow");
-    $(".logo-top-margin").animate({ marginLeft: "40%" }, "slow");
-    $(".logo-top-margin").animate({ marginTop: "20px" }, "slow");
-    return false;
-  });
-
-  $(".main-menu a.button-settings").click(function() {
-    $("#menu-container .content").fadeOut();
-    $("#menu-container .contact-section").slideDown("slow");
-    $(".logo-top-margin").animate({ marginTop: "0" }, "slow");
-    $(".logo-top-margin").animate({ marginLeft: "0" }, "slow");
-    return false;
-  });
-
   $(".toggle-menu").click(function() {
     $(".show-menu")
       .stop(true, true)

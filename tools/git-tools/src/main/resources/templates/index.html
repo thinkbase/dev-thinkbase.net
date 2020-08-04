@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="_/css/bootstrap.min.css" />
     <link rel="stylesheet" href="_/css/templatemo-style.css" />
     <script src="_/js/modernizr-2.6.2.min.js"></script>
+    <script src="_/js/jquery-1.10.2.min.js"></script>
+    <script src="_/js/plugins.js"></script>
+    <script src="./modules/3rd/jstorage.js"></script>
   </head>
   <body style="">
     <div class="site-bg"></div>
@@ -60,97 +63,17 @@
               <a href="javascript:void(0)" class="site-brand"><img src="./app/logo.png" alt=""/></a>
             </div>
 
-            <div class="homepage home-section text-center">
-              <div class="welcome-text">
-                <h2>幸运的人是 <strong class="orange" id="rolling-lucky-one">CRYSTAL</strong></h2>
-                <p id="rolling-prompt" style="visibility:hidden">
-                  倒计时 <span class="green" id="rolling-seconds">60</span> 秒.<br/>或者点击
-                  <a class="green" href="javascript:void(0)" id="rolling-stop">锁定</a> 
-                  直接找到 <span class="orange">幸运的人</span>.
-                </p>
+            <div th:replace="modules/home::content">HOME</div>
+            <div th:replace="modules/settings::content">SETTINGS</div>
 
-                <div class="subscribe-form">
-                  <div class="row">
-                      <input
-                        name="startRolling"
-                        type="button"
-                        class="button default"
-                        id="startRolling"
-                        value="开始"
-                      />
-                  </div>
-                  <p class="subscribe-text">
-                    点击按钮开始!
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="content contact-section">
-              <div class="row">
-                <div class="col-md-8 col-sm-8">
-                  <div class="box-content">
-                    <h3 class="widget-title">设置</h3>
-                    <form class="settings-form">
-                      <fieldset>
-                        <div>倒计时(秒):</div>
-                        <input
-                          type="number"
-                          min="3" max="120"
-                          id="settingRollingSeconds"
-                          placeholder="输入倒计时秒数..."
-                        />
-                      </fieldset>
-                      <fieldset>
-                        <div>参与人员:</div>
-                        <textarea
-                          id="settingPersons"
-                          cols="30"
-                          rows="4"
-                          placeholder="输入所有人的姓名.."
-                        ></textarea>
-                      </fieldset>
-                      <fieldset style="text-align: right;">
-                        <input
-                          type="submit"
-                          class="button"
-                          id="buttonSave"
-                          value="保存"
-                        />
-                      </fieldset>
-                    </form>
-                  </div>
-                </div>
-                <div class="col-md-4 col-sm-4">
-                  <div class="box-content">
-                    <h3 class="widget-title">说明</h3>
-                    <p>
-                      <code>倒计时</code>：设置每次执行的 <span class="blue">倒计时</span>
-                      (单位为 <code>秒</code>)，
-                      达到时间后才会锁定 <span class="blue">幸运的人</span>.
-                    </p>
-                    <hr/>
-                    <p>
-                      <code>参与人员</code>：设置 <span class="blue">参与人员</span>，
-                      人员姓名之间使用 <span class="blue">空格</span> 或者
-                      <span class="blue">换行</span> 分隔.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
         <div class="col-md-3 hidden-sm">
           <nav id="nav" class="main-navigation hidden-xs hidden-sm">
             <ul class="main-menu">
-              <li>
-                <a class="active button-home" href="javascript:void(0)"><i class="fa fa-home"></i>Home</a>
-              </li>
-              <li>
-                <a class="button-settings" href="javascript:void(0)"><i class="fa fa-database"></i>Settings</a>
-              </li>
+              <li th:replace="modules/home::menu">HOME</li>
+              <li th:replace="modules/settings::menu">SETTINGS</li>
             </ul>
           </nav>
         </div>
@@ -163,10 +86,10 @@
         <div class="row">
           <div class="col-md-12 text-center">
             <p>
-              Copyright © 2019 好好学习 天天向上
+              Copyright © 2020 thinkbase.net
             </p>
             <p style="font-size: 80%">
-              来源: Rectangle is free mobile template brought to you by
+              Template: Rectangle is free mobile template brought to you by
               <span class="orange">template</span><span class="green">mo</span>.com website
               <br/>
               Powered By: <span th:text="${version}">...</span>
@@ -176,16 +99,11 @@
       </div>
     </div>
     <!-- .site-footer -->
-
-    <script src="_/js/jquery-1.10.2.min.js"></script>
-    <script src="_/js/plugins.js"></script>
     
     <script src="./app/main.js"></script>
-    
-    <script src="./modules/3rd/jstorage.js"></script>
 
-    <script src="./modules/home.js"></script>
-    <script src="./modules/settings.js"></script>
+	<script th:replace="modules/home::script"></script>
+	<script th:replace="modules/settings::script"></script>
     
     <!-- templatemo 439 rectangle -->
   </body>

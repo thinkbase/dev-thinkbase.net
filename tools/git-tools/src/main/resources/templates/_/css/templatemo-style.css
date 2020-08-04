@@ -480,20 +480,24 @@ h5 {
 #nav a {
   display: block;
   width: 170px;
-  height: 170px;
+  --height: 170px;
+  height: 100px;
   text-align: center;
   color: white;
   font-size: 18px;
   margin: 0 auto;
 }
 #nav li {
-  margin-bottom: 30px;
+  --margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 #nav i {
-  padding-top: 50px;
+  --padding-top: 50px;
+  padding-top: 20px;
   display: block;
   font-size: 36px;
-  margin-bottom: 10px;
+  --margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .logo-top-margin {

@@ -5,3 +5,7 @@
 .button-home {
   background: #207d59;
 }
+
+.home-section input[type=button] {
+	margin: 4px 12px;
+}

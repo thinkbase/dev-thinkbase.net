@@ -1,0 +1,73 @@
+<blockquote th:fragment="content">
+	<div class="content settings-section">
+		<div class="row">
+		    <div class="col-md-8 col-sm-8">
+		      <div class="box-content">
+		        <h3 class="widget-title">设置</h3>
+		        <form class="settings-form">
+		          <fieldset>
+		            <div>本地 Repo 路径:</div>
+		            <textarea id="settingRepoPaths" cols="30" rows="8"
+		              placeholder="输入 Git Repo 路径(每行一个).."></textarea>
+		          </fieldset>
+		          <fieldset style="text-align: right;">
+		            <input type="submit" class="button" id="buttonSave" value="保存"/>
+		          </fieldset>
+		        </form>
+		      </div>
+		    </div>
+		    <div class="col-md-4 col-sm-4">
+		      <div class="box-content">
+		        <h3 class="widget-title">说明</h3>
+		        <p>
+		          <code>本地 Repo 路径</code>：<br/>
+		          设置每次执行的 <span class="blue">多个 Git Repo 的路径</span>
+		          (注意：如果是 <code>/</code> 结尾的路径，则认为是一个包含多个 git repo 的父目录，此时会坚持子目录下是否
+		          存在 <code>.git</code> 目录来识别是否是一个有效的 git repo).
+		        </p>
+		      </div>
+		    </div>
+		</div>
+	</div>
+	<script>
+	</script>
+</blockquote>
+
+<blockquote th:fragment="menu">
+	<li>
+		<a class="button-settings" href="javascript:void(0)"><i class="fa fa-database"></i>Settings</a>
+	</li>
+</blockquote>
+
+<blockquote th:fragment="script">
+	<script>
+	(function($) {
+		"use strict";
+
+		$(".main-menu a.button-settings").click(function() {
+		    $("#menu-container .content").fadeOut();
+		    $("#menu-container .settings-section").slideDown("slow");
+		    $(".logo-top-margin").animate({ marginTop: "0" }, "slow");
+		    $(".logo-top-margin").animate({ marginLeft: "0" }, "slow");
+		    return false;
+		});
+
+		//关于存储的处理
+		var DEFAULT_REPO_PATHS = "/home/u01/git-thinkbase\n/home/u01/gits/";
+		(function() {
+			$(".settings-form").submit(function(e) {
+				e.preventDefault();
+
+				ps = $("#settingRepoPaths").val();
+				$.jStorage.set("settingRepoPaths", ps);
+
+				alert("设置信息已保存。");
+			});
+
+			var ps = $.jStorage.get("settingRepoPaths", DEFAULT_REPO_PATHS);
+			$("#settingRepoPaths").val(ps);
+
+		})();
+	})(jQuery);
+	</script>
+</blockquote>
