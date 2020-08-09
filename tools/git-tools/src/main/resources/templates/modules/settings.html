@@ -66,8 +66,15 @@
 
 			var ps = $.jStorage.get("settingRepoPaths", DEFAULT_REPO_PATHS);
 			$("#settingRepoPaths").val(ps);
-
 		})();
+		
+		//扩展为一个 jQuery 方法
+        $.extend({
+            "settingRepoPaths": function(){
+                return $.jStorage.get("settingRepoPaths");
+            }
+        });
+		
 	})(jQuery);
 	</script>
 </blockquote>

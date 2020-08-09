@@ -30,9 +30,24 @@
 		    $(".logo-top-margin").animate({ marginTop: "20px" }, "slow");
 		    return false;
 		});
-	    $("#startMore").click(function(){
-	    	alert("更多功能持续增加中 ...");
-	    });
-	})(jQuery);
+	    
+	    $("#startExportLog").click(function(){
+	    	var repos = $.settingRepoPaths();
+			$.ajax({
+				type : "post",
+				dataType : 'json',
+				url : "./service/export",
+				contentType : 'application/json',
+				data : repos,
+				success : function(d) {
+					alert(d);
+				}
+			});
+		});
+
+			$("#startMore").click(function() {
+				alert("更多功能持续增加中 ...");
+			});
+		})(jQuery);
 	</script>
 </div>
