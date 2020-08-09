@@ -72,23 +72,22 @@ public class GitUtils {
 	 * @throws IOException
 	 * @throws GitAPIException
 	 */
-	public static List<CommitStatInfo> analyseRepoCommits(Repository repo) throws IOException, GitAPIException {
-		List<CommitStatInfo> result = new ArrayList<CommitStatInfo>();
+	public static void analyseRepoCommits(Repository repo, AnalyseCallback cb) throws IOException, GitAPIException {
 		try (Git git = new Git(repo)) {
 			try (RevWalk walk = new RevWalk(repo)){
 				try (DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE)){
 					try (ObjectReader reader = repo.newObjectReader()) {
-					    doAnalyse(repo, git, walk, reader, diffFormatter, result);
+					    doAnalyse(repo, git, walk, reader, diffFormatter, cb);
 					}
 				}
 			}
 		}
-		return result;
     }
 
 	private static void doAnalyse(
-			Repository repo, Git git, RevWalk walk, ObjectReader reader, DiffFormatter diffFormatter,
-			List<CommitStatInfo> result) throws GitAPIException, IOException {
+			Repository repo, Git git, RevWalk walk,
+			ObjectReader reader, DiffFormatter diffFormatter,
+			AnalyseCallback cb) throws GitAPIException, IOException {
 		diffFormatter.setRepository(repo);
 		diffFormatter.setDiffComparator(RawTextComparator.DEFAULT);
 		diffFormatter.setDetectRenames(true);
@@ -102,6 +101,9 @@ public class GitUtils {
 			}
 		    
 		    CommitStatInfo ci = new CommitStatInfo();
+		    ci.setRepo(repo.getWorkTree().getName());
+		    ci.setBranch(repo.getBranch());
+		    
 		    ci.setId(commit.getId().getName());
 		    ci.setTime(new Date(commit.getCommitTime()*1000L));
 		    ci.setAuthor(commit.getAuthorIdent().getName());
@@ -110,6 +112,7 @@ public class GitUtils {
 		    
 			int linesAdded = 0;
 			int linesDeleted = 0;
+			int files = 0;
 
 		    AbstractTreeIterator oldTreeIter;
 		    if (commit.getParentCount()>0) {
@@ -123,29 +126,36 @@ public class GitUtils {
 		    
 		    List<DiffEntry> diffs = diffFormatter.scan(oldTreeIter, newTreeIter);
 		    for (DiffEntry diff : diffs) {
-		    	boolean comparable = false;	//i.e. If PatchType=BINARY, not editlist so can't campare text
+		    	boolean canCompare = false;	//i.e. If PatchType=BINARY, not editlist so can't campare text
 		    	
+		    	int curDiffDel = 0;
+		    	int curDiffAdd = 0;
 		    	FileHeader fileHeader = diffFormatter.toFileHeader(diff);
 				for (Edit edit : fileHeader.toEditList()) {
-					comparable = true;
+					canCompare = true;
 					
-		            int curDel = edit.getEndA() - edit.getBeginA();
-		            int curAdd = edit.getEndB() - edit.getBeginB();
+		            curDiffDel += edit.getEndA() - edit.getBeginA();
+		            curDiffAdd += edit.getEndB() - edit.getBeginB();
 		            
-		            String diffInfo = diff.toString()+", "+curAdd+"+, "+curDel+"-";
-		            ci.addDiff(diffInfo);
-
-		            linesDeleted += curDel;
-					linesAdded += curAdd;
 		        }
-				if (! comparable) {
-					ci.addDiff(diff.toString());
+				if (canCompare) {
+		            ci.addDiff(diff, curDiffAdd, curDiffDel);
+				}else {
+					ci.addDiff(diff);
 				}
+	            linesDeleted += curDiffDel;
+				linesAdded += curDiffAdd;
+				files ++;
 		    }
+		    ci.setFiles(files);
 		    ci.setLinesAdded(linesAdded);
 		    ci.setLinesDeleted(linesDeleted);
 		    
-		    result.add(ci);
+		    cb.perform(ci);
 		}
+	}
+	
+	public static interface AnalyseCallback {
+		public void perform(CommitStatInfo ci);
 	}
 }

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.thinkbase.dev.gittools.service.utils.GitUtils;
-import net.thinkbase.dev.gittools.service.vo.CommitStatInfo;
 import net.thinkbase.dev.gittools.service.vo.ExportResult;
 import reactor.core.publisher.Mono;
 
@@ -33,10 +32,9 @@ public class GitService {
 			FileRepositoryBuilder builder = new FileRepositoryBuilder();
 			try (Repository repo = builder.setGitDir(dir).build()) {
 				logger.info("Begin process repo {} ...", repo.getDirectory());
-				List<CommitStatInfo> infos = GitUtils.analyseRepoCommits(repo);
-				for (CommitStatInfo info: infos) {
-					logger.info(info.toString());
-				}
+				GitUtils.analyseRepoCommits(repo, (ci)->{
+					logger.info(ci.toString());
+				});
 	        }
 		}
 		
