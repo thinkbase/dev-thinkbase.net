@@ -40,7 +40,11 @@
 				contentType : 'application/json',
 				data : repos,
 				success : function(d) {
-					alert(d);
+					if (d.success){
+						alert(d.message);
+					}else{
+						alert("程序运行错误: "+JSON.stringfy(d));
+					}
 				}
 			});
 		});

@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.List;
 
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,20 +27,25 @@ public class GitService {
 		String[] paths = pathLines.split("[\\n|\\r]");
 		List<File> repos = GitUtils.findAllGitRepos(paths);
 
-		for (File dir: repos) {
+		var idxRepoCount=0;
+		var idxCommitCount=1;
+		var idxStartTime=2;
+		var buf = new long[] {0, 0, System.currentTimeMillis()};
+		for (var dir: repos) {
 			FileRepositoryBuilder builder = new FileRepositoryBuilder();
-			try (Repository repo = builder.setGitDir(dir).build()) {
+			try (var repo = builder.setGitDir(dir).build()) {
 				logger.info("Begin process repo {} ...", repo.getDirectory());
+				buf[idxRepoCount]++;
 				GitUtils.analyseRepoCommits(repo, (ci)->{
 					logger.info(ci.toString());
+					buf[idxCommitCount]++;
 				});
 	        }
 		}
+		String msg = "导出操作完成: 共处理 "+buf[idxRepoCount]+ "个仓库, "+buf[idxCommitCount]+" 个提交,"
+				+ " 耗时"+(System.currentTimeMillis()-buf[idxStartTime])/1000+"秒";
 		
-		ExportResult data = new ExportResult();
-		
-		data.setSuccess(true);
-		
+		var data = new ExportResult(msg);
 		return Mono.just(data);
 	}
 }
