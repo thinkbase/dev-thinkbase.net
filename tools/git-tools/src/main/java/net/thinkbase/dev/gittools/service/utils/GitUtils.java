@@ -97,7 +97,7 @@ public class GitUtils {
 		Iterable<RevCommit> logs = git.log().call();	//logs of current branches
 		for(RevCommit commit: logs) {
 			if (logger.isDebugEnabled()) {
-				logger.debug("Process git commit: {} of {} ...", commit, repoPath);
+				logger.debug("Processing : {} of {} ...", commit.getId().getName(), repoPath);
 			}
 		    
 		    CommitStatInfo ci = new CommitStatInfo();

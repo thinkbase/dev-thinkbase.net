@@ -26,5 +26,9 @@ public class ExportResult {
 	public String getDownloadAddress() {
 		return downloadAddress;
 	}
+
+	public void setDownloadAddress(String downloadAddress) {
+		this.downloadAddress = downloadAddress;
+	}
 	
 }

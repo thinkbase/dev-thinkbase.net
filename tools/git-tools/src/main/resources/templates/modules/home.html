@@ -32,20 +32,32 @@
 		});
 	    
 	    $("#startExportLog").click(function(){
-	    	var repos = $.settingRepoPaths();
+	    	var repos = $.settingRepoPaths()||"";
+	    	if (! repos.trim()) {
+	    		alert("未设置 本地 Repo 路径");
+	    		return;
+	    	}
 			$.ajax({
 				type : "post",
 				dataType : 'json',
-				url : "./service/export",
+				url : "./service/export-stat-detail",
 				contentType : 'application/json',
 				data : repos,
 				success : function(d) {
 					if (d.success){
 						alert(d.message);
+						window.open("/file/"+d.downloadAddress);
 					}else{
-						alert("程序运行错误: "+JSON.stringfy(d));
+						alert("程序运行错误 - "+JSON.stringfy(d));
 					}
-				}
+				},
+				error: function(xhr, status, error){
+			        var errorMessage = xhr.status + ': ' + xhr.statusText
+			        alert('系统错误 - ' + errorMessage);
+			        if (xhr.responseText){
+			        	throw xhr.responseText;
+			        }
+			    }
 			});
 		});
 
