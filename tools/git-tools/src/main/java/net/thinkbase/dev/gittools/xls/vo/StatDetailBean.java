@@ -120,7 +120,12 @@ public class StatDetailBean {
 		bean.setTime(ci.getTime());
 		bean.setAuthor(ci.getAuthor());
 		bean.setCommitter(ci.getCommitter());
-		bean.setComment(ci.getComment());
+		
+		String comment = ci.getComment();
+		if (null!=comment && comment.length()>2000) {
+			comment = comment.substring(0, 2000) + " ...";
+		}
+		bean.setComment(comment);
 		
 		List<String> diffs = ci.getDiffs();
 		if (diffs.size()>3) {
