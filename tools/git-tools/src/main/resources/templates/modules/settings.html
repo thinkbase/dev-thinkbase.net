@@ -6,8 +6,18 @@
 		        <h3 class="widget-title">设置</h3>
 		        <form class="settings-form">
 		          <fieldset>
+		            <div>导出文件类型:</div>
+		            <select id="settingExportType" style="width:100%">
+		            	<option value="xlsx">Excel(xlsx)</option>
+		            	<option value="csv">CSV</option>
+		            </select>
+		            <div>数据明细程度:</div>
+		            <select id="settingDetailLevel" style="width:100%">
+		            	<option value=commit>commit</option>
+		            	<option value="file">file</option>
+		            </select>
 		            <div>本地 Repo 路径:</div>
-		            <textarea id="settingRepoPaths" cols="30" rows="8"
+		            <textarea id="settingRepoPaths" cols="30" rows="6"
 		              placeholder="输入 Git Repo 路径(每行一个).."></textarea>
 		          </fieldset>
 		          <fieldset style="text-align: right;">
@@ -20,10 +30,19 @@
 		      <div class="box-content">
 		        <h3 class="widget-title">说明</h3>
 		        <p>
-		          <code>本地 Repo 路径</code>：<br/>
+		          <code>导出文件类型</code>：
+		          <p style="font-size:8px">设置导出文件的类型, 支持 <code>Excel</code> 和 <code>CSV</code> 格式;</p>
+		          <hr style="margin:0px"/>
+		          <code>数据明细程度</code>：
+		          <p style="font-size:8px">
+		          设置导出文件的数据明细程度, <code>commit</code>: 每次提交一行; <code>file</code>: 每次提交中每个文件一行;
+		          </p>
+		          <hr style="margin:0px"/>
+		          <code>本地 Repo 路径</code>：
+		          <p style="font-size:8px">
 		          设置每次执行的 <span class="blue">多个 Git Repo 的路径</span>
-		          (注意：如果是 <code>/</code> 结尾的路径，则认为是一个包含多个 git repo 的父目录，此时会坚持子目录下是否
-		          存在 <code>.git</code> 目录来识别是否是一个有效的 git repo).
+		          (注意：1.以 <code>/</code> 结尾的路径代表包含多个 git repo 的父目录，此时子目录下
+		          存在 <code>.git</code> 目录就被识别为一个git repo；2.使用 <code>--</code> 开始可以注释一行).</p>
 		        </p>
 		      </div>
 		    </div>
@@ -44,6 +63,10 @@
 	(function($) {
 		"use strict";
 
+		var DEFAULT_EXPORT_TYPE = "xlsx";
+		var DEFAULT_DETAIL_LEVEL = "commit";
+		var DEFAULT_REPO_PATHS = "/home/u01/git-thinkbase\n/home/u01/gits/";
+
 		$(".main-menu a.button-settings").click(function() {
 		    $("#menu-container .content").fadeOut();
 		    $("#menu-container .settings-section").slideDown("slow");
@@ -52,24 +75,41 @@
 		    return false;
 		});
 
-		//关于存储的处理
-		var DEFAULT_REPO_PATHS = "/home/u01/git-thinkbase\n/home/u01/gits/";
+		//存储导出文件类型和路径列表
 		(function() {
 			$(".settings-form").submit(function(e) {
 				e.preventDefault();
 
-				ps = $("#settingRepoPaths").val();
+				var et = $("#settingExportType").val();
+				$.jStorage.set("settingExportType", et);
+
+				var dl = $("#settingDetailLevel").val();
+				$.jStorage.set("settingDetailLevel", dl);
+
+				var ps = $("#settingRepoPaths").val();
 				$.jStorage.set("settingRepoPaths", ps);
 
 				alert("设置信息已保存。");
 			});
 
+			var et = $.jStorage.get("settingExportType", DEFAULT_EXPORT_TYPE);
+			$("#settingExportType").val(et);
+			
+			var dl = $.jStorage.get("settingDetailLevel", DEFAULT_DETAIL_LEVEL);
+			$("#settingDetailLevel").val(dl);
+			
 			var ps = $.jStorage.get("settingRepoPaths", DEFAULT_REPO_PATHS);
 			$("#settingRepoPaths").val(ps);
 		})();
 		
-		//扩展为一个 jQuery 方法
+		//扩展为 jQuery 方法
         $.extend({
+            "settingExportType": function(){
+                return $.jStorage.get("settingExportType", DEFAULT_EXPORT_TYPE);
+            },
+            "settingDetailLevel": function(){
+                return $.jStorage.get("settingDetailLevel", DEFAULT_DETAIL_LEVEL);
+            },
             "settingRepoPaths": function(){
                 return $.jStorage.get("settingRepoPaths");
             }

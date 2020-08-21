@@ -31,7 +31,9 @@ public class GitUtils {
 	private static final Logger logger =  LoggerFactory.getLogger(GitUtils.class);
 	
 	/**
-	 * Find the git repos from some paths, If path ends with "/", treat it as the parent path of several git repos. 
+	 * Find the git repos from some paths;
+	 * If path ends with "/", treat it as the parent path of several git repos;
+	 * If path starts with "--", skip it.
 	 * @param repoPaths
 	 * @return
 	 */
@@ -40,6 +42,9 @@ public class GitUtils {
 		
 		for (String path: repoPaths) {
 			path = path.trim();
+			if (path.startsWith("--")) {
+				continue;
+			}
 			if (path.endsWith("/")) {
 				File parent = new File(path);
 				String[] subDirs = parent.list(new FilenameFilter() {
@@ -68,16 +73,22 @@ public class GitUtils {
 	/**
 	 * Analyse a repo
 	 * @param repo
+	 * @param cb
+	 * @param summaryDiffEntries
 	 * @return
 	 * @throws IOException
 	 * @throws GitAPIException
 	 */
-	public static void analyseRepoCommits(Repository repo, AnalyseCallback cb) throws IOException, GitAPIException {
+	public static void analyseRepoCommits(Repository repo, AnalyseCallback cb, boolean summaryDiffEntries) throws IOException, GitAPIException {
 		try (Git git = new Git(repo)) {
 			try (RevWalk walk = new RevWalk(repo)){
 				try (DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE)){
 					try (ObjectReader reader = repo.newObjectReader()) {
-					    doAnalyse(repo, git, walk, reader, diffFormatter, cb);
+						diffFormatter.setRepository(repo);
+						diffFormatter.setDiffComparator(RawTextComparator.DEFAULT);
+						diffFormatter.setDetectRenames(true);
+
+						doAnalyse(repo, git, walk, reader, diffFormatter, cb, summaryDiffEntries);
 					}
 				}
 			}
@@ -87,10 +98,7 @@ public class GitUtils {
 	private static void doAnalyse(
 			Repository repo, Git git, RevWalk walk,
 			ObjectReader reader, DiffFormatter diffFormatter,
-			AnalyseCallback cb) throws GitAPIException, IOException {
-		diffFormatter.setRepository(repo);
-		diffFormatter.setDiffComparator(RawTextComparator.DEFAULT);
-		diffFormatter.setDetectRenames(true);
+			AnalyseCallback cb, boolean summaryDiffEntries) throws GitAPIException, IOException {
 		
 		String repoPath = git.getRepository().getDirectory().getCanonicalPath();
 		
@@ -100,20 +108,6 @@ public class GitUtils {
 				logger.debug("Processing : {} of {} ...", commit.getId().getName(), repoPath);
 			}
 		    
-		    CommitStatInfo ci = new CommitStatInfo();
-		    ci.setRepo(repo.getWorkTree().getName());
-		    ci.setBranch(repo.getBranch());
-		    
-		    ci.setId(commit.getId().getName());
-		    ci.setTime(new Date(commit.getCommitTime()*1000L));
-		    ci.setAuthor(commit.getAuthorIdent().getName());
-		    ci.setCommitter(commit.getCommitterIdent().getName());
-		    ci.setComment(commit.getFullMessage());
-		    
-			int linesAdded = 0;
-			int linesDeleted = 0;
-			int files = 0;
-
 		    AbstractTreeIterator oldTreeIter;
 		    if (commit.getParentCount()>0) {
 			    RevCommit parent = walk.parseCommit(commit.getParent(0).getId());
@@ -125,7 +119,24 @@ public class GitUtils {
 		    AbstractTreeIterator newTreeIter = new CanonicalTreeParser(null, reader, commit.getTree());
 		    
 		    List<DiffEntry> diffs = diffFormatter.scan(oldTreeIter, newTreeIter);
+		    
+		    CommitStatInfo ci = null;
+		    if (summaryDiffEntries) {
+			    ci = buildBasicCommitInfo(repo, commit);
+		    }
+		    
+			int linesAdded = 0;
+			int linesDeleted = 0;
+			int files = 0;
+
 		    for (DiffEntry diff : diffs) {
+		    	if (! summaryDiffEntries) {
+		    		ci = buildBasicCommitInfo(repo, commit);
+					linesAdded = 0;
+					linesDeleted = 0;
+					files = 0;
+		    	}
+		    	
 		    	boolean canCompare = false;	//i.e. If PatchType=BINARY, not editlist so can't campare text
 		    	
 		    	int curDiffDel = 0;
@@ -146,13 +157,36 @@ public class GitUtils {
 	            linesDeleted += curDiffDel;
 				linesAdded += curDiffAdd;
 				files ++;
+				
+				if (! summaryDiffEntries) {
+				    ci.setFiles(files);
+				    ci.setLinesAdded(linesAdded);
+				    ci.setLinesDeleted(linesDeleted);
+				    cb.perform(ci);
+
+				}
 		    }
-		    ci.setFiles(files);
-		    ci.setLinesAdded(linesAdded);
-		    ci.setLinesDeleted(linesDeleted);
-		    
-		    cb.perform(ci);
+		    if (summaryDiffEntries) {
+			    ci.setFiles(files);
+			    ci.setLinesAdded(linesAdded);
+			    ci.setLinesDeleted(linesDeleted);
+			    cb.perform(ci);
+		    }
 		}
+	}
+
+	private static CommitStatInfo buildBasicCommitInfo(Repository repo, RevCommit commit) throws IOException {
+		CommitStatInfo ci;
+		ci = new CommitStatInfo();
+		ci.setRepo(repo.getWorkTree().getName());
+		ci.setBranch(repo.getBranch());
+		
+		ci.setId(commit.getId().getName());
+		ci.setTime(new Date(commit.getCommitTime()*1000L));
+		ci.setAuthor(commit.getAuthorIdent().getName());
+		ci.setCommitter(commit.getCommitterIdent().getName());
+		ci.setComment(commit.getFullMessage());
+		return ci;
 	}
 	
 	public static interface AnalyseCallback {

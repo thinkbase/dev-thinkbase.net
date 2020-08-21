@@ -4,8 +4,8 @@
 			<h2>GIT 工具集</h2>
 			<div class="subscribe-form">
 	             <div class="row">
-	               <input name="startExportLog" type="button" class="button default" id="startExportLog" value="导出日志"/>
-	               <input name="startMore" type="button" class="button default" id="startMore" value="更多 ..."/>
+	               <input id="startGenerate" type="button" class="button default" value="创建 ..."/>
+	               <input id="startDownload" type="button" class="button" value="下载 ..."/>
 	             </div>
 			</div>
 	    </div>
@@ -22,6 +22,8 @@
 	<script>
 	(function($) {
 		"use strict";
+		
+		var FILE_NAME_STORAGE_KEY = "export-file-name";
 
 	    $(".main-menu a.button-home").click(function() {
 		    $("#menu-container .content").slideUp("slow");
@@ -31,22 +33,35 @@
 		    return false;
 		});
 	    
-	    $("#startExportLog").click(function(){
+	    $("#startGenerate").click(function(){
 	    	var repos = $.settingRepoPaths()||"";
 	    	if (! repos.trim()) {
 	    		alert("未设置 本地 Repo 路径");
 	    		return;
 	    	}
+	    	
+	    	var fileType = $.settingExportType();
+	    	var detailLevel = $.settingDetailLevel();
+	    	
+	    	var result = confirm("确认使用以下参数生成数据文件:\n"+
+	    			"导出文件类型: "+fileType+"\n"+
+	    			"数据明细程度: "+detailLevel+"\n"+
+	    			"本地 Repo 路径: \n"+repos);
+	    	if (!result){
+	    		return;
+	    	}
+	    	
 			$.ajax({
 				type : "post",
 				dataType : 'json',
-				url : "./service/export-stat-detail",
+				url : "./service/export-stat/"+fileType+"/"+detailLevel,
 				contentType : 'application/json',
 				data : repos,
 				success : function(d) {
 					if (d.success){
-						alert(d.message);
-						window.open("/file/"+d.downloadAddress);
+						$.jStorage.set(FILE_NAME_STORAGE_KEY, d.downloadAddress)
+						var msg = "已导出到文件: " + d.downloadAddress + "\n\n" + d.message;
+						alert(msg);
 					}else{
 						alert("程序运行错误 - "+JSON.stringfy(d));
 					}
@@ -61,9 +76,18 @@
 			});
 		});
 
-			$("#startMore").click(function() {
-				alert("更多功能持续增加中 ...");
-			});
+		$("#startDownload").click(function() {
+			var fileName = $.jStorage.get(FILE_NAME_STORAGE_KEY);
+			if (! fileName){
+				alert("未导出数据文件, 请先执行 ["+$("#startGenerate").val()+"]");
+				return;
+			}
+			var result = confirm("确认下载数据文件: "+fileName);
+	    	if (!result){
+	    		return;
+	    	}
+	    	window.open("/file/"+fileName);
+		});
 		})(jQuery);
 	</script>
 </div>
