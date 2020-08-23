@@ -26,6 +26,7 @@
     <script type="text/javascript">
         $(function () {
           var derivers = $.pivotUtilities.derivers;
+          var aggregatorTemplates = $.pivotUtilities.aggregatorTemplates;
           var renderers = $.extend($.pivotUtilities.renderers, $.pivotUtilities.plotly_renderers);
           
           var fileName = $(location).attr('hash');
@@ -76,8 +77,8 @@
             complete: function (parsed) {
               $("#output").pivotUI(parsed.data, {
                 renderers: renderers,
-                cols: ["分支", "作者", "时段"],
-                rows: ["Repo"],
+                cols: ["分支", "作者", "时段"], rows: ["Repo"],
+                aggregatorName: "求和后取整", vals: ["修改行数"],
                 rendererName: "Heatmap",
                 derivedAttributes: derivedAttributes
               }, false, "zh");
