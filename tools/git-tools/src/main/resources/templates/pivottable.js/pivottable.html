@@ -39,15 +39,47 @@
           
           document.title = "Pivot Table Analyzer - " + decodeURIComponent(fileName);
           
+          var derivedAttributes = {
+        		  "年": function(record){
+        			  var d = new Date(record["提交时间"]);
+        			  return d.getFullYear();
+        		  },
+        		  "年/月份": function(record){
+        			  var d = new Date(record["提交时间"]);
+        			  return d.getFullYear()+"/"+(d.getMonth()+1);
+        		  },
+        		  "星期": function(record){
+        			  var d = new Date(record["提交时间"]);
+        			  return d.getDay();
+        		  },
+        		  "时段": function(record){
+        			  var d = new Date(record["提交时间"]);
+        			  var hour = d.getHours();
+        			  if (hour>=8 & hour<18){
+        				  return "08-18";
+        			  }
+        			  if (hour>=18 & hour<24){
+        				  return "18-24";
+        			  }
+        			  if (hour>=0 & hour<8){
+        				  return "00-08";
+        			  }
+        		  },
+        		  "修改行数": function(record){
+        			  return parseInt(record["新增行数"])+parseInt(record["删除行数"]);
+        		  }
+          };
+          
           Papa.parse("/file/"+fileName, {
             download: true,
             skipEmptyLines: true,
             complete: function (parsed) {
               $("#output").pivotUI(parsed.data, {
                 renderers: renderers,
-                cols: ["分支", "作者"],
+                cols: ["分支", "作者", "时段"],
                 rows: ["Repo"],
-                rendererName: "Table"
+                rendererName: "Heatmap",
+                derivedAttributes: derivedAttributes
               }, false, "zh");
             }
           });
