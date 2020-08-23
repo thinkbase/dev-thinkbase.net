@@ -6,6 +6,7 @@
 	             <div class="row">
 	               <input id="startGenerate" type="button" class="button default" value="创建 ..."/>
 	               <input id="startDownload" type="button" class="button" value="下载 ..."/>
+	               <input id="startPivotTable" type="button" class="button" value="分析 ..."/>
 	             </div>
 			</div>
 	    </div>
@@ -88,6 +89,23 @@
 	    	}
 	    	window.open("/file/"+fileName);
 		});
-		})(jQuery);
+
+		$("#startPivotTable").click(function() {
+			var fileName = $.jStorage.get(FILE_NAME_STORAGE_KEY);
+			if (! fileName){
+				alert("未导出数据文件, 请先执行 ["+$("#startGenerate").val()+"]");
+				return;
+			}
+            if ( !(fileName.endsWith(".csv")) ){
+        	    alert("导出数据文件不是 CVS 格式(扩展名不是 '.csv'), 请到 'Settings' 中设置 '导出文件类型'.");
+        	    return;
+            }
+			var result = confirm("确认分析数据文件: "+fileName);
+	    	if (!result){
+	    		return;
+	    	}
+	    	window.open("/pivottable.js/pivottable.html#"+fileName, document.title+"/PivotTable/"+fileName);
+		});
+	})(jQuery);
 	</script>
 </div>
