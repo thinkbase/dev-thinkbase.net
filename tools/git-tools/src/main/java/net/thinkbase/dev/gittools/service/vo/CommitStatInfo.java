@@ -18,7 +18,8 @@ public class CommitStatInfo {
 	private String author;
 	private String committer;
 	private String comment;
-	private List<String> diffs = new ArrayList<String>();
+	private List<String> diffs = new ArrayList<>();
+	private List<String> parents = new ArrayList<>();
 	
 	private int files;
 	private int linesAdded;
@@ -76,6 +77,14 @@ public class CommitStatInfo {
 
 	public void setLinesDeleted(int linesDeleted) {
 		this.linesDeleted = linesDeleted;
+	}
+
+	public List<String> getParents() {
+		return parents;
+	}
+
+	public void addParent(String parentId) {
+		this.parents.add(parentId);
 	}
 
 	public List<String> getDiffs() {

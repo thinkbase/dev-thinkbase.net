@@ -186,6 +186,12 @@ public class GitUtils {
 		ci.setAuthor(commit.getAuthorIdent().getName());
 		ci.setCommitter(commit.getCommitterIdent().getName());
 		ci.setComment(commit.getFullMessage());
+		
+		RevCommit[] parents = commit.getParents();
+		for(RevCommit p: parents) {
+			ci.addParent(p.getId().getName());
+		}
+		
 		return ci;
 	}
 	

@@ -17,31 +17,34 @@ import net.thinkbase.dev.gittools.service.vo.CommitStatInfo;
 public class StatDetailBean {
 	public static final String SHEET_NAME="明细统计信息";
 	
-	@ExcelColumn(order = 1, title = "Repo", width = 8)
+	@ExcelColumn(title = "Repo", width = 8)
 	private String repo;
-	@ExcelColumn(order = 2, title = "分支", width = 7)
+	@ExcelColumn(title = "分支", width = 7)
 	private String branch;
 	
-	@ExcelColumn(order = 3, title = "Commit#", width = 18)
+	@ExcelColumn(title = "Commit#", width = 18)
 	private String id;
-	@ExcelColumn(order = 4, title = "提交时间", width = 9, format = "yyyy-MM-dd HH:mm:ss")
+	@ExcelColumn(title = "提交时间", width = 9, format = "yyyy-MM-dd HH:mm:ss")
 	private Date time;
-	@ExcelColumn(order = 5, title = "作者", width = 6)
+	@ExcelColumn(title = "作者", width = 6)
 	private String author;
-	@ExcelColumn(order = 6, title = "提交人", width = 6)
+	@ExcelColumn(title = "提交人", width = 6)
 	private String committer;
 	
-	@ExcelColumn(order = 7, title = "文件数", width = 4)
+	@ExcelColumn(title = "文件数", width = 4)
 	private int files;
-	@ExcelColumn(order = 8, title = "新增行数", width = 4)
+	@ExcelColumn(title = "新增行数", width = 4)
 	private int linesAdded;
-	@ExcelColumn(order = 9, title = "删除行数", width = 4)
+	@ExcelColumn(title = "删除行数", width = 4)
 	private int linesDeleted;
 	
-	@ExcelColumn(order = 10, title = "备注", width = 30)
+	@ExcelColumn(title = "备注", width = 30)
 	private String comment;
-	@ExcelColumn(order = 11, title = "提交文件", width = 32)
+	@ExcelColumn(title = "提交文件", width = 32)
 	private String diffs;
+	
+	@ExcelColumn(title = "合并来源", width = 8)
+	private String mergeParents;
 
 	public String getRepo() {
 		return repo;
@@ -109,6 +112,12 @@ public class StatDetailBean {
 	public void setLinesDeleted(int linesDeleted) {
 		this.linesDeleted = linesDeleted;
 	}
+	public String getMergeParents() {
+		return mergeParents;
+	}
+	public void setMergeParents(String mergeParents) {
+		this.mergeParents = mergeParents;
+	}
 
 	public static StatDetailBean fromCommitStatInfo(CommitStatInfo ci) {
 		StatDetailBean bean = new StatDetailBean();
@@ -137,6 +146,11 @@ public class StatDetailBean {
 		bean.setFiles(ci.getFiles());
 		bean.setLinesAdded(ci.getLinesAdded());
 		bean.setLinesDeleted(ci.getLinesDeleted());
+		
+		List<String> parents = ci.getParents();
+		if (parents.size()>1) {
+			bean.setMergeParents(StringUtils.join(parents.subList(1, parents.size()), ","));
+		}
 		
 		return bean;
 	}
