@@ -67,14 +67,14 @@ public class StatDetailBean {
 	@ExcelColumn(title = "任务", width = 6)
 	private String exTask;
 
-	@ExcelColumn(title = "分类1", width = 6)
-	private String exCatalog1;
+	@ExcelColumn(title = "属性1", width = 6)
+	private String exAttribute1;
 
-	@ExcelColumn(title = "分类2", width = 6)
-	private String exCatalog2;
+	@ExcelColumn(title = "属性2", width = 6)
+	private String exAttribute2;
 
-	@ExcelColumn(title = "分类3", width = 6)
-	private String exCatalog3;
+	@ExcelColumn(title = "属性3", width = 6)
+	private String exAttribute3;
 
 	public String getRepo() {
 		return repo;
@@ -227,16 +227,22 @@ public class StatDetailBean {
 	public void setExTask(String exTask) {
 		this.exTask = exTask;
 	}
-	public String getExCatalog1() {
-		return exCatalog1;
+	public String getExAttribute1() {
+		return exAttribute1;
 	}
-	public void setExCatalog1(String exCatalog1) {
-		this.exCatalog1 = exCatalog1;
+	public void setExAttribute1(String exAttribute1) {
+		this.exAttribute1 = exAttribute1;
 	}
-	public String getExCatalog3() {
-		return exCatalog3;
+	public String getExAttribute2() {
+		return exAttribute2;
 	}
-	public void setExCatalog3(String exCatalog3) {
-		this.exCatalog3 = exCatalog3;
+	public void setExAttribute2(String exAttribute2) {
+		this.exAttribute2 = exAttribute2;
+	}
+	public String getExAttribute3() {
+		return exAttribute3;
+	}
+	public void setExAttribute3(String exAttribute3) {
+		this.exAttribute3 = exAttribute3;
 	}
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import javax.script.ScriptException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -50,7 +51,17 @@ public class GitService {
 			@RequestBody ExportParameters params,
 			@PathVariable("fileType") String fileType,
 			@PathVariable("detailLevel") String detailLevel) throws IOException, GitAPIException, ScriptException {
-		
+		try {
+			return _doExportStatDetail(params, fileType, detailLevel);
+		}catch(Throwable ex) {
+			logger.error(ex.getMessage(), ex);
+			ExportResult error = new ExportResult(false, ExceptionUtils.getRootCauseMessage(ex));
+			return Mono.just(error);
+		}
+	}
+
+	private Mono<ExportResult> _doExportStatDetail(ExportParameters params, String fileType, String detailLevel)
+			throws IOException, GitAPIException {
 		Boolean export2Excel;
 		if ("xlsx".equals(fileType)) {
 			export2Excel = true;

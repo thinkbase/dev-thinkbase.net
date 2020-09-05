@@ -75,7 +75,11 @@
 						var msg = "已导出到文件: " + d.downloadAddress + "\n\n" + d.message;
 						alert(msg);
 					}else{
-						alert("程序运行错误 - "+JSON.stringfy(d));
+						if (d.message){
+							alert("程序运行错误 - "+d.message);
+						}else{
+							alert("程序运行错误 - "+JSON.stringify(d));
+						}
 					}
 				},
 				error: function(xhr, status, error){
