@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.script.ScriptException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -25,10 +27,12 @@ import com.github.liaochong.myexcel.core.CsvBuilder;
 import com.github.liaochong.myexcel.core.DefaultStreamExcelBuilder;
 import com.github.liaochong.myexcel.utils.FileExportUtil;
 
+import groovy.lang.GroovyObject;
 import net.thinkbase.dev.gittools.config.GittoolsConfig;
 import net.thinkbase.dev.gittools.service.utils.GitUtils;
 import net.thinkbase.dev.gittools.service.vo.ExportParameters;
 import net.thinkbase.dev.gittools.service.vo.ExportResult;
+import net.thinkbase.dev.gittools.xls.utils.ExtScriptUtil;
 import net.thinkbase.dev.gittools.xls.vo.StatDetailBean;
 import reactor.core.publisher.Mono;
 
@@ -45,7 +49,7 @@ public class GitService {
 	public Mono<ExportResult> doExportStatDetail(
 			@RequestBody ExportParameters params,
 			@PathVariable("fileType") String fileType,
-			@PathVariable("detailLevel") String detailLevel) throws IOException, GitAPIException {
+			@PathVariable("detailLevel") String detailLevel) throws IOException, GitAPIException, ScriptException {
 		
 		Boolean export2Excel;
 		if ("xlsx".equals(fileType)) {
@@ -72,16 +76,26 @@ public class GitService {
 		String[] paths = pathLines.split("[\\n|\\r]");
 		List<File> repos = GitUtils.findAllGitRepos(paths);
 		
+		GroovyObject instance = null;
+		String exGroovyFile = params.getExtScriptFile();
+		if (StringUtils.isNotBlank(exGroovyFile)) {
+			File fGroovy = new File(exGroovyFile);
+			if ( (! fGroovy.isFile()) || (! fGroovy.exists()) ) {
+				throw new IllegalArgumentException("文件 "+exGroovyFile+" 不存在, 或者可能是一个目录");
+			}
+			instance = ExtScriptUtil.buildExtInstance(fGroovy);
+		}
+		
 		if (export2Excel) {
-			var data = exportExcel(repos, summaryDiffEntries, params.getExtScriptFile());
+			var data = exportExcel(repos, summaryDiffEntries, instance);
 			return Mono.just(data);
 		}else {
-			var data = exportCsv(repos, summaryDiffEntries, params.getExtScriptFile());
+			var data = exportCsv(repos, summaryDiffEntries, instance);
 			return Mono.just(data);
 		}
 	}
 
-	private ExportResult exportExcel(List<File> repos, boolean summaryDiffEntries, String extScriptFile)
+	private ExportResult exportExcel(List<File> repos, boolean summaryDiffEntries, GroovyObject instance)
 			throws IOException, GitAPIException {
 		final int idxRepoCount=0, idxCommitCount=1;
 		final var startTime=System.currentTimeMillis();
@@ -97,7 +111,13 @@ public class GitService {
 					buf[idxRepoCount]++;
 					GitUtils.analyseRepoCommits(repo, (ci)->{
 						
-						excelBuilder.append(StatDetailBean.fromCommitStatInfo(ci));
+						StatDetailBean bean = StatDetailBean.fromCommitStatInfo(ci);
+						
+						if (null!=instance) {
+							ExtScriptUtil.processExtension(instance, ci, bean);
+						}
+						
+						excelBuilder.append(bean);
 						
 						buf[idxCommitCount]++;
 					}, summaryDiffEntries);
@@ -117,7 +137,7 @@ public class GitService {
 			return data;
 	    }
 	}
-	private ExportResult exportCsv(List<File> repos, boolean summaryDiffEntries, String extScriptFile)
+	private ExportResult exportCsv(List<File> repos, boolean summaryDiffEntries, GroovyObject instance)
 			throws IOException, GitAPIException {
 		final int idxRepoCount=0, idxCommitCount=1;
 		final var startTime=System.currentTimeMillis();
@@ -133,6 +153,11 @@ public class GitService {
 				GitUtils.analyseRepoCommits(repo, (ci)->{
 					
 					StatDetailBean bean = StatDetailBean.fromCommitStatInfo(ci);
+					
+					if (null!=instance) {
+						ExtScriptUtil.processExtension(instance, ci, bean);
+					}
+					
 					makeCompatible4CSV(bean);
 					infos.add(bean);
 					

@@ -44,20 +44,31 @@
 	    	var fileType = $.settingExportType();
 	    	var detailLevel = $.settingDetailLevel();
 	    	
-	    	var result = confirm("确认使用以下参数生成数据文件:\n"+
-	    			"导出文件类型: "+fileType+"\n"+
-	    			"数据明细程度: "+detailLevel+"\n"+
-	    			"本地 Repo 路径: \n"+repos);
+	    	var extGroovy = $.settingExtGroovyFile()||"";
+	    	
+	    	var confirmMsg =
+	    		"确认使用以下参数生成数据文件:\n"+
+	    		"导出文件类型: "+fileType+"\n"+
+	    		"数据明细程度: "+detailLevel+"\n"+
+	    		"本地 Repo 路径: \n"+repos;
+	    	if (extGroovy){
+	    		confirmMsg+="\n扩展 Groovy 脚本文件:\n"+extGroovy;
+	    	}
+	    	
+	    	var result = confirm(confirmMsg);
 	    	if (!result){
 	    		return;
 	    	}
 	    	
 			$.ajax({
 				type : "post",
-				dataType : 'json',
 				url : "./service/export-stat/"+fileType+"/"+detailLevel,
 				contentType : 'application/json',
-				data : repos,
+				data : JSON.stringify({
+					pathLines: repos,
+					extScriptFile: extGroovy
+				}),
+				dataType : 'json',
 				success : function(d) {
 					if (d.success){
 						$.jStorage.set(FILE_NAME_STORAGE_KEY, d.downloadAddress)

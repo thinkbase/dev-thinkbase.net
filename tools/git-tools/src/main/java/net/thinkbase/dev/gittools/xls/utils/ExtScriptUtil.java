@@ -1,45 +1,44 @@
 package net.thinkbase.dev.gittools.xls.utils;
 
-import javax.script.Bindings;
-import javax.script.Invocable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import java.io.File;
+import java.io.IOException;
 
+import org.codehaus.groovy.control.CompilationFailedException;
+
+import groovy.lang.GroovyClassLoader;
+import groovy.lang.GroovyCodeSource;
+import groovy.lang.GroovyObject;
 import net.thinkbase.dev.gittools.service.vo.CommitStatInfo;
 import net.thinkbase.dev.gittools.xls.vo.StatDetailBean;
 
 public class ExtScriptUtil {
+	/** The class name of extension groovy class */
+	private static final String GIT_TOOLS_EXT_METHOD = "run"; 
+	
 	/**
-	 * Get groovy engine with "run" function defined
+	 * Build groovy instance with {@link #GIT_TOOLS_EXT_METHOD} function defined
 	 * @param groovySrc
 	 * @return
-	 * @throws ScriptException
 	 */
-	public static ScriptEngine getScriptEngine(String groovySrc) throws ScriptException {
-		ScriptEngineManager factory = new ScriptEngineManager();
-	    ScriptEngine engine = factory.getEngineByName("groovy");
-
-	    //Assign a resource loader for scripting
-	    Bindings binding = engine.createBindings();
-	    binding.put("engine", engine);
-	    
-	    //eval source
-	    engine.eval(groovySrc, binding);
-	    
-	    return engine;
+	public static GroovyObject buildExtInstance(File groovySrc) {
+		try {
+			GroovyClassLoader classLoader = new GroovyClassLoader(Thread.currentThread().getContextClassLoader());  
+			Class<?> groovyClass = classLoader.parseClass(new GroovyCodeSource(groovySrc, "utf-8"));  
+			GroovyObject instance = (GroovyObject)groovyClass.getDeclaredConstructor().newInstance();
+			return instance;
+		} catch (CompilationFailedException | ReflectiveOperationException | SecurityException | IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	/**
 	 * Call "run" function with {@link CommitStatInfo} and {@link StatDetailBean}, so extension fields in {@link StatDetailBean}
 	 * could be filled by groovy script
-	 * @param engine
+	 * @param instance
 	 * @param ci
 	 * @param si
-	 * @throws NoSuchMethodException
-	 * @throws ScriptException
 	 */
-	public static void processExtension(ScriptEngine engine, CommitStatInfo ci, StatDetailBean si) throws NoSuchMethodException, ScriptException {
-		((Invocable)engine).invokeFunction("run", ci, si);
+	public static void processExtension(GroovyObject instance, CommitStatInfo ci, StatDetailBean si) {
+		instance.invokeMethod(GIT_TOOLS_EXT_METHOD, new Object[] {ci, si});
 	}
 }
