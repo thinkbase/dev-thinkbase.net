@@ -46,6 +46,36 @@ public class StatDetailBean {
 	@ExcelColumn(title = "合并来源", width = 8)
 	private String mergeParents;
 
+	@ExcelColumn(title = "有效性", width = 4)
+	private String exValidation;
+
+	@ExcelColumn(title = "组织", width = 6)
+	private String exOrganization;
+
+	@ExcelColumn(title = "团队", width = 6)
+	private String exTeam;
+
+	@ExcelColumn(title = "产品", width = 6)
+	private String exProductLine;
+
+	@ExcelColumn(title = "组件", width = 6)
+	private String exComponent;
+
+	@ExcelColumn(title = "阶段", width = 6)
+	private String exStage;
+
+	@ExcelColumn(title = "任务", width = 6)
+	private String exTask;
+
+	@ExcelColumn(title = "分类1", width = 6)
+	private String exCatalog1;
+
+	@ExcelColumn(title = "分类2", width = 6)
+	private String exCatalog2;
+
+	@ExcelColumn(title = "分类3", width = 6)
+	private String exCatalog3;
+
 	public String getRepo() {
 		return repo;
 	}
@@ -153,5 +183,60 @@ public class StatDetailBean {
 		}
 		
 		return bean;
+	}
+	
+	public String getExValidation() {
+		return exValidation;
+	}
+	public void setExValidation(String exValidation) {
+		this.exValidation = exValidation;
+	}
+	public String getExOrganization() {
+		return exOrganization;
+	}
+	public void setExOrganization(String exOrganization) {
+		this.exOrganization = exOrganization;
+	}
+	public String getExTeam() {
+		return exTeam;
+	}
+	public void setExTeam(String exTeam) {
+		this.exTeam = exTeam;
+	}
+	public String getExProductLine() {
+		return exProductLine;
+	}
+	public void setExProductLine(String exProductLine) {
+		this.exProductLine = exProductLine;
+	}
+	public String getExComponent() {
+		return exComponent;
+	}
+	public void setExComponent(String exComponent) {
+		this.exComponent = exComponent;
+	}
+	public String getExStage() {
+		return exStage;
+	}
+	public void setExStage(String exStage) {
+		this.exStage = exStage;
+	}
+	public String getExTask() {
+		return exTask;
+	}
+	public void setExTask(String exTask) {
+		this.exTask = exTask;
+	}
+	public String getExCatalog1() {
+		return exCatalog1;
+	}
+	public void setExCatalog1(String exCatalog1) {
+		this.exCatalog1 = exCatalog1;
+	}
+	public String getExCatalog3() {
+		return exCatalog3;
+	}
+	public void setExCatalog3(String exCatalog3) {
+		this.exCatalog3 = exCatalog3;
 	}
 }
