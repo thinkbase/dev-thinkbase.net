@@ -25,6 +25,6 @@
   },
   "dependencies": {
     "date-format": "0.0.2",
-    "jquery": "^2.2.2"
+    "jquery": "^3.5.1"
   }
 }
